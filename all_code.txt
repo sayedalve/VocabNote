@@ -1,0 +1,1872 @@
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\all_code.txt
+===============================================================================
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\all_code.txt
+===============================================================================
+
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\build\VocabNote\warn-VocabNote.txt
+===============================================================================
+
+This file lists modules PyInstaller was not able to find. This does not
+necessarily mean these modules are required for running your program. Both
+Python's standard library and 3rd-party Python packages often conditionally
+import optional modules, some of which may be available only on certain
+platforms.
+
+Types of import:
+* top-level: imported at the top-level - look at these first
+* conditional: imported within an if-statement
+* delayed: imported within a function
+* optional: imported within a try-except-statement
+
+IMPORTANT: Do NOT post this list to the issue-tracker. Use it as a basis for
+            tracking down the missing module yourself. Thanks!
+
+missing module named urllib.urlopen - imported by urllib (delayed, optional), lxml.html (delayed, optional)
+missing module named urllib.urlencode - imported by urllib (delayed, optional), lxml.html (delayed, optional)
+missing module named pwd - imported by posixpath (delayed, conditional, optional), shutil (delayed, optional), tarfile (optional), pathlib (delayed, optional), subprocess (delayed, conditional, optional), http.server (delayed, optional), psutil (optional), netrc (delayed, conditional), getpass (delayed), setuptools._distutils.util (delayed, conditional, optional), setuptools._vendor.backports.tarfile (optional), setuptools._distutils.archive_util (optional)
+missing module named grp - imported by shutil (delayed, optional), tarfile (optional), pathlib (delayed, optional), subprocess (delayed, conditional, optional), setuptools._vendor.backports.tarfile (optional), setuptools._distutils.archive_util (optional)
+missing module named posix - imported by os (conditional, optional), shutil (conditional), importlib._bootstrap_external (conditional), posixpath (optional)
+missing module named resource - imported by posix (top-level)
+missing module named _frozen_importlib_external - imported by importlib._bootstrap (delayed), importlib (optional), importlib.abc (optional), zipimport (top-level)
+excluded module named _frozen_importlib - imported by importlib (optional), importlib.abc (optional), zipimport (top-level)
+missing module named _posixsubprocess - imported by subprocess (conditional), multiprocessing.util (delayed)
+missing module named fcntl - imported by subprocess (optional), xmlrpc.server (optional)
+missing module named _posixshmem - imported by multiprocessing.resource_tracker (conditional), multiprocessing.shared_memory (conditional)
+missing module named multiprocessing.set_start_method - imported by multiprocessing (top-level), multiprocessing.spawn (top-level)
+missing module named multiprocessing.get_start_method - imported by multiprocessing (top-level), multiprocessing.spawn (top-level)
+missing module named multiprocessing.get_context - imported by multiprocessing (top-level), multiprocessing.pool (top-level), multiprocessing.managers (top-level), multiprocessing.sharedctypes (top-level)
+missing module named multiprocessing.TimeoutError - imported by multiprocessing (top-level), multiprocessing.pool (top-level)
+missing module named termios - imported by tty (top-level), getpass (optional)
+missing module named _scproxy - imported by urllib.request (conditional)
+missing module named multiprocessing.BufferTooShort - imported by multiprocessing (top-level), multiprocessing.connection (top-level)
+missing module named multiprocessing.AuthenticationError - imported by multiprocessing (top-level), multiprocessing.connection (top-level)
+missing module named asyncio.DefaultEventLoopPolicy - imported by asyncio (delayed, conditional), asyncio.events (delayed, conditional)
+missing module named annotationlib - imported by typing_extensions (conditional)
+missing module named _typeshed - imported by numpy.random.bit_generator (top-level), jaraco.context (conditional), setuptools._distutils.dist (conditional), setuptools.command.bdist_egg (conditional), setuptools.glob (conditional), setuptools._vendor.wheel.wheelfile (conditional), setuptools.compat.py311 (conditional), requests.cookies (conditional)
+missing module named vms_lib - imported by platform (delayed, optional)
+missing module named 'java.lang' - imported by platform (delayed, optional)
+missing module named java - imported by platform (delayed)
+missing module named _winreg - imported by platform (delayed, optional)
+missing module named usercustomize - imported by site (delayed, optional)
+missing module named sitecustomize - imported by site (delayed, optional)
+missing module named System - imported by pyreadline3.clipboard.ironpython_clipboard (top-level), pyreadline3.keysyms.ironpython_keysyms (top-level), pyreadline3.keysyms.ironpython_constants (top-level), pyreadline3.console.ironpython_console (top-level), pyreadline3.rlmain (conditional)
+missing module named console - imported by pyreadline3.console.ansi (conditional)
+missing module named clr - imported by pyreadline3.clipboard.ironpython_clipboard (top-level), pyreadline3.console.ironpython_console (top-level)
+missing module named IronPythonConsole - imported by pyreadline3.console.ironpython_console (top-level)
+missing module named _manylinux - imported by packaging._manylinux (delayed, optional), setuptools._vendor.packaging._manylinux (delayed, optional)
+missing module named setuptools._vendor.backports.zstd - imported by setuptools._vendor.backports (top-level), urllib3.util.request (conditional, optional), urllib3.response (conditional, optional)
+missing module named importlib_resources - imported by setuptools._vendor.jaraco.text (optional)
+missing module named trove_classifiers - imported by setuptools.config._validate_pyproject.formats (optional)
+missing module named pyimod02_importers - imported by C:\Users\sayed\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyInstaller\hooks\rthooks\pyi_rth_pkgutil.py (delayed)
+missing module named collections.Callable - imported by collections (optional), socks (optional)
+missing module named _dummy_thread - imported by numpy._core.arrayprint (optional)
+missing module named 'numpy_distutils.cpuinfo' - imported by numpy.f2py.diagnose (delayed, conditional, optional)
+missing module named 'numpy_distutils.fcompiler' - imported by numpy.f2py.diagnose (delayed, conditional, optional)
+missing module named 'numpy_distutils.command' - imported by numpy.f2py.diagnose (delayed, conditional, optional)
+missing module named numpy_distutils - imported by numpy.f2py.diagnose (delayed, optional)
+missing module named numpy.random.RandomState - imported by numpy.random (top-level), numpy.random._generator (top-level)
+missing module named threadpoolctl - imported by numpy.lib._utils_impl (delayed, optional)
+missing module named numpy._core.zeros - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.vstack - imported by numpy._core (top-level), numpy.lib._shape_base_impl (top-level), numpy (conditional)
+missing module named numpy._core.void - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.vecmat - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.vecdot - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.ushort - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.unsignedinteger - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.ulonglong - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.ulong - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.uintp - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.uintc - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.uint64 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.uint32 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.uint16 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.uint - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.ubyte - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.trunc - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.true_divide - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.transpose - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.lib._function_base_impl (top-level), numpy (conditional)
+missing module named numpy._core.trace - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.timedelta64 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.tensordot - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.tanh - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.tan - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.swapaxes - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.sum - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.subtract - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.str_ - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.square - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.sqrt - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional), numpy.fft._pocketfft (top-level)
+missing module named numpy._core.spacing - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.sort - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.sinh - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.single - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.signedinteger - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.signbit - imported by numpy._core (delayed), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.sign - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.short - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.rint - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.right_shift - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.result_type - imported by numpy._core (delayed), numpy.testing._private.utils (delayed), numpy (conditional), numpy.fft._pocketfft (top-level)
+missing module named numpy._core.remainder - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.reciprocal - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional), numpy.fft._pocketfft (top-level)
+missing module named numpy._core.radians - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.rad2deg - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.prod - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.power - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.positive - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.pi - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.outer - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.ones - imported by numpy._core (top-level), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.object_ - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.number - imported by numpy._core (delayed), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.not_equal - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.newaxis - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.negative - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.ndarray - imported by numpy._core (top-level), numpy.testing._private.utils (top-level), numpy.lib._utils_impl (top-level), numpy (conditional)
+missing module named numpy._core.multiply - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.moveaxis - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.modf - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.mod - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.minimum - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.maximum - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.max - imported by numpy._core (delayed), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.matvec - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.matrix_transpose - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.matmul - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.longlong - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.longdouble - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.long - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.logical_xor - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.logical_or - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.logical_not - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.logical_and - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.logaddexp2 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.logaddexp - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.log2 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.log1p - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.log - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.linspace - imported by numpy._core (top-level), numpy.lib._index_tricks_impl (top-level), numpy (conditional)
+missing module named numpy._core.less_equal - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.less - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.left_shift - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.ldexp - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.lcm - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.isscalar - imported by numpy._core (delayed), numpy.testing._private.utils (delayed), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.isnat - imported by numpy._core (top-level), numpy.testing._private.utils (top-level), numpy (conditional)
+missing module named numpy._core.isnan - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.isfinite - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.intp - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (top-level), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.integer - imported by numpy._core (conditional), numpy (conditional), numpy.fft._helper (top-level)
+missing module named numpy._core.intc - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.int64 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.int32 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.int16 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.int8 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.inf - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.inexact - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.iinfo - imported by numpy._core (top-level), numpy.lib._twodim_base_impl (top-level), numpy (conditional)
+missing module named numpy._core.hypot - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.hstack - imported by numpy._core (top-level), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.heaviside - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.half - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.greater_equal - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.greater - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.gcd - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.frompyfunc - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.frexp - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.fmod - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.fmin - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.fmax - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.floor_divide - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.floor - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.floating - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.float_power - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.float32 - imported by numpy._core (top-level), numpy.testing._private.utils (top-level), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.float16 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.finfo - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.fabs - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.expm1 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.exp - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.euler_gamma - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.errstate - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.equal - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.empty_like - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional), numpy.fft._pocketfft (top-level)
+missing module named numpy._core.empty - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (top-level), numpy (conditional), numpy.fft._helper (top-level)
+missing module named numpy._core.e - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.double - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.dot - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.divmod - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.divide - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.diagonal - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.degrees - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.deg2rad - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.datetime64 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.csingle - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.cross - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.count_nonzero - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.cosh - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.cos - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.copysign - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.conjugate - imported by numpy._core (conditional), numpy (conditional), numpy.fft._pocketfft (top-level)
+missing module named numpy._core.conj - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.complexfloating - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.complex64 - imported by numpy._core (conditional), numpy (conditional), numpy._array_api_info (top-level)
+missing module named numpy._core.clongdouble - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.character - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.ceil - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.cdouble - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.cbrt - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.bytes_ - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.byte - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.bool_ - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.bitwise_xor - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.bitwise_or - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.bitwise_count - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.bitwise_and - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.atleast_3d - imported by numpy._core (top-level), numpy.lib._shape_base_impl (top-level), numpy (conditional)
+missing module named numpy._core.atleast_2d - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.atleast_1d - imported by numpy._core (top-level), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.asarray - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.lib._array_utils_impl (top-level), numpy (conditional), numpy.fft._helper (top-level), numpy.fft._pocketfft (top-level)
+missing module named numpy._core.asanyarray - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.array_repr - imported by numpy._core (top-level), numpy.testing._private.utils (top-level), numpy (conditional)
+missing module named numpy._core.array2string - imported by numpy._core (delayed), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.array - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (top-level), numpy.lib._polynomial_impl (top-level), numpy (conditional)
+missing module named numpy._core.argsort - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.arctanh - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arctan2 - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arctan - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arcsinh - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arcsin - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arccosh - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arccos - imported by numpy._core (conditional), numpy (conditional)
+missing module named numpy._core.arange - imported by numpy._core (top-level), numpy.testing._private.utils (top-level), numpy (conditional), numpy.fft._helper (top-level)
+missing module named numpy._core.amin - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.amax - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._core.all - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy.testing._private.utils (delayed), numpy (conditional)
+missing module named numpy._core.add - imported by numpy._core (top-level), numpy.linalg._linalg (top-level), numpy (conditional)
+missing module named numpy._distributor_init_local - imported by numpy (optional), numpy._distributor_init (optional)
+missing module named cryptography.x509.UnsupportedExtension - imported by cryptography.x509 (optional), urllib3.contrib.pyopenssl (optional)
+missing module named endesive - imported by fpdf.fpdf (optional), fpdf.sign (conditional), fpdf.output (optional), fpdf.linearization (optional)
+missing module named pathops - imported by fontTools.ttLib.removeOverlaps (top-level)
+missing module named fontTools.ttLib.getClassTag - imported by fontTools.ttLib (top-level), fontTools.ttLib.tables.DefaultTable (top-level)
+missing module named htmlentitydefs - imported by lxml.html.soupparser (optional)
+missing module named BeautifulSoup - imported by lxml.html.soupparser (optional)
+missing module named cchardet - imported by bs4.dammit (optional)
+missing module named 'html5lib.treebuilders' - imported by bs4.builder._html5lib (top-level), lxml.html._html5builder (top-level), lxml.html.html5parser (top-level)
+missing module named 'html5lib.constants' - imported by bs4.builder._html5lib (top-level)
+missing module named html5lib - imported by bs4.builder._html5lib (top-level), lxml.html.html5parser (top-level)
+missing module named urlparse - imported by lxml.ElementInclude (optional), lxml.html.html5parser (optional)
+missing module named urllib2 - imported by lxml.ElementInclude (optional), lxml.html.html5parser (optional)
+missing module named 'cython.cimports' - imported by lxml.html.diff (optional)
+missing module named cython - imported by fontTools.varLib.iup (optional), fontTools.misc.bezierTools (optional), lxml.html.diff (optional), lxml.html._difflib (optional)
+missing module named lxml_html_clean - imported by lxml.html.clean (optional)
+missing module named cssselect - imported by lxml.cssselect (optional)
+missing module named fontTools.ttLib.getSearchRange - imported by fontTools.ttLib (top-level), fontTools.ttLib.tables.otConverters (top-level), fontTools.ttLib.tables._c_m_a_p (top-level), fontTools.ttLib.tables._k_e_r_n (top-level), fontTools.ttLib.woff2 (top-level), fontTools.ttLib.sfnt (delayed, conditional)
+missing module named zopfli - imported by fontTools.ttLib.sfnt (delayed, conditional)
+missing module named brotli - imported by urllib3.util.request (optional), urllib3.response (optional), fontTools.ttLib.woff2 (optional)
+missing module named brotlicffi - imported by urllib3.util.request (optional), urllib3.response (optional), fontTools.ttLib.woff2 (optional)
+missing module named fontTools.ttLib.getTableClass - imported by fontTools.ttLib (top-level), fontTools.ttLib.woff2 (top-level)
+missing module named fontTools.ttLib.getTableModule - imported by fontTools.ttLib (top-level), fontTools.ttLib.woff2 (top-level)
+missing module named unicodedata2 - imported by fontTools.unicode (delayed, optional), fontTools.unicodedata (optional)
+missing module named xattr - imported by fontTools.misc.macCreatorType (optional)
+missing module named fontTools.ttLib.newTable - imported by fontTools.ttLib (top-level), fontTools.varLib (top-level), fontTools.cffLib.CFFToCFF2 (top-level), fontTools.cffLib.CFF2ToCFF (top-level), fontTools.ttLib.tables._n_a_m_e (top-level), fontTools.varLib.featureVars (top-level), fontTools.varLib.cff (top-level), fontTools.varLib.instancer (top-level)
+missing module named uharfbuzz - imported by fontTools.ttLib.tables.otBase (optional), fpdf.fonts (optional), fpdf.fpdf (delayed, optional)
+missing module named fontTools.ttLib.TTFont - imported by fontTools.ttLib (top-level), fontTools.varLib (top-level), fontTools.cffLib (top-level), fontTools.cffLib.CFFToCFF2 (top-level), fontTools.cffLib.CFF2ToCFF (top-level), fontTools.cffLib.specializer (conditional), fontTools.cffLib.width (top-level), fontTools.ttLib.ttVisitor (top-level), fontTools.varLib.varStore (delayed), fontTools.otlLib.optimize.gpos (top-level), fontTools.otlLib.optimize (top-level), fontTools.varLib.stat (top-level), fontTools.colorLib.unbuilder (conditional), fontTools.ttx (top-level), fontTools.ttLib.woff2 (top-level), fontTools.varLib.instancer (top-level)
+missing module named 'lz4.block' - imported by fontTools.ttLib.tables.grUtils (optional)
+missing module named lz4 - imported by fontTools.ttLib.tables.grUtils (optional)
+missing module named xmlrpclib - imported by defusedxml.xmlrpc (conditional)
+missing module named simplejson - imported by requests.compat (conditional, optional)
+missing module named compression - imported by urllib3.util.request (conditional, optional), urllib3.response (conditional, optional)
+missing module named 'h2.events' - imported by urllib3.http2.connection (top-level)
+missing module named 'h2.connection' - imported by urllib3.http2.connection (top-level)
+missing module named h2 - imported by urllib3.http2.connection (top-level)
+missing module named win_inet_pton - imported by socks (conditional, optional)
+missing module named 'OpenSSL.crypto' - imported by urllib3.contrib.pyopenssl (delayed, conditional)
+missing module named OpenSSL - imported by urllib3.contrib.pyopenssl (top-level)
+missing module named 'pyodide.ffi' - imported by urllib3.contrib.emscripten.fetch (delayed, optional)
+missing module named js.console - imported by js (delayed, conditional), urllib3.contrib.emscripten.fetch (delayed, conditional)
+missing module named pyodide - imported by urllib3.contrib.emscripten.fetch (top-level)
+missing module named PyObjCTools - imported by darkdetect._mac_detect (optional)
+missing module named Foundation - imported by darkdetect._mac_detect (optional)
+.
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\src\main.py
+===============================================================================
+import tkinter as tk
+import customtkinter as ctk
+from tkinter import messagebox
+import re
+import threading
+from api.gemini import test_gemini_connection, fetch_word_details
+from database.db_manager import (
+    init_db, save_word_to_db, get_all_words_dictionaries, 
+    update_single_field, delete_word, check_word_exists,
+    get_setting, save_setting, get_all_volumes, create_volume,
+    rename_volume, delete_volume
+)
+from utils.export_manager import export_to_docx, import_from_docx
+from customtkinter import filedialog
+
+# --- Premium Design System ---
+BG_MAIN = "#0E0E10"
+BG_SIDEBAR = "#18181B"
+BG_CARD = "#27272A"
+TEXT_PRIMARY = "#FAFAFA"
+TEXT_MUTED = "#A1A1AA"
+ACCENT = "#2563EB"
+ACCENT_HOVER = "#1D4ED8"
+HIGHLIGHT_COLOR = "#FBBF24"
+
+ctk.deactivate_automatic_dpi_awareness()
+ctk.set_appearance_mode("dark")
+
+class ExportSelectionDialog(ctk.CTkToplevel):
+    def __init__(self, master, current_vol_id, all_volumes):
+        super().__init__(master)
+        self.title("Export Notebook to DOCX")
+        self.geometry("450x500")
+        self.result = None
+        self.transient(master)
+        self.grab_set()
+        self.configure(fg_color=BG_CARD)
+        
+        self.export_type = tk.StringVar(value="current")
+        ctk.CTkLabel(self, text="Select Export Scope", font=("Segoe UI", 18, "bold"), text_color=TEXT_PRIMARY).pack(pady=(25, 15))
+        
+        rb_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        rb_frame.pack(fill="x", padx=40)
+        ctk.CTkRadioButton(rb_frame, text="Active Volume Only", variable=self.export_type, value="current", font=("Segoe UI", 14), command=self.toggle_custom).pack(anchor="w", pady=8)
+        ctk.CTkRadioButton(rb_frame, text="Entire Notebook", variable=self.export_type, value="all", font=("Segoe UI", 14), command=self.toggle_custom).pack(anchor="w", pady=8)
+        ctk.CTkRadioButton(rb_frame, text="Specific Volumes", variable=self.export_type, value="custom", font=("Segoe UI", 14), command=self.toggle_custom).pack(anchor="w", pady=8)
+        
+        self.custom_frame = ctk.CTkScrollableFrame(self, fg_color=BG_MAIN, height=150, corner_radius=8)
+        self.custom_frame.pack(fill="x", padx=40, pady=(15, 10))
+        
+        self.vol_vars = {}
+        for vol in all_volumes:
+            var = tk.BooleanVar(value=(vol['id'] == current_vol_id))
+            ctk.CTkCheckBox(self.custom_frame, text=f"{vol['name']} ({vol['word_count']} words)", font=("Segoe UI", 13), variable=var).pack(anchor="w", pady=5, padx=10)
+            self.vol_vars[vol['id']] = var
+            
+        self.toggle_custom()
+        btn_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        btn_frame.pack(fill="x", padx=40, pady=20)
+        ctk.CTkButton(btn_frame, text="Export", fg_color=ACCENT, hover_color=ACCENT_HOVER, height=36, font=("Segoe UI", 14, "bold"), command=self.confirm).pack(side="left", expand=True, padx=5)
+        ctk.CTkButton(btn_frame, text="Cancel", fg_color="#3F3F46", hover_color="#52525B", height=36, font=("Segoe UI", 14), command=self.destroy).pack(side="left", expand=True, padx=5)
+        
+    def toggle_custom(self):
+        state = "normal" if self.export_type.get() == "custom" else "disabled"
+        for child in self.custom_frame.winfo_children(): child.configure(state=state)
+            
+    def confirm(self):
+        t = self.export_type.get()
+        if t == "custom":
+            selected = [vid for vid, var in self.vol_vars.items() if var.get()]
+            if not selected:
+                messagebox.showwarning("Warning", "Please select at least one volume.")
+                return
+            self.result = {'type': 'custom', 'volumes': selected}
+        else: self.result = {'type': t}
+        self.destroy()
+
+class ImportDuplicateDialog(ctk.CTkToplevel):
+    def __init__(self, master, word):
+        super().__init__(master)
+        self.title("Duplicate Found")
+        self.geometry("600x200")
+        self.result = "skip"
+        self.transient(master)
+        self.grab_set()
+        self.configure(fg_color=BG_CARD)
+        
+        ctk.CTkLabel(self, text=f"'{word.capitalize()}' already exists. What should we do?", font=("Segoe UI", 16, "bold"), text_color=TEXT_PRIMARY).pack(pady=(20, 25))
+        btn_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        btn_frame.pack(fill="x", padx=15)
+        ctk.CTkButton(btn_frame, text="Replace", fg_color=ACCENT, hover_color=ACCENT_HOVER, command=lambda: self.set_result("replace")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Skip", fg_color="#3F3F46", hover_color="#52525B", command=lambda: self.set_result("skip")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Replace All", fg_color="#991B1B", hover_color="#7F1D1D", command=lambda: self.set_result("replace_all")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Skip All", fg_color="#3F3F46", hover_color="#52525B", command=lambda: self.set_result("skip_all")).pack(side="left", padx=5, expand=True)
+        
+    def set_result(self, res):
+        self.result = res
+        self.destroy()
+
+class DuplicateDialog(ctk.CTkToplevel):
+    def __init__(self, master, word):
+        super().__init__(master)
+        self.title("Duplicate Detected")
+        self.geometry("500x200")
+        self.result = "cancel"
+        self.transient(master)
+        self.grab_set()
+        self.configure(fg_color=BG_CARD)
+        
+        ctk.CTkLabel(self, text=f"'{word.capitalize()}' is already in your notebook.", font=("Segoe UI", 18, "bold"), text_color=TEXT_PRIMARY).pack(pady=(30, 25))
+        btn_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        btn_frame.pack(fill="x", padx=20)
+        ctk.CTkButton(btn_frame, text="Open Entry", fg_color=ACCENT, hover_color=ACCENT_HOVER, command=lambda: self.set_result("open")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Replace AI Data", fg_color="#991B1B", hover_color="#7F1D1D", command=lambda: self.set_result("replace")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Cancel", fg_color="#3F3F46", hover_color="#52525B", command=lambda: self.set_result("cancel")).pack(side="left", padx=5, expand=True)
+        
+    def set_result(self, res):
+        self.result = res
+        self.destroy()
+
+
+# =========================================================================================
+# THE DYNAMIC SCALING CANVAS ENGINE
+# =========================================================================================
+
+class WordListView(ctk.CTkFrame):
+    def __init__(self, master, app):
+        super().__init__(master, fg_color=BG_MAIN, corner_radius=0)
+        self.app = app
+        self.words = []
+        
+        self.editing_word = None
+        self.open_notes = set()
+        self.edit_widgets = {}
+        
+        # Maps for instant targeted scrolling
+        self.card_y_positions = {}
+        self.card_bg_ids = {}
+        
+        self.canvas = tk.Canvas(self, bg=BG_MAIN, highlightthickness=0)
+        self.scrollbar = ctk.CTkScrollbar(self, command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
+        
+        self.canvas.bind("<Configure>", lambda e: self.render())
+        self.canvas.bind("<Enter>", self._bind_mouse)
+        self.canvas.bind("<Leave>", self._unbind_mouse)
+
+    def _bind_mouse(self, event):
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+        self.canvas.bind_all("<Button-4>", self._on_mousewheel)
+        self.canvas.bind_all("<Button-5>", self._on_mousewheel)
+
+    def _unbind_mouse(self, event):
+        self.canvas.unbind_all("<MouseWheel>")
+        self.canvas.unbind_all("<Button-4>")
+        self.canvas.unbind_all("<Button-5>")
+
+    def _on_mousewheel(self, event):
+        if event.num == 4 or event.delta > 0:
+            self.canvas.yview_scroll(-1, "units")
+        elif event.num == 5 or event.delta < 0:
+            self.canvas.yview_scroll(1, "units")
+
+    def scroll_to_word(self, target_word, flash=False):
+        """Mathematically scrolls to a specific word and flashes it."""
+        if target_word in self.card_y_positions:
+            target_y = self.card_y_positions[target_word]
+            bbox = self.canvas.bbox("all")
+            if bbox:
+                total_height = bbox[3]
+                fraction = max(0.0, (target_y - self._z(10)) / total_height)
+                self.canvas.yview_moveto(fraction)
+            
+            if flash:
+                bg_id = self.card_bg_ids.get(target_word)
+                if bg_id:
+                    original_color = BG_CARD
+                    flash_color = "#3F3F46" 
+                    
+                    def flash_cycle(step):
+                        try:
+                            if step == 0:
+                                self.canvas.itemconfig(bg_id, fill=flash_color)
+                                self.after(300, lambda: flash_cycle(1))
+                            elif step == 1:
+                                self.canvas.itemconfig(bg_id, fill=original_color)
+                                self.after(300, lambda: flash_cycle(2))
+                            elif step == 2:
+                                self.canvas.itemconfig(bg_id, fill=flash_color)
+                                self.after(300, lambda: flash_cycle(3))
+                            elif step == 3:
+                                self.canvas.itemconfig(bg_id, fill=original_color)
+                        except Exception:
+                            pass 
+
+                    flash_cycle(0)
+
+    def _z(self, val):
+        return max(1, int(val * self.app.zoom_factor))
+
+    def set_words(self, words):
+        self.words = words
+        self.editing_word = None
+        self.render()
+
+    def render(self):
+        self.canvas.delete("all")
+        for w in self.edit_widgets.values():
+            w.destroy()
+        self.edit_widgets.clear()
+        self.card_y_positions.clear()
+        self.card_bg_ids.clear()
+        
+        width = self.canvas.winfo_width()
+        if width < 100: return 
+        
+        y_offset = self._z(10)
+        for w_data in self.words:
+            word_key = w_data['word']
+            self.card_y_positions[word_key] = y_offset
+            
+            bg_id, y_offset = self._draw_card(y_offset, w_data, width)
+            
+            self.card_bg_ids[word_key] = bg_id
+            y_offset += self._z(25)
+            
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    # --- Graphics Primitives ---
+
+    def _create_round_rect(self, x1, y1, x2, y2, radius, **kwargs):
+        points = [
+            x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, 
+            x2, y1, x2, y1+radius, x2, y1+radius, x2, y2-radius, 
+            x2, y2-radius, x2, y2, x2-radius, y2, x2-radius, y2, 
+            x1+radius, y2, x1+radius, y2, x1, y2, x1, y2-radius, 
+            x1, y2-radius, x1, y1+radius, x1, y1+radius, x1, y1
+        ]
+        return self.canvas.create_polygon(points, smooth=True, **kwargs)
+
+    def _update_round_rect(self, item_id, x1, y1, x2, y2, radius):
+        points = [
+            x1+radius, y1, x1+radius, y1, x2-radius, y1, x2-radius, y1, 
+            x2, y1, x2, y1+radius, x2, y1+radius, x2, y2-radius, 
+            x2, y2-radius, x2, y2, x2-radius, y2, x2-radius, y2, 
+            x1+radius, y2, x1+radius, y2, x1, y2, x1, y2-radius, 
+            x1, y2-radius, x1, y1+radius, x1, y1+radius, x1, y1
+        ]
+        self.canvas.coords(item_id, *points)
+
+    def _draw_button(self, x_right, y_center, text, fg_color, text_color, hover_color, command, word, is_star=False):
+        font_size = self._z(24) if is_star else self._z(13)
+        temp = self.canvas.create_text(0, -100, text=text, font=("Segoe UI", font_size, "bold"))
+        bbox = self.canvas.bbox(temp)
+        self.canvas.delete(temp)
+        tw = bbox[2] - bbox[0] if bbox else self._z(40)
+        
+        w = self._z(38) if is_star else tw + self._z(36)
+        h = self._z(36)
+        x_left = x_right - w
+        y_top = y_center - h//2
+        y_bot = y_center + h//2
+        
+        btn_tag = f"btn_{text}_{word}"
+        
+        rect_id = self._create_round_rect(x_left, y_top, x_right, y_bot, radius=self._z(18) if is_star else self._z(6), fill=fg_color, outline="", tags=(btn_tag, "clickable"))
+        self.canvas.create_text(x_left + w//2, y_center, text=text, font=("Segoe UI", font_size, "bold" if not is_star else ""), fill=text_color, tags=(btn_tag, "clickable"))
+        
+        def on_click(e, cmd=command, w=word): cmd(w)
+        def on_enter(e, r=rect_id, hc=hover_color):
+            self.canvas.itemconfig(r, fill=hc)
+            self.canvas.config(cursor="hand2")
+        def on_leave(e, r=rect_id, fc=fg_color):
+            self.canvas.itemconfig(r, fill=fc)
+            self.canvas.config(cursor="")
+
+        self.canvas.tag_bind(btn_tag, "<Button-1>", on_click)
+        self.canvas.tag_bind(btn_tag, "<Enter>", on_enter)
+        self.canvas.tag_bind(btn_tag, "<Leave>", on_leave)
+        
+        return x_left - self._z(12) 
+
+    # --- Interactive Layout Engine ---
+
+    def _draw_interactive_tags(self, start_x, start_y, max_w, items_str, important_str, word, field_key):
+        curr_x = start_x
+        curr_y = start_y
+        line_height = self._z(28)
+
+        items = [s.strip() for s in items_str.split(',') if s.strip()]
+        important_items = set(s.strip().lower() for s in important_str.split(',') if s.strip())
+
+        if not items:
+            self.canvas.create_text(start_x, start_y, text=f"No {field_key} yet.", font=("Segoe UI", self._z(15)), fill=TEXT_MUTED, anchor="nw")
+            return start_y + self._z(35)
+
+        for i, item in enumerate(items):
+            is_imp = item.lower() in important_items
+            color = HIGHLIGHT_COLOR if is_imp else TEXT_PRIMARY
+            font_weight = "bold" if is_imp else "normal"
+            font_choice = ("Segoe UI", self._z(15), font_weight)
+            
+            display_text = item + ("," if i < len(items) - 1 else "")
+            
+            temp_id = self.canvas.create_text(0, -100, text=display_text, font=font_choice)
+            bbox = self.canvas.bbox(temp_id)
+            self.canvas.delete(temp_id)
+            item_w = bbox[2] - bbox[0] if bbox else 0
+            
+            if curr_x + item_w > start_x + max_w and curr_x != start_x:
+                curr_x = start_x
+                curr_y += line_height
+                
+            text_id = self.canvas.create_text(curr_x, curr_y, text=display_text, font=font_choice, fill=color, anchor="nw", tags="clickable")
+            
+            def on_enter(e, tid=text_id, f=font_choice):
+                self.canvas.itemconfig(tid, font=(f[0], f[1], f[2] + " underline" if f[2] else "underline"))
+                self.canvas.config(cursor="hand2")
+            def on_leave(e, tid=text_id, f=font_choice):
+                self.canvas.itemconfig(tid, font=f)
+                self.canvas.config(cursor="")
+            def on_click(e, w=word, k=field_key, val=item, cur_imp=important_str):
+                self._toggle_important(w, k, val, cur_imp)
+
+            self.canvas.tag_bind(text_id, "<Enter>", on_enter)
+            self.canvas.tag_bind(text_id, "<Leave>", on_leave)
+            self.canvas.tag_bind(text_id, "<Button-1>", on_click)
+            
+            curr_x += item_w + self._z(6)
+
+        return curr_y + line_height
+        
+    def _toggle_important(self, word, field_key, item_val, current_important_str):
+        imp_list = [s.strip() for s in current_important_str.split(',') if s.strip()]
+        item_lower = item_val.lower()
+        
+        found = False
+        for i, imp in enumerate(imp_list):
+            if imp.lower() == item_lower:
+                imp_list.pop(i)
+                found = True
+                break
+                
+        if not found:
+            imp_list.append(item_val)
+            
+        new_str = ", ".join(imp_list)
+        update_single_field(word, f"important_{field_key}", new_str)
+        
+        for w in self.words:
+            if w['word'] == word:
+                w[f"important_{field_key}"] = new_str
+                break
+        self.render()
+
+    def _draw_inline_properties(self, w_data, x1, x2, curr_y, is_edit):
+        """Draws PRO, POS, and Meaning cleanly with word wrap support for large properties."""
+        if is_edit:
+            curr_y = self._draw_property_row("PRO", 'ipa', w_data, x1, x2, curr_y, True)
+            curr_y = self._draw_property_row("POS", 'part_of_speech', w_data, x1, x2, curr_y, True)
+            curr_y = self._draw_property_row("MEANING", 'meaning', w_data, x1, x2, curr_y, True)
+            return curr_y
+            
+        start_x = x1 + self._z(20)
+        max_x = x2 - self._z(20)
+        
+        line_x = start_x
+        line_y = curr_y
+        max_y = curr_y
+        
+        def add_item(lbl_text, val_text):
+            nonlocal line_x, line_y, max_y
+            
+            est_w = self._z(40) + self._z(len(val_text)*10)
+            if lbl_text == "MEANING": est_w = self._z(150) 
+            
+            if line_x + est_w > max_x and line_x != start_x:
+                line_x = start_x
+                line_y = max_y + self._z(10)
+                
+            id_lbl = self.canvas.create_text(line_x, line_y + self._z(2), text=lbl_text, font=("Segoe UI", self._z(10), "bold"), fill=TEXT_MUTED, anchor="nw")
+            bbox_lbl = self.canvas.bbox(id_lbl)
+            val_x = (bbox_lbl[2] if bbox_lbl else line_x + self._z(35)) + self._z(8)
+            
+            rem_w = max_x - val_x
+            if rem_w < self._z(80): rem_w = max_x - start_x 
+            
+            id_val = self.canvas.create_text(val_x, line_y, text=val_text if val_text else "—", font=("Segoe UI", self._z(15)), fill=TEXT_PRIMARY if val_text else TEXT_MUTED, anchor="nw", width=rem_w)
+            bbox_val = self.canvas.bbox(id_val)
+            
+            line_x = (bbox_val[2] if bbox_val else val_x + self._z(50)) + self._z(20)
+            item_bottom = (bbox_val[3] if bbox_val else line_y + self._z(24))
+            
+            if item_bottom > max_y:
+                max_y = item_bottom
+                
+        add_item("PRO", w_data.get('ipa', "") or "")
+        add_item("POS", w_data.get('part_of_speech', "") or "")
+        add_item("MEANING", w_data.get('meaning', "") or "")
+        
+        return max_y + self._z(14)
+
+    def _draw_property_row(self, label, key, w_data, x1, x2, curr_y, is_edit, custom_font="Segoe UI"):
+        col1_x = x1 + self._z(140)
+        col2_x = col1_x + self._z(25)
+        value = w_data.get(key, "") or ""
+        
+        self.canvas.create_text(col1_x, curr_y + self._z(2), text=label.upper(), font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="ne")
+        
+        if is_edit:
+            widget = ctk.CTkEntry(self.canvas, width=x2 - col2_x - self._z(30), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=(custom_font, self._z(16) if custom_font != "Segoe UI" else self._z(15)), border_width=0, corner_radius=6)
+            widget.insert(0, value)
+            self.canvas.create_window(col2_x, curr_y - self._z(6), anchor="nw", window=widget) 
+            self.edit_widgets[f"{w_data['word']}_{key}"] = widget
+            return curr_y + self._z(35)
+        else:
+            display_text = value if value else "—"
+            color = TEXT_PRIMARY if value else TEXT_MUTED
+            text_id = self.canvas.create_text(col2_x, curr_y, text=display_text, font=(custom_font, self._z(16) if custom_font != "Segoe UI" else self._z(15)), fill=color, anchor="nw", width=x2 - col2_x - self._z(30))
+            bbox = self.canvas.bbox(text_id)
+            return (bbox[3] if bbox else curr_y + self._z(24)) + self._z(14)
+
+    def _draw_panel(self, label, key, w_data, x, y, width, bg_color, is_edit):
+        rect_id = self._create_round_rect(x, y, x + width, y + self._z(10), radius=self._z(8), fill=bg_color, outline="")
+        self.canvas.create_text(x + self._z(25), y + self._z(15), text=label, font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
+        
+        val_x = x + self._z(25)
+        val_y = y + self._z(42)
+        val_w = width - self._z(50)
+        value = w_data.get(key, "") or ""
+        important_value = w_data.get(f'important_{key}', "") or ""
+        
+        if is_edit:
+            widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(65), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
+            widget.insert("1.0", value)
+            self.canvas.create_window(val_x, val_y, anchor="nw", window=widget)
+            self.edit_widgets[f"{w_data['word']}_{key}"] = widget
+            bottom_y = val_y + self._z(75)
+        else:
+            bottom_y = self._draw_interactive_tags(val_x, val_y, val_w, value, important_value, w_data['word'], key)
+                
+        self._update_round_rect(rect_id, x, y, x + width, bottom_y + self._z(15), radius=self._z(8))
+        return bottom_y + self._z(15)
+
+    # --- Main Assembly ---
+
+    def _draw_card(self, y_start, w_data, width):
+        word = w_data['word']
+        is_edit = (self.editing_word == word)
+        x1 = self._z(40)
+        x2 = max(x1 + self._z(100), width - self._z(40))
+        
+        bg_id = self._create_round_rect(x1, y_start, x2, y_start+self._z(100), radius=self._z(12), fill=BG_CARD, outline="")
+        curr_y = y_start + self._z(35)
+        
+        is_fav = bool(w_data.get('is_favorite', 0))
+        fav_color = HIGHLIGHT_COLOR if is_fav else TEXT_MUTED
+        btn_x = self._draw_button(x1 + self._z(45), curr_y, "★" if is_fav else "☆", BG_CARD, fav_color, "#3F3F46", self.action_fav, word, is_star=True)
+        
+        id_title = self.canvas.create_text(x1 + self._z(65), curr_y, text=word.capitalize(), font=("Segoe UI", self._z(28), "bold"), fill=TEXT_PRIMARY, anchor="w")
+        bbox_title = self.canvas.bbox(id_title)
+        
+        if bbox_title:
+            title_end_x = bbox_title[2] + self._z(15)
+        else:
+            title_end_x = x1 + self._z(65) + self._z(len(word) * 18) + self._z(15)
+        
+        exam = w_data.get('exam_history', '').strip()
+        if exam:
+            self.canvas.create_text(title_end_x, curr_y + self._z(5), text=exam, font=("Segoe UI", self._z(14), "italic"), fill=TEXT_MUTED, anchor="w")
+
+        btn_x = x2 - self._z(25)
+        btn_x = self._draw_button(btn_x, curr_y, "Delete", "#7F1D1D", TEXT_PRIMARY, "#991B1B", self.action_delete, word)
+        btn_x = self._draw_button(btn_x, curr_y, "Refresh AI", ACCENT, TEXT_PRIMARY, ACCENT_HOVER, self.action_refresh, word)
+        
+        if is_edit:
+            btn_x = self._draw_button(btn_x, curr_y, "💾 Save", ACCENT, TEXT_PRIMARY, ACCENT_HOVER, self.action_save, word)
+        else:
+            btn_x = self._draw_button(btn_x, curr_y, "✎ Edit", "#3F3F46", TEXT_PRIMARY, "#52525B", self.action_edit, word)
+            
+        has_notes = bool(w_data.get('notes', '').strip())
+        n_color = ACCENT if has_notes else BG_CARD
+        self._draw_button(btn_x, curr_y, "📝 Notes", n_color, TEXT_PRIMARY, ACCENT_HOVER if has_notes else "#3F3F46", self.action_notes, word)
+        
+        curr_y += self._z(50)
+        
+        curr_y = self._draw_inline_properties(w_data, x1, x2, curr_y, is_edit)
+        curr_y = self._draw_property_row("BANGLA", 'bangla_meaning', w_data, x1, x2, curr_y, is_edit, custom_font="Kalpurush")
+        curr_y = self._draw_property_row("EXAMPLE", 'example_sentence', w_data, x1, x2, curr_y, is_edit)
+        curr_y += self._z(10)
+        
+        panel_w = max(self._z(100), (x2 - x1 - self._z(50)) // 2)
+        y_syn = self._draw_panel("SYNONYMS", 'synonyms', w_data, x1 + self._z(20), curr_y, panel_w, "#1C1C20", is_edit)
+        y_ant = self._draw_panel("ANTONYMS", 'antonyms', w_data, x1 + self._z(30) + panel_w, curr_y, panel_w, "#191A21", is_edit)
+        curr_y = max(y_syn, y_ant) + self._z(15) 
+        
+        if word in self.open_notes or is_edit:
+            notes_rect = self._create_round_rect(x1 + self._z(20), curr_y, x2 - self._z(20), curr_y + self._z(10), radius=self._z(8), fill=BG_SIDEBAR, outline="")
+            self.canvas.create_text(x1 + self._z(45), curr_y + self._z(15), text="PERSONAL NOTES", font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
+            
+            val_x = x1 + self._z(45)
+            val_y = curr_y + self._z(40)
+            val_w = x2 - x1 - self._z(90)
+            value = w_data.get('notes', "") or ""
+            
+            if is_edit:
+                widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(65), fg_color=BG_CARD, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
+                widget.insert("1.0", value)
+                self.canvas.create_window(val_x, val_y, anchor="nw", window=widget)
+                self.edit_widgets[f"{word}_notes"] = widget
+                bottom_y = val_y + self._z(75)
+            else:
+                display_text = value if value else "No personal notes yet."
+                color = TEXT_PRIMARY if value else TEXT_MUTED
+                text_id = self.canvas.create_text(val_x, val_y, text=display_text, font=("Segoe UI", self._z(15)), fill=color, anchor="nw", width=val_w)
+                bbox = self.canvas.bbox(text_id)
+                bottom_y = (bbox[3] if bbox else val_y + self._z(25)) + self._z(20)
+                
+            self._update_round_rect(notes_rect, x1 + self._z(20), curr_y, x2 - self._z(20), bottom_y + self._z(10), radius=self._z(8))
+            curr_y = bottom_y + self._z(10)
+            
+        self._update_round_rect(bg_id, x1, y_start, x2, curr_y + self._z(25), radius=self._z(12))
+        return bg_id, curr_y + self._z(25)
+
+    # --- Event Actions ---
+
+    def action_delete(self, word):
+        if messagebox.askyesno("Delete Word", f"Are you sure you want to permanently delete '{word.capitalize()}'?"):
+            if delete_word(word):
+                self.app.load_words()
+
+    def action_refresh(self, word):
+        api_key = self.app.api_key if self.app.api_key else self.app.api_key_entry.get().strip()
+        if not api_key or api_key == "••••••••":
+            messagebox.showwarning("Missing API Key", "Please enter your API Key in Settings first.")
+            return
+            
+        self.app.status_label.configure(text=f"Refreshing '{word}'...", text_color=HIGHLIGHT_COLOR)
+        
+        def fetch_task():
+            try:
+                data, api_msg = fetch_word_details(word, api_key)
+                self.app.after(0, lambda: self._on_refresh_done(word, data, api_msg))
+            except Exception as e:
+                self.app.after(0, lambda: self._on_refresh_done(word, None, f"Network failed: {str(e)}"))
+            
+        threading.Thread(target=fetch_task, daemon=True).start()
+
+    def _on_refresh_done(self, word, data, api_msg):
+        if data:
+            for field in ['meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech', 'example_sentence', 'synonyms', 'antonyms', 'exam_history']:
+                if field in data: update_single_field(word, field, data[field])
+            self.app.status_label.configure(text=f"Refreshed '{word}'!", text_color="#34D399")
+            self.app.load_words(scroll_to=word.lower(), flash=False)
+        else:
+            messagebox.showerror("Refresh Failed", api_msg)
+            self.app.status_label.configure(text="", text_color=TEXT_MUTED)
+
+    def action_edit(self, word):
+        self.editing_word = word
+        self.render()
+
+    def action_save(self, word):
+        updates = {
+            'ipa': self.edit_widgets.get(f"{word}_ipa").get().strip() if f"{word}_ipa" in self.edit_widgets else "",
+            'part_of_speech': self.edit_widgets.get(f"{word}_part_of_speech").get().strip() if f"{word}_part_of_speech" in self.edit_widgets else "",
+            'meaning': self.edit_widgets.get(f"{word}_meaning").get().strip() if f"{word}_meaning" in self.edit_widgets else "",
+            'bangla_meaning': self.edit_widgets.get(f"{word}_bangla_meaning").get().strip() if f"{word}_bangla_meaning" in self.edit_widgets else "",
+            'example_sentence': self.edit_widgets.get(f"{word}_example_sentence").get().strip() if f"{word}_example_sentence" in self.edit_widgets else "",
+            'synonyms': self.edit_widgets.get(f"{word}_synonyms").get("1.0", "end-1c").strip() if f"{word}_synonyms" in self.edit_widgets else "",
+            'antonyms': self.edit_widgets.get(f"{word}_antonyms").get("1.0", "end-1c").strip() if f"{word}_antonyms" in self.edit_widgets else "",
+        }
+        if f"{word}_notes" in self.edit_widgets:
+            updates['notes'] = self.edit_widgets.get(f"{word}_notes").get("1.0", "end-1c").strip()
+            
+        for field, new_value in updates.items():
+            update_single_field(word, field, new_value)
+            
+        self.editing_word = None
+        self.app.load_words(scroll_to=word.lower(), flash=False)
+
+    def action_notes(self, word):
+        if word in self.open_notes:
+            self.open_notes.remove(word)
+        else:
+            self.open_notes.add(word)
+        self.render()
+        
+    def action_fav(self, word):
+        w_data = next((w for w in self.words if w['word'] == word), None)
+        if not w_data: return
+        
+        is_fav = not bool(w_data.get('is_favorite', 0))
+        update_single_field(word, 'is_favorite', 1 if is_fav else 0)
+        
+        if not is_fav and self.app.show_favorites_only:
+            self.app.load_words()
+        else:
+            w_data['is_favorite'] = 1 if is_fav else 0
+            self.render()
+
+
+# =========================================================================================
+
+class VocabNoteApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        init_db()
+        
+        self.api_key = get_setting("gemini_api_key")
+        
+        saved_zoom = get_setting("zoom_factor")
+        try:
+            self.zoom_factor = float(saved_zoom) if saved_zoom else 1.0
+        except ValueError:
+            self.zoom_factor = 1.0
+            
+        self.current_volume_id = None
+        self.vol_display_to_id = {}
+        self.show_favorites_only = False
+
+        self.title("VocabNote")
+        self.geometry("1200x800")
+        self.configure(fg_color=BG_MAIN)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+        self.setup_sidebar()
+        self.setup_notebook_page()
+        self.setup_settings_page()
+
+        self.view_all_words()
+        self.refresh_volumes_dashboard()
+        self.load_words()
+
+    def setup_sidebar(self):
+        self.sidebar = ctk.CTkFrame(self, width=250, fg_color=BG_SIDEBAR, corner_radius=0)
+        self.sidebar.grid(row=0, column=0, sticky="nsew")
+        self.sidebar.grid_rowconfigure(6, weight=1)
+
+        ctk.CTkLabel(self.sidebar, text="VocabNote", font=("Segoe UI", 24, "bold"), text_color=TEXT_PRIMARY).grid(row=0, column=0, padx=25, pady=(35, 30), sticky="w")
+
+        self.btn_notebook = ctk.CTkButton(self.sidebar, text="📚 All Words", fg_color=BG_CARD, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 15), anchor="w", command=self.view_all_words)
+        self.btn_notebook.grid(row=1, column=0, padx=15, pady=(5, 2), sticky="ew")
+
+        self.btn_favorites = ctk.CTkButton(self.sidebar, text="⭐ Favorites", fg_color=BG_SIDEBAR, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 15), anchor="w", command=self.view_favorites)
+        self.btn_favorites.grid(row=2, column=0, padx=15, pady=(2, 15), sticky="ew")
+
+        self.btn_settings = ctk.CTkButton(self.sidebar, text="⚙ Settings", fg_color=BG_SIDEBAR, hover_color=BG_CARD, text_color=TEXT_PRIMARY, font=("Segoe UI", 15), anchor="w", command=lambda: self.select_frame("settings"))
+        self.btn_settings.grid(row=3, column=0, padx=15, pady=5, sticky="ew")
+
+        ctk.CTkLabel(self.sidebar, text="DATA MANAGEMENT", font=("Segoe UI", 11, "bold"), text_color=TEXT_MUTED).grid(row=7, column=0, padx=25, pady=(20, 10), sticky="w")
+        ctk.CTkButton(self.sidebar, text="Export as DOCX", fg_color=ACCENT, hover_color=ACCENT_HOVER, font=("Segoe UI", 14), anchor="w", command=self.export_docx).grid(row=8, column=0, padx=15, pady=(0, 10), sticky="ew")
+        ctk.CTkButton(self.sidebar, text="Import from DOCX", fg_color=BG_CARD, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 14), anchor="w", command=self.import_docx).grid(row=9, column=0, padx=15, pady=(0, 30), sticky="ew")
+
+    def setup_notebook_page(self):
+        self.notebook_frame = ctk.CTkFrame(self, fg_color=BG_MAIN, corner_radius=0)
+        
+        self.header_container = tk.Frame(self.notebook_frame, bg=BG_MAIN)
+        self.header_container.pack(fill="x", padx=40, pady=(25, 10))
+
+        row1 = tk.Frame(self.header_container, bg=BG_MAIN)
+        row1.pack(fill="x", pady=(0, 10))
+        
+        self.header = ctk.CTkLabel(row1, text="My Notebook", font=("Segoe UI", 28, "bold"), text_color=TEXT_PRIMARY)
+        self.header.pack(side="left", padx=(0, 20))
+
+        self.volume_dropdown = ctk.CTkOptionMenu(row1, width=170, height=32, fg_color=BG_CARD, button_color=BG_CARD, button_hover_color="#3F3F46", font=("Segoe UI", 13), command=self.on_volume_selection_changed)
+        self.volume_dropdown.pack(side="left", padx=(0, 8))
+        
+        ctk.CTkButton(row1, text="+ New", width=60, height=32, fg_color=BG_CARD, hover_color="#3F3F46", font=("Segoe UI", 12, "bold"), text_color=TEXT_PRIMARY, command=self.add_volume_ui).pack(side="left", padx=3)
+        ctk.CTkButton(row1, text="Rename", width=65, height=32, fg_color=BG_CARD, hover_color="#3F3F46", font=("Segoe UI", 12, "bold"), text_color=TEXT_PRIMARY, command=self.rename_volume_ui).pack(side="left", padx=3)
+        ctk.CTkButton(row1, text="Delete", width=65, height=32, fg_color="#7F1D1D", hover_color="#991B1B", font=("Segoe UI", 12, "bold"), text_color=TEXT_PRIMARY, command=self.delete_volume_ui).pack(side="left", padx=3)
+
+        self.sort_dropdown = ctk.CTkOptionMenu(row1, values=["Sort A-Z", "Sort Z-A"], width=120, height=32, fg_color=BG_CARD, button_color=BG_CARD, button_hover_color="#3F3F46", font=("Segoe UI", 13), command=lambda choice: self.load_words())
+        self.sort_dropdown.pack(side="right")
+        
+        self.zoom_slider = ctk.CTkSlider(row1, from_=0.6, to=1.4, width=120, command=self.on_zoom_changed)
+        self.zoom_slider.set(self.zoom_factor)
+        self.zoom_slider.pack(side="right", padx=(10, 15))
+        self.zoom_slider.bind("<ButtonRelease-1>", lambda e: save_setting("zoom_factor", str(self.zoom_factor)))
+        
+        ctk.CTkLabel(row1, text="Zoom", font=("Segoe UI", 12, "bold"), text_color=TEXT_MUTED).pack(side="right")
+
+        row2 = tk.Frame(self.header_container, bg=BG_MAIN)
+        row2.pack(fill="x")
+
+        self.add_word_entry = ctk.CTkEntry(row2, placeholder_text="Enter a hard English word...", width=260, height=38, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
+        self.add_word_entry.pack(side="left", padx=(0, 10))
+        self.add_word_entry.bind("<Return>", lambda e: self.add_new_word())
+        
+        ctk.CTkButton(row2, text="Enrich Word", width=110, height=38, fg_color=ACCENT, hover_color=ACCENT_HOVER, font=("Segoe UI", 14, "bold"), command=self.add_new_word).pack(side="left")
+
+        self.search_all_var = tk.BooleanVar(value=True)
+        self.cb_search_all = ctk.CTkCheckBox(row2, text="Search All Volumes", variable=self.search_all_var, font=("Segoe UI", 12), text_color=TEXT_MUTED, fg_color=ACCENT, hover_color=ACCENT_HOVER, command=lambda: self.load_words())
+        self.cb_search_all.pack(side="right", padx=(15, 0))
+
+        self.search_entry = ctk.CTkEntry(row2, placeholder_text="Search...", width=220, height=38, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
+        self.search_entry.pack(side="right")
+        self.search_entry.bind("<KeyRelease>", lambda e: self.load_words())
+
+        self.status_label = ctk.CTkLabel(self.notebook_frame, text="", font=("Segoe UI", 13), text_color=TEXT_MUTED, height=20)
+        self.status_label.pack(anchor="w", padx=40, pady=(0, 6))
+
+        self.word_list_frame = WordListView(self.notebook_frame, self)
+        self.word_list_frame.pack(side="top", fill="both", expand=True, padx=40, pady=(0, 10))
+
+    def on_zoom_changed(self, value):
+        self.zoom_factor = value
+        self.word_list_frame.render()
+
+    def setup_settings_page(self):
+        self.settings_frame = ctk.CTkFrame(self, fg_color=BG_MAIN, corner_radius=0)
+        ctk.CTkLabel(self.settings_frame, text="Settings", font=("Segoe UI", 34, "bold"), text_color=TEXT_PRIMARY).pack(anchor="w", padx=50, pady=(45, 30))
+        ctk.CTkLabel(self.settings_frame, text="AI API Key (Gemini)", font=("Segoe UI", 15, "bold"), text_color=TEXT_PRIMARY).pack(anchor="w", padx=50, pady=(0, 8))
+        
+        self.api_key_entry = ctk.CTkEntry(self.settings_frame, placeholder_text="Paste API Key here...", width=450, height=42, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
+        if self.api_key: self.api_key_entry.insert(0, "••••••••")
+        self.api_key_entry.bind("<FocusOut>", self.on_api_key_changed)
+        self.api_key_entry.pack(anchor="w", padx=50, pady=(0, 20))
+        
+        ctk.CTkButton(self.settings_frame, text="Test Connection", width=160, height=42, fg_color=BG_CARD, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 14), command=self.run_api_test).pack(anchor="w", padx=50)
+        self.settings_status = ctk.CTkLabel(self.settings_frame, text="", font=("Segoe UI", 14), text_color=TEXT_MUTED)
+        self.settings_status.pack(anchor="w", padx=50, pady=15)
+
+    def on_api_key_changed(self, event):
+        new_key = self.api_key_entry.get().strip()
+        if new_key == "":
+            save_setting("gemini_api_key", "")
+            self.api_key = None
+        elif new_key != "••••••••":
+            save_setting("gemini_api_key", new_key)
+            self.api_key = new_key
+            self.api_key_entry.delete(0, 'end')
+            self.api_key_entry.insert(0, "••••••••")
+
+    def refresh_volumes_dashboard(self):
+        vols = get_all_volumes()
+        dropdown_strings = []
+        self.vol_display_to_id.clear()
+        
+        for v in vols:
+            display_str = f"{v['name']} ({v['word_count']} words)"
+            dropdown_strings.append(display_str)
+            self.vol_display_to_id[display_str] = v['id']
+            
+        self.volume_dropdown.configure(values=dropdown_strings)
+        
+        if self.current_volume_id is None or not any(v['id'] == self.current_volume_id for v in vols):
+            self.current_volume_id = vols[0]['id']
+            
+        for display_str, v_id in self.vol_display_to_id.items():
+            if v_id == self.current_volume_id:
+                self.volume_dropdown.set(display_str)
+                break
+
+    def on_volume_selection_changed(self, choice):
+        self.current_volume_id = self.vol_display_to_id.get(choice)
+        self.load_words()
+
+    def view_all_words(self):
+        self.show_favorites_only = False
+        self.btn_notebook.configure(fg_color=BG_CARD)
+        self.btn_favorites.configure(fg_color=BG_SIDEBAR)
+        self.select_frame("notebook")
+
+    def view_favorites(self):
+        self.show_favorites_only = True
+        self.btn_notebook.configure(fg_color=BG_SIDEBAR)
+        self.btn_favorites.configure(fg_color=BG_CARD)
+        self.select_frame("notebook")
+
+    def add_volume_ui(self):
+        dialog = ctk.CTkInputDialog(text="Enter new volume name:", title="Create Volume")
+        name = dialog.get_input()
+        if name and name.strip():
+            create_volume(name.strip())
+            self.refresh_volumes_dashboard()
+
+    def rename_volume_ui(self):
+        dialog = ctk.CTkInputDialog(text="Enter new name for active volume:", title="Rename Volume")
+        name = dialog.get_input()
+        if name and name.strip():
+            rename_volume(self.current_volume_id, name.strip())
+            self.refresh_volumes_dashboard()
+
+    def delete_volume_ui(self):
+        if messagebox.askyesno("Delete Volume", "Are you sure you want to delete the active volume permanently?"):
+            success, msg = delete_volume(self.current_volume_id)
+            if success:
+                self.current_volume_id = None
+                self.refresh_volumes_dashboard()
+                self.load_words()
+            else:
+                messagebox.showerror("Error", msg)
+
+    def load_words(self, scroll_to=None, flash=False):
+        self.header.configure(text="Favorites" if self.show_favorites_only else "My Notebook")
+
+        all_words = get_all_words_dictionaries(
+            search_query=self.search_entry.get().strip(), 
+            sort_order="DESC" if "Z-A" in self.sort_dropdown.get() else "ASC", 
+            volume_id=self.current_volume_id, 
+            search_all=self.search_all_var.get(),
+            favorites_only=self.show_favorites_only
+        )
+
+        self.word_list_frame.set_words(all_words)
+        
+        if scroll_to:
+            self.after(50, lambda: self.word_list_frame.scroll_to_word(scroll_to, flash=flash))
+        else:
+            try:
+                self.word_list_frame.canvas.yview_moveto(0)
+            except Exception:
+                pass
+
+    def add_new_word(self):
+        word = self.add_word_entry.get().strip()
+        if not word: return
+
+        if check_word_exists(word):
+            dialog = DuplicateDialog(self, word)
+            self.wait_window(dialog)
+            if dialog.result == "cancel": return
+            elif dialog.result == "open":
+                self.search_entry.delete(0, 'end')
+                self.search_entry.insert(0, word)
+                self.search_all_var.set(True) 
+                self.load_words(scroll_to=word.lower(), flash=True)
+                self.add_word_entry.delete(0, 'end')
+                return
+
+        api_key_to_use = self.api_key if self.api_key else self.api_key_entry.get().strip()
+        if not api_key_to_use or api_key_to_use == "••••••••":
+            messagebox.showwarning("Missing API Key", "Please add your API Key in Settings first.")
+            return
+
+        self.status_label.configure(text=f"Asking AI about '{word}'...", text_color=HIGHLIGHT_COLOR)
+        self.update()
+
+        def fetch_task():
+            try:
+                data, api_msg = fetch_word_details(word, api_key_to_use)
+                self.after(0, lambda: self._on_add_fetched(word, data, api_msg))
+            except Exception as e:
+                self.after(0, lambda: self._on_add_fetched(word, None, f"Network failed: {str(e)}"))
+            
+        threading.Thread(target=fetch_task, daemon=True).start()
+
+    def _on_add_fetched(self, word, data, api_msg):
+        if data:
+            if check_word_exists(word): 
+                for field in ['meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech', 'example_sentence', 'synonyms', 'antonyms', 'exam_history']:
+                    if field in data: update_single_field(word, field, data[field])
+                self.status_label.configure(text=f"'{word}' updated with fresh AI data!", text_color="#34D399")
+            else:
+                save_word_to_db(word, data, current_vol_id=self.current_volume_id)
+                self.status_label.configure(text=f"'{word}' added successfully!", text_color="#34D399")
+            
+            self.add_word_entry.delete(0, 'end')
+            self.search_entry.delete(0, 'end')
+            self.refresh_volumes_dashboard() 
+            self.load_words(scroll_to=word.lower(), flash=True)
+        else:
+            self.status_label.configure(text=api_msg, text_color="#F87171")
+
+    def select_frame(self, name):
+        self.notebook_frame.grid_forget()
+        self.settings_frame.grid_forget()
+        self.btn_notebook.configure(fg_color=BG_SIDEBAR)
+        self.btn_favorites.configure(fg_color=BG_SIDEBAR)
+        self.btn_settings.configure(fg_color=BG_CARD if name == "settings" else BG_SIDEBAR)
+        
+        if name == "notebook":
+            self.notebook_frame.grid(row=0, column=1, sticky="nsew")
+            if self.show_favorites_only: self.btn_favorites.configure(fg_color=BG_CARD)
+            else: self.btn_notebook.configure(fg_color=BG_CARD)
+            self.refresh_volumes_dashboard()
+            self.load_words()
+        else:
+            self.settings_frame.grid(row=0, column=1, sticky="nsew")
+
+    def run_api_test(self):
+        self.settings_status.configure(text="Testing connection...", text_color=HIGHLIGHT_COLOR)
+        self.update()
+        key_input = self.api_key_entry.get().strip()
+        if key_input == "••••••••": key_input = self.api_key
+        is_success, msg = test_gemini_connection(key_input)
+        self.settings_status.configure(text=msg, text_color="#34D399" if is_success else "#F87171")
+
+    def import_docx(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Word Document", "*.docx")])
+        if not file_path: return
+        success, result = import_from_docx(file_path)
+        if not success:
+            messagebox.showerror("Import Error", result)
+            return
+            
+        words_to_import = result
+        if not words_to_import:
+            messagebox.showinfo("Import", "No recognizable vocabulary items found in the document.")
+            return
+            
+        replace_duplicates, skip_duplicates, imported_count, skipped_count, failed_count = False, False, 0, 0, 0
+        
+        for w_data in words_to_import:
+            word = w_data['word']
+            if check_word_exists(word):
+                if not replace_duplicates and not skip_duplicates:
+                    dialog = ImportDuplicateDialog(self, word)
+                    self.wait_window(dialog)
+                    if dialog.result == "cancel": break
+                    elif dialog.result == "replace_all": replace_duplicates = True
+                    elif dialog.result == "skip_all": skip_duplicates = True
+                    elif dialog.result == "replace":
+                        self._force_replace_word(word, w_data)
+                        imported_count += 1
+                        continue
+                    elif dialog.result == "skip":
+                        skipped_count += 1
+                        continue
+                if replace_duplicates:
+                    self._force_replace_word(word, w_data)
+                    imported_count += 1
+                elif skip_duplicates: skipped_count += 1
+            else:
+                success, _ = save_word_to_db(word, w_data, self.current_volume_id)
+                if success:
+                    update_single_field(word, 'notes', w_data.get('notes', ''))
+                    imported_count += 1
+                else: failed_count += 1
+                    
+        messagebox.showinfo("Import Summary", f"Imported: {imported_count} words\nSkipped: {skipped_count} duplicates\nFailed: {failed_count}")
+        self.refresh_volumes_dashboard()
+        self.load_words()
+
+    def _force_replace_word(self, word, data):
+        for field in ['meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech', 'example_sentence', 'synonyms', 'antonyms', 'notes', 'exam_history']:
+            if field in data: update_single_field(word, field, data[field])
+
+    def export_docx(self):
+        vols = get_all_volumes()
+        dialog = ExportSelectionDialog(self, self.current_volume_id, vols)
+        self.wait_window(dialog)
+        if not dialog.result: return
+            
+        words = []
+        if dialog.result['type'] == 'all': words = get_all_words_dictionaries(search_all=True, sort_order="ASC")
+        elif dialog.result['type'] == 'current': words = get_all_words_dictionaries(volume_id=self.current_volume_id, sort_order="ASC")
+        elif dialog.result['type'] == 'custom': words = get_all_words_dictionaries(volume_id=dialog.result['volumes'], sort_order="ASC")
+            
+        if not words:
+            messagebox.showwarning("Export Failed", "No words found to export.")
+            return
+            
+        file_path = filedialog.asksaveasfilename(defaultextension=".docx", filetypes=[("Word Document", "*.docx")])
+        if file_path:
+            success, msg = export_to_docx(words, file_path)
+            if success: messagebox.showinfo("Success", msg)
+            else: messagebox.showerror("Error", msg)
+
+if __name__ == "__main__":
+    app = VocabNoteApp()
+    app.mainloop().
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\src\api\gemini.py
+===============================================================================
+import json
+import re
+import time
+import requests
+
+# --- Locked configuration -----------------------------------------------
+MODEL_NAME = "gemini-3.1-flash-lite"
+API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+
+REQUEST_TIMEOUT_SECONDS = 15
+MAX_RETRIES = 2          # retries for transient errors only (429 / 5xx)
+RETRY_BACKOFF_SECONDS = 2  # multiplied by attempt number
+
+def _build_url():
+    """Builds the fixed, locked-model endpoint. One line, no surprises."""
+    return f"{API_BASE_URL}/{MODEL_NAME}:generateContent"
+
+def _call_gemini_api(prompt_text, api_key, timeout=REQUEST_TIMEOUT_SECONDS):
+    if not api_key or not api_key.strip():
+        return None, "Missing API key. Please add your Gemini API key in Settings."
+
+    url = _build_url()
+    payload = {"contents": [{"parts": [{"text": prompt_text}]}]}
+    
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": api_key.strip(),
+    }
+
+    last_error = "Gemini request failed for an unknown reason."
+
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            response = requests.post(
+                url, headers=headers, json=payload, timeout=timeout
+            )
+        except requests.exceptions.Timeout:
+            last_error = "The request to Gemini timed out. Check your internet connection and try again."
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_BACKOFF_SECONDS * (attempt + 1))
+                continue
+            return None, last_error
+        except requests.exceptions.ConnectionError:
+            return None, "Could not reach Gemini's servers. Please check your internet connection."
+        except requests.exceptions.RequestException as e:
+            return None, f"Network error while contacting Gemini: {str(e)}"
+
+        if response.status_code == 200:
+            return response, None
+
+        google_msg = ""
+        try:
+            google_msg = response.json().get("error", {}).get("message", "")
+        except (ValueError, AttributeError):
+            pass
+
+        if response.status_code == 429:
+            last_error = f"Free-tier quota exceeded for {MODEL_NAME}. Wait a minute and try again. ({google_msg})"
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_BACKOFF_SECONDS * (attempt + 1))
+                continue
+            return None, last_error
+
+        if response.status_code in (401, 403):
+            return None, f"API key rejected ({response.status_code}). Double-check the key in Settings. ({google_msg})"
+
+        if response.status_code == 404:
+            return None, f"Model '{MODEL_NAME}' returned 404. Google retires Gemini models on a rolling basis. Check documentation and update MODEL_NAME."
+
+        if response.status_code >= 500:
+            last_error = f"Gemini server error ({response.status_code}). Retrying..."
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_BACKOFF_SECONDS * (attempt + 1))
+                continue
+            return None, f"Gemini server error ({response.status_code}). Please try again shortly."
+
+        return None, f"API Error ({response.status_code}): {google_msg or 'Unknown error.'}"
+
+    return None, last_error
+
+def _clean_json_response(raw_text):
+    text = raw_text.strip()
+    fence_match = re.search(r"```(?:json)?\s*(.*?)\s*```", text, re.DOTALL)
+    if fence_match:
+        text = fence_match.group(1).strip()
+
+    if not text.startswith("{"):
+        brace_match = re.search(r"\{.*\}", text, re.DOTALL)
+        if brace_match:
+            text = brace_match.group(0)
+
+    return text
+
+def test_gemini_connection(api_key):
+    response, error = _call_gemini_api("Respond with the single word: OK", api_key, timeout=10)
+    if error:
+        return False, error
+    return True, f"Connection successful! ({MODEL_NAME})"
+
+def fetch_word_details(word, api_key):
+    prompt = f"""
+        Analyze the English word: "{word}".
+        Return ONLY a valid JSON object with the following keys. Do not include markdown code blocks like ```json.
+        Do NOT wrap any synonyms or antonyms in double quotes. Just return them separated by commas.
+
+        {{
+            "meaning": "Short concise English meaning",
+            "bangla_meaning": "Meaning in Bengali script",
+            "english_definition": "A more detailed English definition",
+            "ipa": "Simple intuitive English pronunciation spelling (e.g. a-bate, ze-nith)",
+            "part_of_speech": "e.g. noun, verb, adjective",
+            "example_sentence": "A clear, natural example sentence",
+            "synonyms": "3-5 synonyms, comma-separated.",
+            "antonyms": "3-5 antonyms, comma-separated.",
+            "exam_history": "If this word frequently appears in Bangladesh competitive exams (e.g., BCS, Bangladesh Bank, IBA MBA, DU Admission, BUET, Medical), return a short badge string like '(BCS 44)'. If NEVER appeared, return \\"\\""
+        }}
+        """
+
+    response, error = _call_gemini_api(prompt, api_key)
+    if error:
+        return None, error
+
+    try:
+        raw_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError, TypeError, ValueError):
+        return None, "Gemini returned an unexpected response format. Try a different word or rephrase."
+
+    cleaned = _clean_json_response(raw_text)
+
+    try:
+        data = json.loads(cleaned)
+    except json.JSONDecodeError:
+        return None, "Gemini's response wasn't valid JSON. Please try refreshing this word again."
+
+    if not isinstance(data, dict):
+        return None, "Gemini's response wasn't in the expected format. Please try again."
+
+    return data, "Success".
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\src\database\db_manager.py
+===============================================================================
+import sqlite3
+import os
+from datetime import datetime
+
+DB_PATH = os.path.join("data", "vocab_notebook.db")
+MAX_WORDS_PER_VOLUME = 500
+
+
+def init_db():
+    # Automatically create the 'data' folder if missing
+    os.makedirs("data", exist_ok=True)
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS volumes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, created_at TEXT)''')
+
+    cursor.execute("SELECT COUNT(*) FROM volumes")
+    if cursor.fetchone()[0] == 0:
+        cursor.execute(
+            "INSERT INTO volumes (name, created_at) VALUES (?, ?)",
+            ("Volume 1", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        )
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS words (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        word TEXT UNIQUE NOT NULL,
+        meaning TEXT,
+        bangla_meaning TEXT,
+        english_definition TEXT,
+        ipa TEXT,
+        part_of_speech TEXT,
+        example_sentence TEXT,
+        synonyms TEXT,
+        antonyms TEXT,
+        status TEXT DEFAULT 'New',
+        is_favorite INTEGER DEFAULT 0,
+        notes TEXT DEFAULT '',
+        date_added TEXT
+    )
+    ''')
+    conn.commit()
+
+    # Safe migrations
+    try:
+        cursor.execute("ALTER TABLE words ADD COLUMN important_synonyms TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE words ADD COLUMN important_antonyms TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE words ADD COLUMN volume_id INTEGER DEFAULT 1")
+        cursor.execute("UPDATE words SET volume_id = 1 WHERE volume_id IS NULL")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE words ADD COLUMN exam_history TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
+
+    conn.commit()
+    conn.close()
+
+
+def get_setting(key):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT value FROM settings WHERE key = ?", (key,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    finally:
+        conn.close()
+
+
+def save_setting(key, value):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)",
+            (key, value)
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def get_all_volumes():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            SELECT v.id, v.name, COUNT(w.id) as word_count
+            FROM volumes v
+            LEFT JOIN words w ON v.id = w.volume_id
+            GROUP BY v.id
+            ORDER BY v.id ASC
+        ''')
+        return [dict(row) for row in cursor.fetchall()]
+    finally:
+        conn.close()
+
+
+def create_volume(name):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO volumes (name, created_at) VALUES (?, ?)",
+            (name, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        )
+        conn.commit()
+        return cursor.lastrowid
+    finally:
+        conn.close()
+
+
+def rename_volume(vol_id, new_name):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("UPDATE volumes SET name = ? WHERE id = ?", (new_name, vol_id))
+        conn.commit()
+        return True
+    finally:
+        conn.close()
+
+
+def delete_volume(vol_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT COUNT(*) FROM volumes")
+        total_volumes = cursor.fetchone()[0]
+
+        if total_volumes <= 1:
+            return False, "Cannot delete the last remaining volume."
+
+        cursor.execute("SELECT COUNT(*) FROM words WHERE volume_id = ?", (vol_id,))
+        if cursor.fetchone()[0] > 0:
+            return False, "Cannot delete a volume that contains words."
+
+        cursor.execute("DELETE FROM volumes WHERE id = ?", (vol_id,))
+        conn.commit()
+        return True, "Volume deleted."
+    finally:
+        conn.close()
+
+
+def get_available_volume_for_new_word(preferred_vol_id=None):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT COUNT(*) FROM volumes")
+        volume_count = cursor.fetchone()[0]
+
+        if volume_count == 0:
+            cursor.execute(
+                "INSERT INTO volumes (name, created_at) VALUES (?, ?)",
+                ("Volume 1", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            )
+            conn.commit()
+            return cursor.lastrowid
+
+        if preferred_vol_id:
+            cursor.execute("SELECT COUNT(*) FROM words WHERE volume_id = ?", (preferred_vol_id,))
+            if cursor.fetchone()[0] < MAX_WORDS_PER_VOLUME:
+                return preferred_vol_id
+
+        cursor.execute("SELECT id FROM volumes ORDER BY id DESC LIMIT 1")
+        latest_row = cursor.fetchone()
+
+        if latest_row:
+            latest_vol_id = latest_row[0]
+            cursor.execute("SELECT COUNT(*) FROM words WHERE volume_id = ?", (latest_vol_id,))
+            if cursor.fetchone()[0] < MAX_WORDS_PER_VOLUME:
+                return latest_vol_id
+
+        cursor.execute("SELECT COUNT(*) FROM volumes")
+        vol_count = cursor.fetchone()[0]
+        cursor.execute(
+            "INSERT INTO volumes (name, created_at) VALUES (?, ?)",
+            (f"Volume {vol_count + 1}", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        )
+        conn.commit()
+        return cursor.lastrowid
+    finally:
+        conn.close()
+
+
+def save_word_to_db(word, ai_data, current_vol_id=None):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    target_vol_id = get_available_volume_for_new_word(current_vol_id)
+    try:
+        cursor.execute('''
+        INSERT INTO words (
+            word, meaning, bangla_meaning, english_definition, ipa, part_of_speech,
+            example_sentence, synonyms, antonyms, date_added, volume_id, exam_history
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            word.lower(),
+            ai_data.get("meaning", ""),
+            ai_data.get("bangla_meaning", ""),
+            ai_data.get("english_definition", ""),
+            ai_data.get("ipa", ""),
+            ai_data.get("part_of_speech", ""),
+            ai_data.get("example_sentence", ""),
+            ai_data.get("synonyms", ""),
+            ai_data.get("antonyms", ""),
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            target_vol_id,
+            ai_data.get("exam_history", "")
+        ))
+        conn.commit()
+        return True, f"'{word}' saved permanently!"
+    except sqlite3.IntegrityError:
+        return False, f"'{word}' is already in your notebook!"
+    except Exception as e:
+        return False, f"Database error: {str(e)}"
+    finally:
+        conn.close()
+
+
+def get_all_words_dictionaries(search_query="", sort_order="ASC", volume_id=None, search_all=False, favorites_only=False):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    try:
+        order = "DESC" if sort_order.upper() == "DESC" else "ASC"
+        query_base = "SELECT * FROM words"
+        params = []
+        conditions = []
+
+        if search_query:
+            conditions.append("word LIKE ?")
+            params.append(f"%{search_query.lower()}%")
+
+        if volume_id and not search_all:
+            if isinstance(volume_id, list):
+                placeholders = ",".join("?" for _ in volume_id)
+                conditions.append(f"volume_id IN ({placeholders})")
+                params.extend(volume_id)
+            else:
+                conditions.append("volume_id = ?")
+                params.append(volume_id)
+
+        if favorites_only:
+            conditions.append("is_favorite = 1")
+
+        if conditions:
+            query_base += " WHERE " + " AND ".join(conditions)
+
+        query_base += f" ORDER BY word {order}"
+
+        cursor.execute(query_base, tuple(params))
+        return [dict(row) for row in cursor.fetchall()]
+    except Exception:
+        return []
+    finally:
+        conn.close()
+
+
+def check_word_exists(word):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT 1 FROM words WHERE word = ?", (word.lower(),))
+        return cursor.fetchone() is not None
+    finally:
+        conn.close()
+
+
+def update_single_field(word, field_name, new_value):
+    allowed_fields = [
+        'meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech',
+        'example_sentence', 'synonyms', 'antonyms', 'important_synonyms',
+        'important_antonyms', 'notes', 'is_favorite', 'exam_history'
+    ]
+    if field_name not in allowed_fields:
+        return False
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            f"UPDATE words SET {field_name} = ? WHERE word = ?",
+            (new_value, word.lower())
+        )
+        conn.commit()
+        return True
+    except Exception:
+        return False
+    finally:
+        conn.close()
+
+
+def delete_word(word):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM words WHERE word = ?", (word.lower(),))
+        conn.commit()
+        return True
+    except Exception:
+        return False
+    finally:
+        conn.close().
+==============================================================================
+FILE: C:\Users\sayed\Downloads\VocabNote\src\utils\export_manager.py
+===============================================================================
+from docx import Document
+from fpdf import FPDF
+import re
+
+def export_to_docx(words_data, file_path):
+    try:
+        doc = Document()
+        doc.add_heading('My Vocabulary Notebook', 0)
+
+        if not words_data:
+            doc.add_paragraph("Your notebook is empty. Add some words first!")
+            doc.save(file_path)
+            return True, "Export successful!"
+
+        for w in words_data:
+            doc.add_heading(w['word'].capitalize(), level=2)
+            doc.add_paragraph(f"IPA: {w.get('ipa', '')}  |  Part of Speech: {w.get('part_of_speech', '')}")
+            
+            if w.get('meaning'): doc.add_paragraph(f"Meaning: {w.get('meaning', '')}")
+            if w.get('bangla_meaning'): doc.add_paragraph(f"Bangla: {w.get('bangla_meaning', '')}")
+            if w.get('english_definition'): doc.add_paragraph(f"Definition: {w.get('english_definition', '')}")
+            if w.get('example_sentence'): doc.add_paragraph(f"Example: {w.get('example_sentence', '')}")
+            
+            def add_rich_text(paragraph, text, label):
+                paragraph.add_run(f"{label}: ").bold = True
+                parts = re.split(r'"(.*?)"', text)
+                for i, part in enumerate(parts):
+                    if i % 2 == 1:
+                        paragraph.add_run(part).bold = True
+                    else:
+                        paragraph.add_run(part)
+
+            if w.get('synonyms'):
+                p_syn = doc.add_paragraph()
+                add_rich_text(p_syn, w.get('synonyms', ''), "Synonyms")
+                
+            if w.get('antonyms'):
+                p_ant = doc.add_paragraph()
+                add_rich_text(p_ant, w.get('antonyms', ''), "Antonyms")
+
+            if w.get('notes'):
+                clean_notes = w.get('notes', '').replace('"', '')
+                doc.add_paragraph(f"Notes: {clean_notes}")
+
+            doc.add_paragraph()
+
+        doc.save(file_path)
+        return True, "DOCX Export successful!"
+    except Exception as e:
+        return False, f"Export failed: {str(e)}"
+
+def export_to_pdf(words_data, file_path):
+    try:
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(0, 10, "My Vocabulary Notebook", ln=True, align='C')
+        pdf.ln(10)
+        
+        if not words_data:
+            pdf.set_font("Arial", '', 12)
+            pdf.cell(0, 10, "Your notebook is empty.", ln=True)
+        else:
+            for w in words_data:
+                pdf.set_font("Arial", 'B', 14)
+                pdf.cell(0, 8, w['word'].capitalize(), ln=True)
+                
+                pdf.set_font("Arial", '', 11)
+                
+                def safe_text(txt):
+                    if not txt: return ""
+                    return str(txt).encode('latin-1', 'replace').decode('latin-1')
+
+                pdf.cell(0, 6, f"IPA: {safe_text(w.get('ipa', ''))} | POS: {safe_text(w.get('part_of_speech', ''))}", ln=True)
+                pdf.cell(0, 6, f"Meaning: {safe_text(w.get('meaning', ''))}", ln=True)
+                
+                syns = safe_text(w.get('synonyms', '')).replace('"', '')
+                pdf.cell(0, 6, f"Synonyms: {syns}", ln=True)
+                
+                ants = safe_text(w.get('antonyms', '')).replace('"', '')
+                pdf.cell(0, 6, f"Antonyms: {ants}", ln=True)
+                pdf.ln(5)
+                
+        pdf.output(file_path)
+        return True, "PDF Export successful!"
+    except Exception as e:
+        return False, f"PDF Export failed: {str(e)}"
+
+def import_from_docx(file_path):
+    """Parses an exported DOCX file and extracts vocabulary dictionaries."""
+    try:
+        doc = Document(file_path)
+        words_to_import = []
+        current_word = None
+
+        for p in doc.paragraphs:
+            text = p.text.strip()
+            if not text:
+                continue
+            
+            # Identify a new word block
+            if p.style.name.startswith('Heading 2'):
+                if current_word:
+                    words_to_import.append(current_word)
+                current_word = {
+                    'word': text.lower(), 'ipa': '', 'part_of_speech': '', 
+                    'meaning': '', 'bangla_meaning': '', 'english_definition': '', 
+                    'example_sentence': '', 'synonyms': '', 'antonyms': '', 'notes': ''
+                }
+                continue
+            
+            # Map paragraphs back to data fields
+            if current_word:
+                if text.startswith("IPA:"):
+                    parts = text.split("|")
+                    for part in parts:
+                        if "IPA:" in part:
+                            current_word['ipa'] = part.replace("IPA:", "").strip()
+                        elif "Part of Speech:" in part:
+                            current_word['part_of_speech'] = part.replace("Part of Speech:", "").strip()
+                elif text.startswith("Meaning:"):
+                    current_word['meaning'] = text.replace("Meaning:", "").strip()
+                elif text.startswith("Bangla:"):
+                    current_word['bangla_meaning'] = text.replace("Bangla:", "").strip()
+                elif text.startswith("Definition:"):
+                    current_word['english_definition'] = text.replace("Definition:", "").strip()
+                elif text.startswith("Example:"):
+                    current_word['example_sentence'] = text.replace("Example:", "").strip()
+                elif text.startswith("Synonyms:"):
+                    current_word['synonyms'] = text.replace("Synonyms:", "").strip()
+                elif text.startswith("Antonyms:"):
+                    current_word['antonyms'] = text.replace("Antonyms:", "").strip()
+                elif text.startswith("Notes:"):
+                    current_word['notes'] = text.replace("Notes:", "").strip()
+
+        # Catch the final word
+        if current_word:
+            words_to_import.append(current_word)
+
+        return True, words_to_import
+    except Exception as e:
+        return False, f"Import failed: {str(e)}".

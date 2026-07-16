@@ -1,10 +1,24 @@
-import tkinter as tk
-import sys
 import os
+import sys
+import ctypes
+
+# =======================================================================
+# HIGH-DPI FIX: Must run BEFORE tkinter imports
+# =======================================================================
+if sys.platform == 'win32':
+    try:
+        # Tell Windows 11 to scale this properly, CustomTkinter will handle the rest
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except Exception:
+        pass
+
+import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox
 import re
 import threading
+import traceback
+
 from api.gemini import test_gemini_connection, fetch_word_details
 from database.db_manager import (
     init_db, save_word_to_db, get_all_words_dictionaries, 
@@ -25,8 +39,6 @@ ACCENT = "#2563EB"
 ACCENT_HOVER = "#1D4ED8"
 HIGHLIGHT_COLOR = "#FBBF24"
 
-
-
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -35,6 +47,7 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
+# Let CustomTkinter handle DPI naturally
 ctk.set_appearance_mode("dark")
 
 class ExportSelectionDialog(ctk.CTkToplevel):
@@ -129,9 +142,8 @@ class DuplicateDialog(ctk.CTkToplevel):
         self.result = res
         self.destroy()
 
-
 # =========================================================================================
-# THE DYNAMIC SCALING CANVAS ENGINE
+# THE CANVAS ENGINE (MINIMALIST UI & PROPER PADDING)
 # =========================================================================================
 
 class WordListView(ctk.CTkFrame):
@@ -143,6 +155,9 @@ class WordListView(ctk.CTkFrame):
         self.editing_word = None
         self.open_notes = set()
         self.edit_widgets = {}
+        
+        self.card_y_positions = {}
+        self.card_bg_ids = {}
         
         self.canvas = tk.Canvas(self, bg=BG_MAIN, highlightthickness=0)
         self.scrollbar = ctk.CTkScrollbar(self, command=self.canvas.yview)
@@ -171,6 +186,37 @@ class WordListView(ctk.CTkFrame):
         elif event.num == 5 or event.delta < 0:
             self.canvas.yview_scroll(1, "units")
 
+    def scroll_to_word(self, target_word, flash=False):
+        if target_word in self.card_y_positions:
+            target_y = self.card_y_positions[target_word]
+            bbox = self.canvas.bbox("all")
+            if bbox:
+                total_height = bbox[3]
+                fraction = max(0.0, (target_y - self._z(10)) / total_height)
+                self.canvas.yview_moveto(fraction)
+            
+            if flash:
+                bg_id = self.card_bg_ids.get(target_word)
+                if bg_id:
+                    original_color = BG_CARD
+                    flash_color = "#3F3F46" 
+                    def flash_cycle(step):
+                        try:
+                            if step == 0:
+                                self.canvas.itemconfig(bg_id, fill=flash_color)
+                                self.after(300, lambda: flash_cycle(1))
+                            elif step == 1:
+                                self.canvas.itemconfig(bg_id, fill=original_color)
+                                self.after(300, lambda: flash_cycle(2))
+                            elif step == 2:
+                                self.canvas.itemconfig(bg_id, fill=flash_color)
+                                self.after(300, lambda: flash_cycle(3))
+                            elif step == 3:
+                                self.canvas.itemconfig(bg_id, fill=original_color)
+                        except Exception:
+                            pass 
+                    flash_cycle(0)
+
     def _z(self, val):
         return max(1, int(val * self.app.zoom_factor))
 
@@ -184,14 +230,19 @@ class WordListView(ctk.CTkFrame):
         for w in self.edit_widgets.values():
             w.destroy()
         self.edit_widgets.clear()
+        self.card_y_positions.clear()
+        self.card_bg_ids.clear()
         
         width = self.canvas.winfo_width()
         if width < 100: return 
         
         y_offset = self._z(10)
         for w_data in self.words:
-            y_offset = self._draw_card(y_offset, w_data, width)
-            y_offset += self._z(25)
+            word_key = w_data['word']
+            self.card_y_positions[word_key] = y_offset
+            bg_id, y_offset = self._draw_card(y_offset, w_data, width)
+            self.card_bg_ids[word_key] = bg_id
+            y_offset += self._z(40) # Increased gap between cards for breathing room
             
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
@@ -219,13 +270,16 @@ class WordListView(ctk.CTkFrame):
 
     def _draw_button(self, x_right, y_center, text, fg_color, text_color, hover_color, command, word, is_star=False):
         font_size = self._z(24) if is_star else self._z(13)
+        
         temp = self.canvas.create_text(0, -100, text=text, font=("Segoe UI", font_size, "bold"))
         bbox = self.canvas.bbox(temp)
         self.canvas.delete(temp)
-        tw = bbox[2] - bbox[0] if bbox else self._z(40)
+        tw = (bbox[2] - bbox[0]) if bbox else self._z(40)
         
-        w = self._z(38) if is_star else tw + self._z(36)
+        # Sleeker button padding
+        w = self._z(38) if is_star else tw + self._z(28)
         h = self._z(36)
+        
         x_left = x_right - w
         y_top = y_center - h//2
         y_bot = y_center + h//2
@@ -254,27 +308,27 @@ class WordListView(ctk.CTkFrame):
     def _draw_interactive_tags(self, start_x, start_y, max_w, items_str, important_str, word, field_key):
         curr_x = start_x
         curr_y = start_y
-        line_height = self._z(28)
+        line_height = self._z(32) # Increased breathing room for tags
 
         items = [s.strip() for s in items_str.split(',') if s.strip()]
         important_items = set(s.strip().lower() for s in important_str.split(',') if s.strip())
 
         if not items:
-            self.canvas.create_text(start_x, start_y, text=f"No {field_key} yet.", font=("Segoe UI", self._z(15)), fill=TEXT_MUTED, anchor="nw")
+            self.canvas.create_text(start_x, start_y, text=f"No {field_key} yet.", font=("Segoe UI", self._z(14)), fill=TEXT_MUTED, anchor="nw")
             return start_y + self._z(35)
 
         for i, item in enumerate(items):
             is_imp = item.lower() in important_items
             color = HIGHLIGHT_COLOR if is_imp else TEXT_PRIMARY
             font_weight = "bold" if is_imp else "normal"
-            font_choice = ("Segoe UI", self._z(17), font_weight)
+            font_choice = ("Segoe UI", self._z(15), font_weight)
             
             display_text = item + ("," if i < len(items) - 1 else "")
             
             temp_id = self.canvas.create_text(0, -100, text=display_text, font=font_choice)
             bbox = self.canvas.bbox(temp_id)
             self.canvas.delete(temp_id)
-            item_w = bbox[2] - bbox[0] if bbox else 0
+            item_w = (bbox[2] - bbox[0]) if bbox else self._z(len(display_text) * 10)
             
             if curr_x + item_w > start_x + max_w and curr_x != start_x:
                 curr_x = start_x
@@ -295,7 +349,7 @@ class WordListView(ctk.CTkFrame):
             self.canvas.tag_bind(text_id, "<Leave>", on_leave)
             self.canvas.tag_bind(text_id, "<Button-1>", on_click)
             
-            curr_x += item_w + self._z(6)
+            curr_x += item_w + self._z(8)
 
         return curr_y + line_height
         
@@ -323,16 +377,15 @@ class WordListView(ctk.CTkFrame):
         self.render()
 
     def _draw_inline_properties(self, w_data, x1, x2, curr_y, is_edit):
-        """Draws PRO, POS, and Meaning cleanly with word wrap support for large properties."""
+        """Minimalist spaced wrapping to prevent horizontal clutter."""
         if is_edit:
-            # Edit Mode leverages the perfectly stacked layout for reliability
             curr_y = self._draw_property_row("PRO", 'ipa', w_data, x1, x2, curr_y, True)
             curr_y = self._draw_property_row("POS", 'part_of_speech', w_data, x1, x2, curr_y, True)
             curr_y = self._draw_property_row("MEANING", 'meaning', w_data, x1, x2, curr_y, True)
             return curr_y
             
-        start_x = x1 + self._z(20)
-        max_x = x2 - self._z(20)
+        start_x = x1 + self._z(30)
+        max_x = x2 - self._z(30)
         
         line_x = start_x
         line_y = curr_y
@@ -341,77 +394,95 @@ class WordListView(ctk.CTkFrame):
         def add_item(lbl_text, val_text):
             nonlocal line_x, line_y, max_y
             
-            # Predict if this component will breach the line boundary
-            est_w = self._z(40) + self._z(len(val_text)*10)
-            if lbl_text == "MEANING": est_w = self._z(150) # Force minimum space for Meaning
+            font_lbl = ("Segoe UI", self._z(11), "bold")
+            font_val = ("Segoe UI", self._z(15))
             
-            if line_x + est_w > max_x and line_x != start_x:
+            temp_lbl = self.canvas.create_text(0, -100, text=lbl_text, font=font_lbl)
+            temp_val = self.canvas.create_text(0, -100, text=val_text if val_text else "—", font=font_val)
+            
+            b_lbl = self.canvas.bbox(temp_lbl)
+            b_val = self.canvas.bbox(temp_val)
+            self.canvas.delete(temp_lbl)
+            self.canvas.delete(temp_val)
+            
+            lbl_w = (b_lbl[2] - b_lbl[0]) if b_lbl else self._z(40)
+            val_w = (b_val[2] - b_val[0]) if b_val else self._z(60)
+            
+            # Substantial breathing room between text elements
+            gap_after_lbl = self._z(12)
+            gap_after_item = self._z(50)
+            
+            est_block_w = lbl_w + gap_after_lbl + val_w + gap_after_item
+            if lbl_text == "MEANING": est_block_w = max(est_block_w, self._z(200))
+            
+            if line_x + est_block_w > max_x and line_x != start_x:
                 line_x = start_x
-                line_y = max_y + self._z(10)
+                line_y = max_y + self._z(30)
                 
-            id_lbl = self.canvas.create_text(line_x, line_y + self._z(2), text=lbl_text, font=("Segoe UI", self._z(12), "bold"), fill=TEXT_MUTED, anchor="nw")
-            bbox_lbl = self.canvas.bbox(id_lbl)
-            val_x = (bbox_lbl[2] if bbox_lbl else line_x + self._z(35)) + self._z(8)
+            self.canvas.create_text(line_x, line_y + self._z(2), text=lbl_text, font=font_lbl, fill=TEXT_MUTED, anchor="nw")
+            val_x = line_x + lbl_w + gap_after_lbl
             
             rem_w = max_x - val_x
-            if rem_w < self._z(80): rem_w = max_x - start_x # Force full width if choked
+            if rem_w < self._z(100): rem_w = max_x - start_x 
             
-            id_val = self.canvas.create_text(val_x, line_y, text=val_text if val_text else "—", font=("Segoe UI", self._z(15)), fill=TEXT_PRIMARY if val_text else TEXT_MUTED, anchor="nw", width=rem_w)
+            id_val = self.canvas.create_text(val_x, line_y, text=val_text if val_text else "—", font=font_val, fill=TEXT_PRIMARY if val_text else TEXT_MUTED, anchor="nw", width=rem_w)
+            
             bbox_val = self.canvas.bbox(id_val)
+            true_val_w = (bbox_val[2] - bbox_val[0]) if bbox_val else val_w
             
-            line_x = (bbox_val[2] if bbox_val else val_x + self._z(50)) + self._z(20)
-            item_bottom = (bbox_val[3] if bbox_val else line_y + self._z(24))
+            line_x = val_x + true_val_w + gap_after_item
+            item_bottom = (bbox_val[3] if bbox_val else line_y + self._z(26))
             
-            if item_bottom > max_y:
-                max_y = item_bottom
-                
+            if item_bottom > max_y: max_y = item_bottom
+
         add_item("PRO", w_data.get('ipa', "") or "")
         add_item("POS", w_data.get('part_of_speech', "") or "")
         add_item("MEANING", w_data.get('meaning', "") or "")
         
-        return max_y + self._z(14)
+        return max_y + self._z(25)
 
     def _draw_property_row(self, label, key, w_data, x1, x2, curr_y, is_edit, custom_font="Segoe UI"):
-        col1_x = x1 + self._z(140)
+        col1_x = x1 + self._z(120) 
         col2_x = col1_x + self._z(25)
         value = w_data.get(key, "") or ""
         
         self.canvas.create_text(col1_x, curr_y + self._z(2), text=label.upper(), font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="ne")
         
         if is_edit:
-            widget = ctk.CTkEntry(self.canvas, width=x2 - col2_x - self._z(30), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=(custom_font, self._z(16) if custom_font != "Segoe UI" else self._z(17)), border_width=0, corner_radius=6)
+            widget = ctk.CTkEntry(self.canvas, width=x2 - col2_x - self._z(40), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=(custom_font, self._z(15)), border_width=0, corner_radius=6)
             widget.insert(0, value)
             self.canvas.create_window(col2_x, curr_y - self._z(6), anchor="nw", window=widget) 
             self.edit_widgets[f"{w_data['word']}_{key}"] = widget
-            return curr_y + self._z(35)
+            return curr_y + self._z(45)
         else:
             display_text = value if value else "—"
             color = TEXT_PRIMARY if value else TEXT_MUTED
-            text_id = self.canvas.create_text(col2_x, curr_y, text=display_text, font=(custom_font, self._z(16) if custom_font != "Segoe UI" else self._z(15)), fill=color, anchor="nw", width=x2 - col2_x - self._z(30))
+            text_id = self.canvas.create_text(col2_x, curr_y, text=display_text, font=(custom_font, self._z(15)), fill=color, anchor="nw", width=x2 - col2_x - self._z(40))
             bbox = self.canvas.bbox(text_id)
-            return (bbox[3] if bbox else curr_y + self._z(24)) + self._z(14)
+            # Generous vertical spacing below standard properties
+            return (bbox[3] if bbox else curr_y + self._z(24)) + self._z(22)
 
     def _draw_panel(self, label, key, w_data, x, y, width, bg_color, is_edit):
         rect_id = self._create_round_rect(x, y, x + width, y + self._z(10), radius=self._z(8), fill=bg_color, outline="")
         self.canvas.create_text(x + self._z(25), y + self._z(15), text=label, font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
         
         val_x = x + self._z(25)
-        val_y = y + self._z(42)
-        val_w = width - self._z(50)
+        val_y = y + self._z(50) # Generous top inner padding
+        val_w = width - self._z(50) 
         value = w_data.get(key, "") or ""
         important_value = w_data.get(f'important_{key}', "") or ""
         
         if is_edit:
-            widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(65), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
+            widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(70), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
             widget.insert("1.0", value)
             self.canvas.create_window(val_x, val_y, anchor="nw", window=widget)
             self.edit_widgets[f"{w_data['word']}_{key}"] = widget
-            bottom_y = val_y + self._z(75)
+            bottom_y = val_y + self._z(80)
         else:
             bottom_y = self._draw_interactive_tags(val_x, val_y, val_w, value, important_value, w_data['word'], key)
                 
-        self._update_round_rect(rect_id, x, y, x + width, bottom_y + self._z(15), radius=self._z(8))
-        return bottom_y + self._z(15)
+        self._update_round_rect(rect_id, x, y, x + width, bottom_y + self._z(20), radius=self._z(8)) # Bottom inner padding
+        return bottom_y + self._z(20)
 
     # --- Main Assembly ---
 
@@ -422,27 +493,40 @@ class WordListView(ctk.CTkFrame):
         x2 = max(x1 + self._z(100), width - self._z(40))
         
         bg_id = self._create_round_rect(x1, y_start, x2, y_start+self._z(100), radius=self._z(12), fill=BG_CARD, outline="")
-        curr_y = y_start + self._z(35)
+        curr_y = y_start + self._z(40) # Push content down from top edge
         
         is_fav = bool(w_data.get('is_favorite', 0))
         fav_color = HIGHLIGHT_COLOR if is_fav else TEXT_MUTED
-        btn_x = self._draw_button(x1 + self._z(45), curr_y, "★" if is_fav else "☆", BG_CARD, fav_color, "#3F3F46", self.action_fav, word, is_star=True)
         
-        id_title = self.canvas.create_text(x1 + self._z(65), curr_y, text=word.capitalize(), font=("Segoe UI", self._z(28), "bold"), fill=TEXT_PRIMARY, anchor="w")
+        # FIXED: Anchor the star properly inside the box
+        star_x = x1 + self._z(70) # Right edge of star button (70 - 38 width = 32px padding from left edge)
+        self._draw_button(star_x, curr_y, "★" if is_fav else "☆", BG_CARD, fav_color, "#3F3F46", self.action_fav, word, is_star=True)
+        
+        title_start_x = x1 + self._z(85)
+        max_title_w = x2 - title_start_x - self._z(280)
+        
+        id_title = self.canvas.create_text(title_start_x, curr_y, text=word.capitalize(), font=("Segoe UI", self._z(26), "bold"), fill=TEXT_PRIMARY, anchor="w", width=max_title_w)
         bbox_title = self.canvas.bbox(id_title)
         
-        # Reliable bounding box calculation to prevent Exam History merging
         if bbox_title:
             title_end_x = bbox_title[2] + self._z(15)
+            title_bottom_y = bbox_title[3]
         else:
-            # Fallback approximation for first render
-            title_end_x = x1 + self._z(65) + self._z(len(word) * 18) + self._z(15)
-        
+            title_end_x = title_start_x + self._z(len(word) * 15) + self._z(15)
+            title_bottom_y = curr_y + self._z(20)
+            
         exam = w_data.get('exam_history', '').strip()
         if exam:
-            self.canvas.create_text(title_end_x, curr_y + self._z(5), text=exam, font=("Segoe UI", self._z(14), "italic"), fill=TEXT_MUTED, anchor="w")
+            safe_button_zone = x2 - self._z(260)
+            if title_end_x > safe_button_zone:
+                self.canvas.create_text(title_start_x, title_bottom_y + self._z(5), text=exam, font=("Segoe UI", self._z(14), "italic"), fill=TEXT_MUTED, anchor="nw")
+                curr_y = title_bottom_y + self._z(25)
+            else:
+                self.canvas.create_text(title_end_x, curr_y + self._z(3), text=exam, font=("Segoe UI", self._z(14), "italic"), fill=TEXT_MUTED, anchor="w")
+                if title_bottom_y > curr_y + self._z(20):
+                    curr_y = title_bottom_y - self._z(10)
 
-        btn_x = x2 - self._z(25)
+        btn_x = x2 - self._z(30)
         btn_x = self._draw_button(btn_x, curr_y, "Delete", "#7F1D1D", TEXT_PRIMARY, "#991B1B", self.action_delete, word)
         btn_x = self._draw_button(btn_x, curr_y, "Refresh AI", ACCENT, TEXT_PRIMARY, ACCENT_HOVER, self.action_refresh, word)
         
@@ -455,45 +539,49 @@ class WordListView(ctk.CTkFrame):
         n_color = ACCENT if has_notes else BG_CARD
         self._draw_button(btn_x, curr_y, "📝 Notes", n_color, TEXT_PRIMARY, ACCENT_HOVER if has_notes else "#3F3F46", self.action_notes, word)
         
-        curr_y += self._z(50)
+        curr_y += self._z(60) # Massive breathing room under the title row
         
         curr_y = self._draw_inline_properties(w_data, x1, x2, curr_y, is_edit)
         curr_y = self._draw_property_row("BANGLA", 'bangla_meaning', w_data, x1, x2, curr_y, is_edit, custom_font="Kalpurush")
         curr_y = self._draw_property_row("EXAMPLE", 'example_sentence', w_data, x1, x2, curr_y, is_edit)
-        curr_y += self._z(10)
+        curr_y += self._z(15)
         
-        panel_w = max(self._z(100), (x2 - x1 - self._z(50)) // 2)
-        y_syn = self._draw_panel("SYNONYMS", 'synonyms', w_data, x1 + self._z(20), curr_y, panel_w, "#1C1C20", is_edit)
-        y_ant = self._draw_panel("ANTONYMS", 'antonyms', w_data, x1 + self._z(30) + panel_w, curr_y, panel_w, "#191A21", is_edit)
-        curr_y = max(y_syn, y_ant) + self._z(15) 
+        available_w = x2 - x1 - self._z(75)
+        panel_w = max(self._z(100), available_w // 2)
+        x_syn = x1 + self._z(30)
+        x_ant = x1 + self._z(45) + panel_w
+        
+        y_syn = self._draw_panel("SYNONYMS", 'synonyms', w_data, x_syn, curr_y, panel_w, "#1C1C20", is_edit)
+        y_ant = self._draw_panel("ANTONYMS", 'antonyms', w_data, x_ant, curr_y, panel_w, "#191A21", is_edit)
+        curr_y = max(y_syn, y_ant) + self._z(20) 
         
         if word in self.open_notes or is_edit:
             notes_rect = self._create_round_rect(x1 + self._z(20), curr_y, x2 - self._z(20), curr_y + self._z(10), radius=self._z(8), fill=BG_SIDEBAR, outline="")
-            self.canvas.create_text(x1 + self._z(45), curr_y + self._z(15), text="PERSONAL NOTES", font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
+            self.canvas.create_text(x1 + self._z(45), curr_y + self._z(20), text="PERSONAL NOTES", font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
             
             val_x = x1 + self._z(45)
-            val_y = curr_y + self._z(40)
+            val_y = curr_y + self._z(50)
             val_w = x2 - x1 - self._z(90)
             value = w_data.get('notes', "") or ""
             
             if is_edit:
-                widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(65), fg_color=BG_CARD, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
+                widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(75), fg_color=BG_CARD, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
                 widget.insert("1.0", value)
                 self.canvas.create_window(val_x, val_y, anchor="nw", window=widget)
                 self.edit_widgets[f"{word}_notes"] = widget
-                bottom_y = val_y + self._z(75)
+                bottom_y = val_y + self._z(85)
             else:
                 display_text = value if value else "No personal notes yet."
                 color = TEXT_PRIMARY if value else TEXT_MUTED
                 text_id = self.canvas.create_text(val_x, val_y, text=display_text, font=("Segoe UI", self._z(15)), fill=color, anchor="nw", width=val_w)
                 bbox = self.canvas.bbox(text_id)
-                bottom_y = (bbox[3] if bbox else val_y + self._z(25)) + self._z(20)
+                bottom_y = (bbox[3] if bbox else val_y + self._z(25)) + self._z(25)
                 
             self._update_round_rect(notes_rect, x1 + self._z(20), curr_y, x2 - self._z(20), bottom_y + self._z(10), radius=self._z(8))
-            curr_y = bottom_y + self._z(10)
+            curr_y = bottom_y + self._z(20)
             
-        self._update_round_rect(bg_id, x1, y_start, x2, curr_y + self._z(25), radius=self._z(12))
-        return curr_y + self._z(25)
+        self._update_round_rect(bg_id, x1, y_start, x2, curr_y + self._z(35), radius=self._z(12)) # Clean bottom padding
+        return bg_id, curr_y + self._z(35)
 
     # --- Event Actions ---
 
@@ -503,8 +591,9 @@ class WordListView(ctk.CTkFrame):
                 self.app.load_words()
 
     def action_refresh(self, word):
-        api_key = self.app.api_key if self.app.api_key else self.app.api_key_entry.get().strip()
-        if not api_key or api_key == "••••••••":
+        raw_key = self.app.api_key_entry.get().strip()
+        api_key = self.app.api_key if raw_key == "••••••••" else raw_key
+        if not api_key:
             messagebox.showwarning("Missing API Key", "Please enter your API Key in Settings first.")
             return
             
@@ -515,7 +604,8 @@ class WordListView(ctk.CTkFrame):
                 data, api_msg = fetch_word_details(word, api_key)
                 self.app.after(0, lambda: self._on_refresh_done(word, data, api_msg))
             except Exception as e:
-                self.app.after(0, lambda: self._on_refresh_done(word, None, f"Network failed: {str(e)}"))
+                err_dump = traceback.format_exc()
+                self.app.after(0, lambda: self._on_refresh_done(word, None, f"Network Crash: {str(e)}"))
             
         threading.Thread(target=fetch_task, daemon=True).start()
 
@@ -524,7 +614,7 @@ class WordListView(ctk.CTkFrame):
             for field in ['meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech', 'example_sentence', 'synonyms', 'antonyms', 'exam_history']:
                 if field in data: update_single_field(word, field, data[field])
             self.app.status_label.configure(text=f"Refreshed '{word}'!", text_color="#34D399")
-            self.app.load_words()
+            self.app.load_words(scroll_to=word.lower(), flash=False)
         else:
             messagebox.showerror("Refresh Failed", api_msg)
             self.app.status_label.configure(text="", text_color=TEXT_MUTED)
@@ -550,7 +640,7 @@ class WordListView(ctk.CTkFrame):
             update_single_field(word, field, new_value)
             
         self.editing_word = None
-        self.app.load_words()
+        self.app.load_words(scroll_to=word.lower(), flash=False)
 
     def action_notes(self, word):
         if word in self.open_notes:
@@ -572,7 +662,6 @@ class WordListView(ctk.CTkFrame):
             w_data['is_favorite'] = 1 if is_fav else 0
             self.render()
 
-
 # =========================================================================================
 
 class VocabNoteApp(ctk.CTk):
@@ -593,7 +682,11 @@ class VocabNoteApp(ctk.CTk):
         self.show_favorites_only = False
 
         self.title("VocabNote")
-        self.iconbitmap(resource_path("vocab_icon.ico"))
+        
+        icon_path = resource_path("vocab_icon.ico")
+        if os.path.exists(icon_path):
+            self.iconbitmap(icon_path)
+            
         self.geometry("1200x800")
         self.configure(fg_color=BG_MAIN)
         self.grid_columnconfigure(1, weight=1)
@@ -661,8 +754,8 @@ class VocabNoteApp(ctk.CTk):
 
         self.add_word_entry = ctk.CTkEntry(row2, placeholder_text="Enter a hard English word...", width=260, height=38, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
         self.add_word_entry.pack(side="left", padx=(0, 10))
-        # Fixed Enter Key Binding
-        self.add_word_entry.bind("<Return>", lambda e: self.add_new_word())
+        
+        self.add_word_entry.bind("<Return>", self._on_enter_pressed)
         
         ctk.CTkButton(row2, text="Enrich Word", width=110, height=38, fg_color=ACCENT, hover_color=ACCENT_HOVER, font=("Segoe UI", 14, "bold"), command=self.add_new_word).pack(side="left")
 
@@ -679,6 +772,10 @@ class VocabNoteApp(ctk.CTk):
 
         self.word_list_frame = WordListView(self.notebook_frame, self)
         self.word_list_frame.pack(side="top", fill="both", expand=True, padx=40, pady=(0, 10))
+
+    def _on_enter_pressed(self, event):
+        self.focus()
+        self.add_new_word()
 
     def on_zoom_changed(self, value):
         self.zoom_factor = value
@@ -769,7 +866,7 @@ class VocabNoteApp(ctk.CTk):
             else:
                 messagebox.showerror("Error", msg)
 
-    def load_words(self):
+    def load_words(self, scroll_to=None, flash=False):
         self.header.configure(text="Favorites" if self.show_favorites_only else "My Notebook")
 
         all_words = get_all_words_dictionaries(
@@ -782,10 +879,13 @@ class VocabNoteApp(ctk.CTk):
 
         self.word_list_frame.set_words(all_words)
         
-        try:
-            self.word_list_frame.canvas.yview_moveto(0)
-        except Exception:
-            pass
+        if scroll_to:
+            self.after(50, lambda: self.word_list_frame.scroll_to_word(scroll_to, flash=flash))
+        else:
+            try:
+                self.word_list_frame.canvas.yview_moveto(0)
+            except Exception:
+                pass
 
     def add_new_word(self):
         word = self.add_word_entry.get().strip()
@@ -799,12 +899,13 @@ class VocabNoteApp(ctk.CTk):
                 self.search_entry.delete(0, 'end')
                 self.search_entry.insert(0, word)
                 self.search_all_var.set(True) 
-                self.load_words()
+                self.load_words(scroll_to=word.lower(), flash=True)
                 self.add_word_entry.delete(0, 'end')
                 return
 
-        api_key_to_use = self.api_key if self.api_key else self.api_key_entry.get().strip()
-        if not api_key_to_use or api_key_to_use == "••••••••":
+        raw_key = self.api_key_entry.get().strip()
+        api_key_to_use = self.api_key if raw_key == "••••••••" else raw_key
+        if not api_key_to_use:
             messagebox.showwarning("Missing API Key", "Please add your API Key in Settings first.")
             return
 
@@ -816,6 +917,7 @@ class VocabNoteApp(ctk.CTk):
                 data, api_msg = fetch_word_details(word, api_key_to_use)
                 self.after(0, lambda: self._on_add_fetched(word, data, api_msg))
             except Exception as e:
+                err_dump = traceback.format_exc()
                 self.after(0, lambda: self._on_add_fetched(word, None, f"Network failed: {str(e)}"))
             
         threading.Thread(target=fetch_task, daemon=True).start()
@@ -833,7 +935,7 @@ class VocabNoteApp(ctk.CTk):
             self.add_word_entry.delete(0, 'end')
             self.search_entry.delete(0, 'end')
             self.refresh_volumes_dashboard() 
-            self.load_words()
+            self.load_words(scroll_to=word.lower(), flash=True)
         else:
             self.status_label.configure(text=api_msg, text_color="#F87171")
 
@@ -856,8 +958,8 @@ class VocabNoteApp(ctk.CTk):
     def run_api_test(self):
         self.settings_status.configure(text="Testing connection...", text_color=HIGHLIGHT_COLOR)
         self.update()
-        key_input = self.api_key_entry.get().strip()
-        if key_input == "••••••••": key_input = self.api_key
+        raw_key = self.api_key_entry.get().strip()
+        key_input = self.api_key if raw_key == "••••••••" else raw_key
         is_success, msg = test_gemini_connection(key_input)
         self.settings_status.configure(text=msg, text_color="#34D399" if is_success else "#F87171")
 
