@@ -2,349 +2,129 @@
 
 <div align="center">
 
-**A modern, AI powered vocabulary notebook built for serious learners.**
+A fast, offline first vocabulary notebook powered by Google Gemini AI.
 
-Instantly enrich English words with pronunciation, meanings, Bangla translation, examples, synonyms, antonyms, and exam history using Google's Gemini AI, while keeping your entire vocabulary library stored locally for maximum speed and privacy.
-
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![CustomTkinter](https://img.shields.io/badge/CustomTkinter-Modern_UI-1F6FEB?style=for-the-badge)
-![SQLite](https://img.shields.io/badge/SQLite-Offline-003B57?style=for-the-badge&logo=sqlite)
-![Gemini AI](https://img.shields.io/badge/Gemini_AI-Powered-8E75FF?style=for-the-badge)
-![Platform](https://img.shields.io/badge/Windows-Desktop-0078D6?style=for-the-badge&logo=windows)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![CustomTkinter](https://img.shields.io/badge/CustomTkinter-Modern_UI-1F6FEB?style=for-the-badge)](https://github.com/TomSchimansky/CustomTkinter)
+[![SQLite](https://img.shields.io/badge/SQLite-Offline_Storage-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
+[![Gemini AI](https://img.shields.io/badge/Gemini_AI-Powered-8E75FF?style=for-the-badge)](https://ai.google.dev/)
+[![Windows](https://img.shields.io/badge/Windows-Desktop_App-0078D6?style=for-the-badge&logo=windows&logoColor=white)]()
 
 </div>
 
----
+## 📥 Download
 
-# ✨ Overview
+**[👉 Download the latest Windows executable v1.0.0](https://github.com/sayedalve/VocabNote/releases/tag/v1.0.0)**
 
-Learning vocabulary should be effortless.
+No installation is required. Just unzip the folder and run `VocabNote.exe`.
 
-Instead of manually searching dictionaries, pronunciation websites, translators, and example databases, **VocabNote** enriches everything automatically with a single click.
+## ✨ What is VocabNote
 
-Enter any English word and VocabNote instantly generates:
+VocabNote helps you save and enrich vocabulary words instantly with AI.
 
-* Pronunciation (IPA)
-* Part of Speech
-* English Meaning
-* Bangla Meaning
-* Example Sentence
-* Synonyms
-* Antonyms
-* Competitive Exam History (when available)
-* Personal Notes
+It gives you pronunciation, part of speech, meanings, Bangla translation, example sentences, synonyms, antonyms, exam history, and personal notes. Everything is stored locally, so it stays fast and works offline after the data is saved.
 
-Everything is stored locally inside SQLite, making the application extremely fast even without an internet connection.
+## 🚀 Key Features
 
----
+### 📖 Smart Word Enrichment
+Add a word and let Gemini automatically generate:
+Pronunciation
+Part of speech
+English meaning
+Bangla meaning
+Example sentence
+Synonyms
+Antonyms
+Exam history
 
-# 🚀 Why VocabNote?
+### 🗂 Volume Management
+Organize your vocabulary into custom volumes with full create, rename, and delete support.
 
-Unlike traditional Tkinter applications that become sluggish with large datasets, VocabNote uses a completely custom rendering architecture optimized for desktop performance.
+### 🔍 Search and Filter
+Search words instantly, sort A to Z or Z to A, and filter favorites in real time.
 
-## ⚡ Custom Rendering Engine
+### ⭐ Favorites and Notes
+Mark important words as favorites and store your own personal notes for revision.
 
-Instead of creating thousands of Tkinter widgets, VocabNote renders everything directly on a Canvas.
+### 📄 Export and Import
+Export your notebook to a clean DOCX file and import vocabulary back from DOCX.
 
-Benefits include:
+### ⚡ Fast Desktop UI
+Built with a custom canvas based rendering engine for smoother scrolling and better performance on large word lists.
 
-* Smooth scrolling
-* Lower memory usage
-* Faster rendering
-* Better responsiveness
-* Excellent scalability
+### 💾 Offline First
+All data is stored locally in SQLite for speed, privacy, and reliability.
 
----
+## 🧠 Why This Project Feels Different
 
-## 🎯 Dynamic Zoom Engine
+Most Tkinter apps become slow when the list grows. VocabNote uses a custom rendering approach instead of a heavy widget per row design. That keeps the interface responsive even with many words.
 
-The interface is rendered mathematically rather than relying on fixed widget sizes.
+It is also designed with a modern dark UI, dynamic scaling, and background AI processing so the app stays smooth while fetching data.
 
-Features include:
+## 🛠 Tech Stack
 
-* Real time zoom slider
-* High DPI friendly
-* Crisp rendering
-* No blurry scaling
-* Automatic layout recalculation
+Python  
+CustomTkinter  
+Tkinter Canvas  
+SQLite  
+Google Gemini AI  
+python-docx  
+threading
 
----
+## ⚙️ Installation
 
-## 🤖 AI Powered Vocabulary Enrichment
-
-Powered by **Google Gemini AI**.
-
-Automatically generates:
-
-* IPA Pronunciation
-* Part of Speech
-* English Definition
-* Bangla Meaning
-* Example Sentence
-* Synonyms
-* Antonyms
-* Exam History
-
-Network requests run in background threads so the interface never freezes.
-
----
-
-## 💾 Offline First Design
-
-Only AI generation requires internet.
-
-Everything else works locally.
-
-* SQLite Database
-* Instant search
-* Instant filtering
-* No cloud dependency
-* Fast startup
-
----
-
-# ✨ Features
-
-## 📖 Vocabulary Management
-
-* Add unlimited words
-* Edit any field
-* Delete entries
-* Personal notes
-* Star favorite words
-* Duplicate detection
-* AI refresh
-
----
-
-## 📂 Volume Management
-
-Organize vocabulary into multiple notebooks.
-
-* Create volumes
-* Rename volumes
-* Delete volumes
-* Switch instantly
-* Word counter for every volume
-
----
-
-## 🔍 Powerful Search
-
-* Live search
-* Search across all volumes
-* Search current volume
-* Sort A → Z
-* Sort Z → A
-* Favorite filter
-
----
-
-## ⭐ Interactive Learning
-
-Synonyms and antonyms are interactive.
-
-Simply click any word to mark it as important.
-
-Important words are highlighted automatically and stored permanently.
-
----
-
-## 📄 Import & Export
-
-### Export
-
-Export:
-
-* Current Volume
-* Multiple Volumes
-* Entire Notebook
-
-to a beautifully formatted Word document.
-
-### Import
-
-Import vocabulary directly from DOCX while intelligently handling duplicates.
-
----
-
-## ⚙ Settings
-
-* Gemini API configuration
-* API connection test
-* Persistent settings
-* Zoom level memory
-
----
-
-# 🏗 Architecture
-
-```
-VocabNote
-│
-├── src/
-│   ├── api/
-│   ├── database/
-│   ├── utils/
-│   └── main.py
-│
-├── data/
-│   └── vocab_notebook.db
-│
-├── vocab_icon.ico
-│
-└── README.md
-```
-
----
-
-# 🛠 Tech Stack
-
-| Technology | Purpose |
-|------------|----------|
-| Python | Application |
-| CustomTkinter | Modern UI |
-| Tkinter Canvas | Rendering Engine |
-| SQLite | Local Database |
-| Google Gemini AI | Vocabulary Generation |
-| python-docx | DOCX Export |
-| threading | Background Processing |
-
----
-
-# 📸 Screenshots
-
-Coming soon.
-
----
-
-# ⚡ Installation
-
-## Clone the repository
-
+### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/VocabNote.git
-
+git clone https://github.com/sayedalve/VocabNote.git
 cd VocabNote
-```
-
----
-
-## Install dependencies
-
-```bash
+2. Install dependencies
 pip install customtkinter requests python-docx fpdf2
-```
-
----
-
-## Run
-
-```bash
+3. Run the app
 python src/main.py
-```
+🔑 Gemini API Setup
+Open the Settings tab
+Paste your Gemini API key
+Click Test Connection
+Start adding words
+📦 Build the Windows Executable
 
----
+Install PyInstaller:
 
-# 🔑 Gemini API Setup
-
-1. Open **Settings**
-2. Paste your Gemini API Key
-3. Click **Test Connection**
-4. Start adding words
-
-You can get a free API key from Google AI Studio.
-
----
-
-# 📦 Build Executable
-
-Install PyInstaller
-
-```bash
 pip install pyinstaller
-```
 
-Build
+Build:
 
-```bash
-pyinstaller ^
---onefile ^
---windowed ^
---icon=vocab_icon.ico ^
---add-data "vocab_icon.ico;." ^
---name VocabNote ^
-src/main.py
-```
+pyinstaller --noconsole --onefile --windowed --add-data "vocab_icon.ico;." --icon=vocab_icon.ico --name="VocabNote" src/main.py
 
-Create an empty folder beside the executable:
+After building, keep an empty data folder beside the executable so the SQLite database can be created correctly on first launch.
 
-```
-data/
-```
+🧩 Project Structure
+VocabNote
+├── src
+│   ├── main.py
+│   ├── api
+│   ├── database
+│   └── utils
+├── data
+├── vocab_icon.ico
+└── README.md
+🎯 Roadmap
+Dark and light theme support
+Audio pronunciation
+Flashcards
+Spaced repetition
+Quiz mode
+Statistics dashboard
+Backup and restore
+More export formats
+🤝 Contributing
 
-This allows SQLite to initialize the local database during first launch.
+Pull requests and issues are welcome.
 
----
+📄 License
 
-# 💡 Performance
+Add a license before publishing the repository.
 
-Unlike traditional widget based applications:
+👨‍💻 Author
 
-✅ Canvas based rendering
-
-✅ Responsive UI during AI requests
-
-✅ Large vocabulary collections
-
-✅ High DPI scaling
-
-✅ Minimal memory usage
-
-✅ Offline local database
-
----
-
-# 🎯 Roadmap
-
-- [ ] Dark & Light themes
-- [ ] Audio pronunciation
-- [ ] Flashcard mode
-- [ ] Spaced repetition
-- [ ] Word quiz mode
-- [ ] Statistics dashboard
-- [ ] Multiple AI providers
-- [ ] Markdown export
-- [ ] PDF export
-- [ ] Backup & Restore
-- [ ] Cross platform support
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome.
-
-If you have ideas, improvements, or bug fixes, feel free to open an Issue or submit a Pull Request.
-
----
-
-# ⭐ Support
-
-If you find this project useful, consider giving it a ⭐ on GitHub.
-
-It helps the project reach more people.
-
----
-
-# 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-# 👨‍💻 Author
-
-**Alve**
-
-Built with ❤️ using Python, CustomTkinter, SQLite, and Google Gemini AI.
+Developed by Alve
