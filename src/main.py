@@ -3,23 +3,21 @@ import sys
 import ctypes
 
 # =======================================================================
-# HIGH-DPI FIX: Must run BEFORE tkinter imports
+# HIGH-DPI FIX
 # =======================================================================
 if sys.platform == 'win32':
     try:
-        # Tell Windows 11 to scale this properly, CustomTkinter will handle the rest
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
     except Exception:
         pass
 
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import messagebox
-import re
 import threading
 import traceback
 
-from api.gemini import test_gemini_connection, fetch_word_details
+from api.gemini import test_connection as _test_gemini_connection, fetch_word_details as _fetch_word_details
+
 from database.db_manager import (
     init_db, save_word_to_db, get_all_words_dictionaries, 
     update_single_field, delete_word, check_word_exists,
@@ -29,74 +27,130 @@ from database.db_manager import (
 from utils.export_manager import export_to_docx, import_from_docx
 from customtkinter import filedialog
 
-# --- Premium Design System ---
-BG_MAIN = "#0E0E10"
-BG_SIDEBAR = "#18181B"
-BG_CARD = "#27272A"
-TEXT_PRIMARY = "#FAFAFA"
-TEXT_MUTED = "#A1A1AA"
-ACCENT = "#2563EB"
-ACCENT_HOVER = "#1D4ED8"
-HIGHLIGHT_COLOR = "#FBBF24"
+# =======================================================================
+# DESIGN TOKENS (Glassmorphic Midnight Blue Theme)
+# =======================================================================
+class Color:
+    SURFACE_0 = "#05070A"  
+    SURFACE_1 = "#0B0E14"  
+    SURFACE_2 = "#121722"  
+    SURFACE_3 = "#1A2133"  
+    GLASS_BORDER = "#2A364F" 
+    TEXT_PRIMARY = "#F8FAFC"
+    TEXT_SECONDARY = "#94A3B8"
+    TEXT_MUTED = "#475569"
+    ACCENT = "#38BDF8"     
+    ACCENT_HOVER = "#0EA5E9"
+    SUCCESS = "#10B981"
+    WARNING = "#F59E0B"
+    DANGER = "#EF4444"
+    HIGHLIGHT = "#FCD34D"
+
+class Font:
+    @staticmethod
+    def base(size, weight="normal"):
+        return ("Segoe UI", size, weight)
+    
+    @staticmethod
+    def bangla(size, weight="normal"):
+        return ("Kalpurush", size, weight)
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-# Let CustomTkinter handle DPI naturally
 ctk.set_appearance_mode("dark")
+
+# =======================================================================
+# CUSTOM DIALOGS 
+# =======================================================================
+class StyledConfirmDialog(ctk.CTkToplevel):
+    def __init__(self, master, title, message, confirm_text="Confirm", danger=False):
+        super().__init__(master)
+        self.title("")
+        self.geometry("450x220")
+        self.result = False
+        self.transient(master)
+        self.grab_set()
+        self.configure(fg_color=Color.SURFACE_2)
+        
+        ctk.CTkLabel(self, text=title, font=Font.base(16, "bold"), text_color=Color.TEXT_PRIMARY).pack(pady=(25, 10), padx=25, anchor="w")
+        ctk.CTkLabel(self, text=message, font=Font.base(13), text_color=Color.TEXT_SECONDARY, wraplength=400, justify="left").pack(padx=25, anchor="w")
+        
+        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
+        btn_frame.pack(fill="x", padx=25, pady=(30, 20), side="bottom")
+        
+        cancel_btn = ctk.CTkButton(btn_frame, text="Cancel", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, command=self._cancel, width=100)
+        cancel_btn.pack(side="right", padx=(10, 0))
+        
+        action_color = Color.DANGER if danger else Color.ACCENT
+        action_hover = "#DC2626" if danger else Color.ACCENT_HOVER
+        action_text = "#FFFFFF" if danger else "#000000"
+        action_btn = ctk.CTkButton(btn_frame, text=confirm_text, fg_color=action_color, hover_color=action_hover, text_color=action_text, font=Font.base(12, "bold"), command=self._confirm, width=100)
+        action_btn.pack(side="right")
+
+    def _confirm(self):
+        self.result = True
+        self.destroy()
+
+    def _cancel(self):
+        self.result = False
+        self.destroy()
+
+class StyledInputDialog(ctk.CTkToplevel):
+    def __init__(self, master, title, placeholder=""):
+        super().__init__(master)
+        self.title("")
+        self.geometry("400x200")
+        self.result = None
+        self.transient(master)
+        self.grab_set()
+        self.configure(fg_color=Color.SURFACE_2)
+        
+        ctk.CTkLabel(self, text=title, font=Font.base(15, "bold"), text_color=Color.TEXT_PRIMARY).pack(pady=(25, 15), padx=25, anchor="w")
+        self.entry = ctk.CTkEntry(self, placeholder_text=placeholder, font=Font.base(13), fg_color=Color.SURFACE_1, border_color=Color.GLASS_BORDER, width=350)
+        self.entry.pack(padx=25)
+        self.entry.focus_set()
+        
+        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
+        btn_frame.pack(fill="x", padx=25, pady=(20, 20), side="bottom")
+        
+        ctk.CTkButton(btn_frame, text="Cancel", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, command=self.destroy, width=90).pack(side="right", padx=(10, 0))
+        ctk.CTkButton(btn_frame, text="Save", fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, text_color="#000000", font=Font.base(12, "bold"), command=self._confirm, width=90).pack(side="right")
+        self.bind("<Return>", lambda e: self._confirm())
+
+    def _confirm(self):
+        self.result = self.entry.get()
+        self.destroy()
 
 class ExportSelectionDialog(ctk.CTkToplevel):
     def __init__(self, master, current_vol_id, all_volumes):
         super().__init__(master)
-        self.title("Export Notebook to DOCX")
+        self.title("Export Notebook")
         self.geometry("450x500")
         self.result = None
         self.transient(master)
         self.grab_set()
-        self.configure(fg_color=BG_CARD)
+        self.configure(fg_color=Color.SURFACE_2)
         
         self.export_type = tk.StringVar(value="current")
-        ctk.CTkLabel(self, text="Select Export Scope", font=("Segoe UI", 18, "bold"), text_color=TEXT_PRIMARY).pack(pady=(25, 15))
+        ctk.CTkLabel(self, text="Select Export Scope", font=Font.base(16, "bold"), text_color=Color.TEXT_PRIMARY).pack(pady=(25, 15))
         
-        rb_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        rb_frame = ctk.CTkFrame(self, fg_color="transparent")
         rb_frame.pack(fill="x", padx=40)
-        ctk.CTkRadioButton(rb_frame, text="Active Volume Only", variable=self.export_type, value="current", font=("Segoe UI", 14), command=self.toggle_custom).pack(anchor="w", pady=8)
-        ctk.CTkRadioButton(rb_frame, text="Entire Notebook", variable=self.export_type, value="all", font=("Segoe UI", 14), command=self.toggle_custom).pack(anchor="w", pady=8)
-        ctk.CTkRadioButton(rb_frame, text="Specific Volumes", variable=self.export_type, value="custom", font=("Segoe UI", 14), command=self.toggle_custom).pack(anchor="w", pady=8)
+        ctk.CTkRadioButton(rb_frame, text="Active Volume Only", variable=self.export_type, value="current", font=Font.base(13), text_color=Color.TEXT_PRIMARY, fg_color=Color.ACCENT).pack(anchor="w", pady=8)
+        ctk.CTkRadioButton(rb_frame, text="Entire Notebook", variable=self.export_type, value="all", font=Font.base(13), text_color=Color.TEXT_PRIMARY, fg_color=Color.ACCENT).pack(anchor="w", pady=8)
         
-        self.custom_frame = ctk.CTkScrollableFrame(self, fg_color=BG_MAIN, height=150, corner_radius=8)
-        self.custom_frame.pack(fill="x", padx=40, pady=(15, 10))
-        
-        self.vol_vars = {}
-        for vol in all_volumes:
-            var = tk.BooleanVar(value=(vol['id'] == current_vol_id))
-            ctk.CTkCheckBox(self.custom_frame, text=f"{vol['name']} ({vol['word_count']} words)", font=("Segoe UI", 13), variable=var).pack(anchor="w", pady=5, padx=10)
-            self.vol_vars[vol['id']] = var
-            
-        self.toggle_custom()
-        btn_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
-        btn_frame.pack(fill="x", padx=40, pady=20)
-        ctk.CTkButton(btn_frame, text="Export", fg_color=ACCENT, hover_color=ACCENT_HOVER, height=36, font=("Segoe UI", 14, "bold"), command=self.confirm).pack(side="left", expand=True, padx=5)
-        ctk.CTkButton(btn_frame, text="Cancel", fg_color="#3F3F46", hover_color="#52525B", height=36, font=("Segoe UI", 14), command=self.destroy).pack(side="left", expand=True, padx=5)
-        
-    def toggle_custom(self):
-        state = "normal" if self.export_type.get() == "custom" else "disabled"
-        for child in self.custom_frame.winfo_children(): child.configure(state=state)
+        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
+        btn_frame.pack(fill="x", padx=40, pady=20, side="bottom")
+        ctk.CTkButton(btn_frame, text="Export", fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, text_color="#000000", height=32, font=Font.base(13, "bold"), command=self.confirm).pack(side="left", expand=True, padx=5)
+        ctk.CTkButton(btn_frame, text="Cancel", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, height=32, font=Font.base(13), command=self.destroy).pack(side="left", expand=True, padx=5)
             
     def confirm(self):
-        t = self.export_type.get()
-        if t == "custom":
-            selected = [vid for vid, var in self.vol_vars.items() if var.get()]
-            if not selected:
-                messagebox.showwarning("Warning", "Please select at least one volume.")
-                return
-            self.result = {'type': 'custom', 'volumes': selected}
-        else: self.result = {'type': t}
+        self.result = {'type': self.export_type.get()}
         self.destroy()
 
 class ImportDuplicateDialog(ctk.CTkToplevel):
@@ -107,15 +161,15 @@ class ImportDuplicateDialog(ctk.CTkToplevel):
         self.result = "skip"
         self.transient(master)
         self.grab_set()
-        self.configure(fg_color=BG_CARD)
+        self.configure(fg_color=Color.SURFACE_2)
         
-        ctk.CTkLabel(self, text=f"'{word.capitalize()}' already exists. What should we do?", font=("Segoe UI", 16, "bold"), text_color=TEXT_PRIMARY).pack(pady=(20, 25))
-        btn_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        ctk.CTkLabel(self, text=f"'{word.capitalize()}' already exists. What should we do?", font=Font.base(15, "bold"), text_color=Color.TEXT_PRIMARY).pack(pady=(20, 25))
+        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
         btn_frame.pack(fill="x", padx=15)
-        ctk.CTkButton(btn_frame, text="Replace", fg_color=ACCENT, hover_color=ACCENT_HOVER, command=lambda: self.set_result("replace")).pack(side="left", padx=5, expand=True)
-        ctk.CTkButton(btn_frame, text="Skip", fg_color="#3F3F46", hover_color="#52525B", command=lambda: self.set_result("skip")).pack(side="left", padx=5, expand=True)
-        ctk.CTkButton(btn_frame, text="Replace All", fg_color="#991B1B", hover_color="#7F1D1D", command=lambda: self.set_result("replace_all")).pack(side="left", padx=5, expand=True)
-        ctk.CTkButton(btn_frame, text="Skip All", fg_color="#3F3F46", hover_color="#52525B", command=lambda: self.set_result("skip_all")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Replace", fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, text_color="#000000", command=lambda: self.set_result("replace")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Skip", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, command=lambda: self.set_result("skip")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Replace All", fg_color=Color.DANGER, hover_color="#DC2626", text_color="#FFFFFF", command=lambda: self.set_result("replace_all")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Skip All", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, command=lambda: self.set_result("skip_all")).pack(side="left", padx=5, expand=True)
         
     def set_result(self, res):
         self.result = res
@@ -129,46 +183,58 @@ class DuplicateDialog(ctk.CTkToplevel):
         self.result = "cancel"
         self.transient(master)
         self.grab_set()
-        self.configure(fg_color=BG_CARD)
+        self.configure(fg_color=Color.SURFACE_2)
         
-        ctk.CTkLabel(self, text=f"'{word.capitalize()}' is already in your notebook.", font=("Segoe UI", 18, "bold"), text_color=TEXT_PRIMARY).pack(pady=(30, 25))
-        btn_frame = ctk.CTkFrame(self, fg_color=BG_CARD)
+        ctk.CTkLabel(self, text=f"'{word.capitalize()}' is already in your notebook.", font=Font.base(15, "bold"), text_color=Color.TEXT_PRIMARY).pack(pady=(30, 25))
+        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
         btn_frame.pack(fill="x", padx=20)
-        ctk.CTkButton(btn_frame, text="Open Entry", fg_color=ACCENT, hover_color=ACCENT_HOVER, command=lambda: self.set_result("open")).pack(side="left", padx=5, expand=True)
-        ctk.CTkButton(btn_frame, text="Replace AI Data", fg_color="#991B1B", hover_color="#7F1D1D", command=lambda: self.set_result("replace")).pack(side="left", padx=5, expand=True)
-        ctk.CTkButton(btn_frame, text="Cancel", fg_color="#3F3F46", hover_color="#52525B", command=lambda: self.set_result("cancel")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Open Entry", fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, text_color="#000000", command=lambda: self.set_result("open")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Replace AI Data", fg_color=Color.DANGER, hover_color="#DC2626", text_color="#FFFFFF", command=lambda: self.set_result("replace")).pack(side="left", padx=5, expand=True)
+        ctk.CTkButton(btn_frame, text="Cancel", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, command=lambda: self.set_result("cancel")).pack(side="left", padx=5, expand=True)
         
     def set_result(self, res):
         self.result = res
         self.destroy()
 
-# =========================================================================================
-# THE CANVAS ENGINE (MINIMALIST UI & PROPER PADDING)
-# =========================================================================================
-
+# =======================================================================
+# CANVAS ENGINE (REFACTORED with corrected label spacing)
+# =======================================================================
 class WordListView(ctk.CTkFrame):
     def __init__(self, master, app):
-        super().__init__(master, fg_color=BG_MAIN, corner_radius=0)
+        super().__init__(master, fg_color=Color.SURFACE_0, corner_radius=0)
         self.app = app
         self.words = []
         
         self.editing_word = None
-        self.open_notes = set()
         self.edit_widgets = {}
         
         self.card_y_positions = {}
         self.card_bg_ids = {}
+        self._resize_timer = None
         
-        self.canvas = tk.Canvas(self, bg=BG_MAIN, highlightthickness=0)
-        self.scrollbar = ctk.CTkScrollbar(self, command=self.canvas.yview)
+        self.canvas = tk.Canvas(self, bg=Color.SURFACE_0, highlightthickness=0)
+        
+        self.scrollbar = ctk.CTkScrollbar(
+            self, 
+            width=12, 
+            command=self.canvas.yview, 
+            fg_color="transparent", 
+            button_color=Color.SURFACE_3, 
+            button_hover_color=Color.GLASS_BORDER
+        )
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
         
         self.canvas.pack(side="left", fill="both", expand=True)
-        self.scrollbar.pack(side="right", fill="y")
+        self.scrollbar.pack(side="right", fill="y", padx=(0, 2))
         
-        self.canvas.bind("<Configure>", lambda e: self.render())
+        self.canvas.bind("<Configure>", self._on_configure)
         self.canvas.bind("<Enter>", self._bind_mouse)
         self.canvas.bind("<Leave>", self._unbind_mouse)
+
+    def _on_configure(self, event):
+        if self._resize_timer:
+            self.after_cancel(self._resize_timer)
+        self._resize_timer = self.after(100, self.render)
 
     def _bind_mouse(self, event):
         self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
@@ -181,44 +247,43 @@ class WordListView(ctk.CTkFrame):
         self.canvas.unbind_all("<Button-5>")
 
     def _on_mousewheel(self, event):
-        if event.num == 4 or event.delta > 0:
-            self.canvas.yview_scroll(-1, "units")
-        elif event.num == 5 or event.delta < 0:
-            self.canvas.yview_scroll(1, "units")
+        if event.num == 4 or event.delta > 0: self.canvas.yview_scroll(-1, "units")
+        elif event.num == 5 or event.delta < 0: self.canvas.yview_scroll(1, "units")
 
     def scroll_to_word(self, target_word, flash=False):
-        if target_word in self.card_y_positions:
-            target_y = self.card_y_positions[target_word]
-            bbox = self.canvas.bbox("all")
-            if bbox:
-                total_height = bbox[3]
-                fraction = max(0.0, (target_y - self._z(10)) / total_height)
-                self.canvas.yview_moveto(fraction)
+        target_lower = target_word.lower()
+        actual_key = next((k for k in self.card_y_positions.keys() if k.lower() == target_lower), None)
+                
+        if actual_key:
+            target_y = self.card_y_positions.get(actual_key, 0)
+            sr = self.canvas.cget("scrollregion")
+            if sr:
+                try:
+                    sr_tuple = tuple(map(float, sr.split()))
+                    if len(sr_tuple) == 4 and sr_tuple[3] > 0:
+                        fraction = max(0.0, (target_y - self._z(10)) / sr_tuple[3])
+                        self.canvas.yview_moveto(fraction)
+                except ValueError: pass
             
             if flash:
-                bg_id = self.card_bg_ids.get(target_word)
+                bg_id = self.card_bg_ids.get(actual_key)
                 if bg_id:
-                    original_color = BG_CARD
-                    flash_color = "#3F3F46" 
+                    orig_color = Color.SURFACE_2
+                    flash_color = Color.SURFACE_3 
                     def flash_cycle(step):
                         try:
-                            if step == 0:
-                                self.canvas.itemconfig(bg_id, fill=flash_color)
-                                self.after(300, lambda: flash_cycle(1))
-                            elif step == 1:
-                                self.canvas.itemconfig(bg_id, fill=original_color)
-                                self.after(300, lambda: flash_cycle(2))
-                            elif step == 2:
-                                self.canvas.itemconfig(bg_id, fill=flash_color)
-                                self.after(300, lambda: flash_cycle(3))
-                            elif step == 3:
-                                self.canvas.itemconfig(bg_id, fill=original_color)
-                        except Exception:
-                            pass 
+                            if step % 2 == 0: self.canvas.itemconfig(bg_id, fill=flash_color)
+                            else: self.canvas.itemconfig(bg_id, fill=orig_color)
+                            if step < 3: self.after(300, lambda: flash_cycle(step + 1))
+                        except Exception: pass 
                     flash_cycle(0)
 
     def _z(self, val):
-        return max(1, int(val * self.app.zoom_factor))
+        try:
+            dpi_scale = ctk.ScalingTracker.get_window_dpi_scaling(self.app)
+        except Exception:
+            dpi_scale = 1.0
+        return max(1, int(val * self.app.zoom_factor * dpi_scale))
 
     def set_words(self, words):
         self.words = words
@@ -227,8 +292,7 @@ class WordListView(ctk.CTkFrame):
 
     def render(self):
         self.canvas.delete("all")
-        for w in self.edit_widgets.values():
-            w.destroy()
+        for w in self.edit_widgets.values(): w.destroy()
         self.edit_widgets.clear()
         self.card_y_positions.clear()
         self.card_bg_ids.clear()
@@ -236,17 +300,26 @@ class WordListView(ctk.CTkFrame):
         width = self.canvas.winfo_width()
         if width < 100: return 
         
-        y_offset = self._z(10)
-        for w_data in self.words:
-            word_key = w_data['word']
-            self.card_y_positions[word_key] = y_offset
-            bg_id, y_offset = self._draw_card(y_offset, w_data, width)
-            self.card_bg_ids[word_key] = bg_id
-            y_offset += self._z(40) # Increased gap between cards for breathing room
-            
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        if not self.words:
+            self._draw_empty_state(width, self.canvas.winfo_height())
+            return
 
-    # --- Graphics Primitives ---
+        y_offset = self._z(15)
+        for w_data in self.words:
+            self.card_y_positions[w_data['word']] = y_offset
+            bg_id, y_offset = self._draw_card(y_offset, w_data, width)
+            self.card_bg_ids[w_data['word']] = bg_id
+            y_offset += self._z(15) 
+            
+        # Hard limits scrolling strictly to the exact bounds of the content.
+        visible_height = self.canvas.winfo_height()
+        self.canvas.configure(scrollregion=(0, 0, width, max(visible_height, y_offset)))
+
+    def _draw_empty_state(self, w, h):
+        msg = "No words found. Enter a word above to get started."
+        if self.app.search_entry.get().strip(): msg = "No words match your search."
+        elif self.app.show_favorites_only: msg = "No favorites yet. Star some words!"
+        self.canvas.create_text(w//2, max(150, h//3), text=msg, font=Font.base(self._z(12)), fill=Color.TEXT_MUTED, justify="center")
 
     def _create_round_rect(self, x1, y1, x2, y2, radius, **kwargs):
         points = [
@@ -268,67 +341,25 @@ class WordListView(ctk.CTkFrame):
         ]
         self.canvas.coords(item_id, *points)
 
-    def _draw_button(self, x_right, y_center, text, fg_color, text_color, hover_color, command, word, is_star=False):
-        font_size = self._z(24) if is_star else self._z(13)
-        
-        temp = self.canvas.create_text(0, -100, text=text, font=("Segoe UI", font_size, "bold"))
-        bbox = self.canvas.bbox(temp)
-        self.canvas.delete(temp)
-        tw = (bbox[2] - bbox[0]) if bbox else self._z(40)
-        
-        # Sleeker button padding
-        w = self._z(38) if is_star else tw + self._z(28)
-        h = self._z(36)
-        
-        x_left = x_right - w
-        y_top = y_center - h//2
-        y_bot = y_center + h//2
-        
-        btn_tag = f"btn_{text}_{word}"
-        
-        rect_id = self._create_round_rect(x_left, y_top, x_right, y_bot, radius=self._z(18) if is_star else self._z(6), fill=fg_color, outline="", tags=(btn_tag, "clickable"))
-        self.canvas.create_text(x_left + w//2, y_center, text=text, font=("Segoe UI", font_size, "bold" if not is_star else ""), fill=text_color, tags=(btn_tag, "clickable"))
-        
-        def on_click(e, cmd=command, w=word): cmd(w)
-        def on_enter(e, r=rect_id, hc=hover_color):
-            self.canvas.itemconfig(r, fill=hc)
-            self.canvas.config(cursor="hand2")
-        def on_leave(e, r=rect_id, fc=fg_color):
-            self.canvas.itemconfig(r, fill=fc)
-            self.canvas.config(cursor="")
-
-        self.canvas.tag_bind(btn_tag, "<Button-1>", on_click)
-        self.canvas.tag_bind(btn_tag, "<Enter>", on_enter)
-        self.canvas.tag_bind(btn_tag, "<Leave>", on_leave)
-        
-        return x_left - self._z(12) 
-
-    # --- Interactive Layout Engine ---
-
     def _draw_interactive_tags(self, start_x, start_y, max_w, items_str, important_str, word, field_key):
-        curr_x = start_x
-        curr_y = start_y
-        line_height = self._z(32) # Increased breathing room for tags
-
+        curr_x, curr_y = start_x, start_y
+        line_height = self._z(20) 
         items = [s.strip() for s in items_str.split(',') if s.strip()]
         important_items = set(s.strip().lower() for s in important_str.split(',') if s.strip())
 
-        if not items:
-            self.canvas.create_text(start_x, start_y, text=f"No {field_key} yet.", font=("Segoe UI", self._z(14)), fill=TEXT_MUTED, anchor="nw")
-            return start_y + self._z(35)
+        if not items: return start_y
 
         for i, item in enumerate(items):
             is_imp = item.lower() in important_items
-            color = HIGHLIGHT_COLOR if is_imp else TEXT_PRIMARY
-            font_weight = "bold" if is_imp else "normal"
-            font_choice = ("Segoe UI", self._z(15), font_weight)
+            color = Color.ACCENT if is_imp else Color.TEXT_PRIMARY
+            font_choice = Font.base(self._z(11), "bold" if is_imp else "normal")
             
             display_text = item + ("," if i < len(items) - 1 else "")
             
-            temp_id = self.canvas.create_text(0, -100, text=display_text, font=font_choice)
+            temp_id = self.canvas.create_text(0, -10000, text=display_text, font=font_choice)
             bbox = self.canvas.bbox(temp_id)
             self.canvas.delete(temp_id)
-            item_w = (bbox[2] - bbox[0]) if bbox else self._z(len(display_text) * 10)
+            item_w = (bbox[2] - bbox[0]) if bbox else self._z(len(display_text) * 7)
             
             if curr_x + item_w > start_x + max_w and curr_x != start_x:
                 curr_x = start_x
@@ -348,25 +379,20 @@ class WordListView(ctk.CTkFrame):
             self.canvas.tag_bind(text_id, "<Enter>", on_enter)
             self.canvas.tag_bind(text_id, "<Leave>", on_leave)
             self.canvas.tag_bind(text_id, "<Button-1>", on_click)
-            
-            curr_x += item_w + self._z(8)
+            curr_x += item_w + self._z(5)
 
         return curr_y + line_height
         
     def _toggle_important(self, word, field_key, item_val, current_important_str):
         imp_list = [s.strip() for s in current_important_str.split(',') if s.strip()]
         item_lower = item_val.lower()
-        
         found = False
         for i, imp in enumerate(imp_list):
             if imp.lower() == item_lower:
                 imp_list.pop(i)
                 found = True
                 break
-                
-        if not found:
-            imp_list.append(item_val)
-            
+        if not found: imp_list.append(item_val)
         new_str = ", ".join(imp_list)
         update_single_field(word, f"important_{field_key}", new_str)
         
@@ -376,217 +402,158 @@ class WordListView(ctk.CTkFrame):
                 break
         self.render()
 
-    def _draw_inline_properties(self, w_data, x1, x2, curr_y, is_edit):
-        """Minimalist spaced wrapping to prevent horizontal clutter."""
-        if is_edit:
-            curr_y = self._draw_property_row("PRO", 'ipa', w_data, x1, x2, curr_y, True)
-            curr_y = self._draw_property_row("POS", 'part_of_speech', w_data, x1, x2, curr_y, True)
-            curr_y = self._draw_property_row("MEANING", 'meaning', w_data, x1, x2, curr_y, True)
-            return curr_y
-            
-        start_x = x1 + self._z(30)
-        max_x = x2 - self._z(30)
-        
-        line_x = start_x
-        line_y = curr_y
-        max_y = curr_y
-        
-        def add_item(lbl_text, val_text):
-            nonlocal line_x, line_y, max_y
-            
-            font_lbl = ("Segoe UI", self._z(11), "bold")
-            font_val = ("Segoe UI", self._z(15))
-            
-            temp_lbl = self.canvas.create_text(0, -100, text=lbl_text, font=font_lbl)
-            temp_val = self.canvas.create_text(0, -100, text=val_text if val_text else "—", font=font_val)
-            
-            b_lbl = self.canvas.bbox(temp_lbl)
-            b_val = self.canvas.bbox(temp_val)
-            self.canvas.delete(temp_lbl)
-            self.canvas.delete(temp_val)
-            
-            lbl_w = (b_lbl[2] - b_lbl[0]) if b_lbl else self._z(40)
-            val_w = (b_val[2] - b_val[0]) if b_val else self._z(60)
-            
-            # Substantial breathing room between text elements
-            gap_after_lbl = self._z(12)
-            gap_after_item = self._z(50)
-            
-            est_block_w = lbl_w + gap_after_lbl + val_w + gap_after_item
-            if lbl_text == "MEANING": est_block_w = max(est_block_w, self._z(200))
-            
-            if line_x + est_block_w > max_x and line_x != start_x:
-                line_x = start_x
-                line_y = max_y + self._z(30)
-                
-            self.canvas.create_text(line_x, line_y + self._z(2), text=lbl_text, font=font_lbl, fill=TEXT_MUTED, anchor="nw")
-            val_x = line_x + lbl_w + gap_after_lbl
-            
-            rem_w = max_x - val_x
-            if rem_w < self._z(100): rem_w = max_x - start_x 
-            
-            id_val = self.canvas.create_text(val_x, line_y, text=val_text if val_text else "—", font=font_val, fill=TEXT_PRIMARY if val_text else TEXT_MUTED, anchor="nw", width=rem_w)
-            
-            bbox_val = self.canvas.bbox(id_val)
-            true_val_w = (bbox_val[2] - bbox_val[0]) if bbox_val else val_w
-            
-            line_x = val_x + true_val_w + gap_after_item
-            item_bottom = (bbox_val[3] if bbox_val else line_y + self._z(26))
-            
-            if item_bottom > max_y: max_y = item_bottom
+    def _draw_text_action(self, x_right, y_center, text, default_color, hover_color, command, word, tag_group, hover_trigger_tag):
+        temp = self.canvas.create_text(0, -10000, text=text, font=Font.base(self._z(10), "bold"))
+        bbox = self.canvas.bbox(temp)
+        self.canvas.delete(temp)
+        tw = (bbox[2] - bbox[0]) if bbox else self._z(30)
 
-        add_item("PRO", w_data.get('ipa', "") or "")
-        add_item("POS", w_data.get('part_of_speech', "") or "")
-        add_item("MEANING", w_data.get('meaning', "") or "")
+        x_left = x_right - tw
+        btn_tag = f"action_{text}_{word}"
         
-        return max_y + self._z(25)
+        pad = self._z(5)
+        self.canvas.create_rectangle(x_left-pad, y_center-pad, x_right+pad, y_center+pad, fill="", outline="", tags=(btn_tag, tag_group, hover_trigger_tag, "clickable"))
+        text_id = self.canvas.create_text(x_left + tw//2, y_center, text=text, font=Font.base(self._z(10), "bold"), fill=default_color, tags=(btn_tag, tag_group, hover_trigger_tag, "clickable"))
 
-    def _draw_property_row(self, label, key, w_data, x1, x2, curr_y, is_edit, custom_font="Segoe UI"):
-        col1_x = x1 + self._z(120) 
-        col2_x = col1_x + self._z(25)
+        def on_click(e, cmd=command, w=word): cmd(w)
+        def on_enter(e, tid=text_id, hc=hover_color):
+            self.canvas.itemconfig(tid, fill=hc)
+            self.canvas.config(cursor="hand2")
+        def on_leave(e, tid=text_id, dc=default_color):
+            self.canvas.itemconfig(tid, fill=dc)
+            self.canvas.config(cursor="")
+
+        self.canvas.tag_bind(btn_tag, "<Button-1>", on_click)
+        self.canvas.tag_bind(btn_tag, "<Enter>", on_enter)
+        self.canvas.tag_bind(btn_tag, "<Leave>", on_leave)
+
+        return x_left - self._z(12) 
+
+    # ----- UPDATED METHOD (user's corrected version) -----
+    def _draw_prop_row(self, label, key, w_data, x1, curr_y, max_x, is_edit, custom_font="Segoe UI", is_tag_list=False, val_font_size=11):
         value = w_data.get(key, "") or ""
-        
-        self.canvas.create_text(col1_x, curr_y + self._z(2), text=label.upper(), font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="ne")
-        
-        if is_edit:
-            widget = ctk.CTkEntry(self.canvas, width=x2 - col2_x - self._z(40), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=(custom_font, self._z(15)), border_width=0, corner_radius=6)
-            widget.insert(0, value)
-            self.canvas.create_window(col2_x, curr_y - self._z(6), anchor="nw", window=widget) 
-            self.edit_widgets[f"{w_data['word']}_{key}"] = widget
-            return curr_y + self._z(45)
-        else:
-            display_text = value if value else "—"
-            color = TEXT_PRIMARY if value else TEXT_MUTED
-            text_id = self.canvas.create_text(col2_x, curr_y, text=display_text, font=(custom_font, self._z(15)), fill=color, anchor="nw", width=x2 - col2_x - self._z(40))
-            bbox = self.canvas.bbox(text_id)
-            # Generous vertical spacing below standard properties
-            return (bbox[3] if bbox else curr_y + self._z(24)) + self._z(22)
+        if not is_edit and not value: return curr_y 
 
-    def _draw_panel(self, label, key, w_data, x, y, width, bg_color, is_edit):
-        rect_id = self._create_round_rect(x, y, x + width, y + self._z(10), radius=self._z(8), fill=bg_color, outline="")
-        self.canvas.create_text(x + self._z(25), y + self._z(15), text=label, font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
+        # The X-coordinate where the label text begins
+        label_x = x1 + self._z(15)
         
-        val_x = x + self._z(25)
-        val_y = y + self._z(50) # Generous top inner padding
-        val_w = width - self._z(50) 
-        value = w_data.get(key, "") or ""
-        important_value = w_data.get(f'important_{key}', "") or ""
+        # FIX: Increased val_x from 95 to 125.
+        # This allocates a much wider, guaranteed invisible column for the bold labels, 
+        # ensuring even the longest labels (like "Synonyms") never overlap the values.
+        val_x = x1 + self._z(125) 
         
-        if is_edit:
-            widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(70), fg_color=BG_SIDEBAR, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
-            widget.insert("1.0", value)
-            self.canvas.create_window(val_x, val_y, anchor="nw", window=widget)
-            self.edit_widgets[f"{w_data['word']}_{key}"] = widget
-            bottom_y = val_y + self._z(80)
-        else:
-            bottom_y = self._draw_interactive_tags(val_x, val_y, val_w, value, important_value, w_data['word'], key)
-                
-        self._update_round_rect(rect_id, x, y, x + width, bottom_y + self._z(20), radius=self._z(8)) # Bottom inner padding
-        return bottom_y + self._z(20)
+        # Calculate remaining width to wrap long text properly before hitting the right edge
+        val_w = max(self._z(80), max_x - val_x - self._z(15))
 
-    # --- Main Assembly ---
+        # Draw the Label
+        self.canvas.create_text(label_x, curr_y, text=label, font=Font.base(self._z(10), "bold"), fill=Color.TEXT_SECONDARY, anchor="nw")
+
+        # Draw the Value (Entry/Textbox if editing, static text/interactive tags if viewing)
+        if is_edit:
+            if is_tag_list or key == 'notes':
+                widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(45), fg_color=Color.SURFACE_3, text_color=Color.TEXT_PRIMARY, font=Font.base(self._z(11)), border_width=1, border_color=Color.GLASS_BORDER)
+                widget.insert("1.0", value)
+                self.canvas.create_window(val_x, curr_y, anchor="nw", window=widget)
+                self.edit_widgets[f"{w_data['word']}_{key}"] = widget
+                return curr_y + self._z(55)
+            else:
+                widget = ctk.CTkEntry(self.canvas, width=val_w, fg_color=Color.SURFACE_3, text_color=Color.TEXT_PRIMARY, font=(custom_font, self._z(11)), border_width=1, border_color=Color.GLASS_BORDER)
+                widget.insert(0, value)
+                self.canvas.create_window(val_x, curr_y, anchor="nw", window=widget)
+                self.edit_widgets[f"{w_data['word']}_{key}"] = widget
+                return curr_y + self._z(30)
+        else:
+            if is_tag_list:
+                imp_key = w_data.get(f'important_{key}', "") or ""
+                return self._draw_interactive_tags(val_x, curr_y, val_w, value, imp_key, w_data['word'], key) + self._z(10)
+            else:
+                text_id = self.canvas.create_text(val_x, curr_y, text=value, font=(custom_font, self._z(val_font_size)), fill=Color.TEXT_PRIMARY, anchor="nw", width=val_w)
+                bbox = self.canvas.bbox(text_id)
+                return (bbox[3] if bbox else curr_y + self._z(15)) + self._z(12)
 
     def _draw_card(self, y_start, w_data, width):
         word = w_data['word']
         is_edit = (self.editing_word == word)
-        x1 = self._z(40)
-        x2 = max(x1 + self._z(100), width - self._z(40))
         
-        bg_id = self._create_round_rect(x1, y_start, x2, y_start+self._z(100), radius=self._z(12), fill=BG_CARD, outline="")
-        curr_y = y_start + self._z(40) # Push content down from top edge
+        x1 = self._z(20)
+        x2 = max(x1 + self._z(250), width - self._z(20))
         
+        card_tag = f"card_{word}"
+        corner_rad = self._z(10)
+        
+        # Directly assign unique polygon IDs to prevent TclError
+        rim_id = self._create_round_rect(x1, y_start, x2, y_start+self._z(60), radius=corner_rad, fill=Color.GLASS_BORDER, outline="", tags=card_tag)
+        bg_id = self._create_round_rect(x1+1, y_start+1, x2-1, y_start+self._z(60)-1, radius=corner_rad, fill=Color.SURFACE_2, outline="", tags=card_tag)
+        
+        curr_y = y_start + self._z(15) 
+        
+        # --- Header Section ---
         is_fav = bool(w_data.get('is_favorite', 0))
-        fav_color = HIGHLIGHT_COLOR if is_fav else TEXT_MUTED
+        fav_color = Color.HIGHLIGHT if is_fav else Color.TEXT_MUTED
         
-        # FIXED: Anchor the star properly inside the box
-        star_x = x1 + self._z(70) # Right edge of star button (70 - 38 width = 32px padding from left edge)
-        self._draw_button(star_x, curr_y, "★" if is_fav else "☆", BG_CARD, fav_color, "#3F3F46", self.action_fav, word, is_star=True)
-        
-        title_start_x = x1 + self._z(85)
-        max_title_w = x2 - title_start_x - self._z(280)
-        
-        id_title = self.canvas.create_text(title_start_x, curr_y, text=word.capitalize(), font=("Segoe UI", self._z(26), "bold"), fill=TEXT_PRIMARY, anchor="w", width=max_title_w)
-        bbox_title = self.canvas.bbox(id_title)
-        
-        if bbox_title:
-            title_end_x = bbox_title[2] + self._z(15)
-            title_bottom_y = bbox_title[3]
-        else:
-            title_end_x = title_start_x + self._z(len(word) * 15) + self._z(15)
-            title_bottom_y = curr_y + self._z(20)
-            
-        exam = w_data.get('exam_history', '').strip()
-        if exam:
-            safe_button_zone = x2 - self._z(260)
-            if title_end_x > safe_button_zone:
-                self.canvas.create_text(title_start_x, title_bottom_y + self._z(5), text=exam, font=("Segoe UI", self._z(14), "italic"), fill=TEXT_MUTED, anchor="nw")
-                curr_y = title_bottom_y + self._z(25)
-            else:
-                self.canvas.create_text(title_end_x, curr_y + self._z(3), text=exam, font=("Segoe UI", self._z(14), "italic"), fill=TEXT_MUTED, anchor="w")
-                if title_bottom_y > curr_y + self._z(20):
-                    curr_y = title_bottom_y - self._z(10)
+        star_id = self.canvas.create_text(x1 + self._z(15), curr_y, text="★" if is_fav else "☆", font=Font.base(self._z(14)), fill=fav_color, anchor="nw", tags=(card_tag, "clickable"))
+        self.canvas.tag_bind(star_id, "<Button-1>", lambda e, w=word: self.action_fav(w))
+        self.canvas.tag_bind(star_id, "<Enter>", lambda e, tid=star_id: self.canvas.itemconfig(tid, fill=Color.ACCENT) or self.canvas.config(cursor="hand2"))
+        self.canvas.tag_bind(star_id, "<Leave>", lambda e, tid=star_id: self.canvas.itemconfig(tid, fill=fav_color) or self.canvas.config(cursor=""))
 
-        btn_x = x2 - self._z(30)
-        btn_x = self._draw_button(btn_x, curr_y, "Delete", "#7F1D1D", TEXT_PRIMARY, "#991B1B", self.action_delete, word)
-        btn_x = self._draw_button(btn_x, curr_y, "Refresh AI", ACCENT, TEXT_PRIMARY, ACCENT_HOVER, self.action_refresh, word)
+        title_x = x1 + self._z(35)
+        title_id = self.canvas.create_text(title_x, curr_y - self._z(2), text=word.capitalize(), font=Font.base(self._z(16), "bold"), fill=Color.TEXT_PRIMARY, anchor="nw", tags=card_tag)
+        
+        title_bbox = self.canvas.bbox(title_id)
+        current_x = (title_bbox[2] + self._z(10)) if title_bbox else title_x + self._z(80)
+
+        ipa = w_data.get('ipa', '').strip()
+        if ipa:
+            ipa_id = self.canvas.create_text(current_x, curr_y + self._z(2), text=f"/{ipa}/", font=Font.base(self._z(10), "italic"), fill=Color.TEXT_MUTED, anchor="nw", tags=card_tag)
+            ipa_bbox = self.canvas.bbox(ipa_id)
+            current_x = (ipa_bbox[2] + self._z(10)) if ipa_bbox else current_x + self._z(50)
+
+        pos = w_data.get('part_of_speech', '').strip()
+        if pos:
+            self.canvas.create_text(current_x, curr_y + self._z(2), text=f"•  {pos}", font=Font.base(self._z(10)), fill=Color.ACCENT, anchor="nw", tags=card_tag)
+
+        # --- Hidden Action Bar ---
+        actions_tag = f"actions_{word}"
+        btn_x = x2 - self._z(15)
+        action_y = curr_y + self._z(8)
         
         if is_edit:
-            btn_x = self._draw_button(btn_x, curr_y, "💾 Save", ACCENT, TEXT_PRIMARY, ACCENT_HOVER, self.action_save, word)
+            btn_x = self._draw_text_action(btn_x, action_y, "Save", Color.SUCCESS, Color.SUCCESS, self.action_save, word, actions_tag, card_tag)
+            btn_x = self._draw_text_action(btn_x, action_y, "Cancel", Color.TEXT_SECONDARY, Color.TEXT_PRIMARY, lambda w: self.app.cancel_edit(), word, actions_tag, card_tag)
         else:
-            btn_x = self._draw_button(btn_x, curr_y, "✎ Edit", "#3F3F46", TEXT_PRIMARY, "#52525B", self.action_edit, word)
-            
-        has_notes = bool(w_data.get('notes', '').strip())
-        n_color = ACCENT if has_notes else BG_CARD
-        self._draw_button(btn_x, curr_y, "📝 Notes", n_color, TEXT_PRIMARY, ACCENT_HOVER if has_notes else "#3F3F46", self.action_notes, word)
+            btn_x = self._draw_text_action(btn_x, action_y, "Delete", Color.TEXT_SECONDARY, Color.DANGER, self.action_delete, word, actions_tag, card_tag)
+            btn_x = self._draw_text_action(btn_x, action_y, "Refresh", Color.TEXT_SECONDARY, Color.ACCENT, self.action_refresh, word, actions_tag, card_tag)
+            btn_x = self._draw_text_action(btn_x, action_y, "Edit", Color.TEXT_SECONDARY, Color.TEXT_PRIMARY, self.action_edit, word, actions_tag, card_tag)
+            self.canvas.itemconfig(actions_tag, state="hidden")
+
+        self.canvas.tag_bind(card_tag, "<Enter>", lambda e: self.canvas.itemconfig(actions_tag, state="normal"))
+        self.canvas.tag_bind(card_tag, "<Leave>", lambda e: self.canvas.itemconfig(actions_tag, state="hidden"))
+
+        # --- Body Grid Section ---
+        curr_y += self._z(35)
         
-        curr_y += self._z(60) # Massive breathing room under the title row
+        curr_y = self._draw_prop_row("Meaning", 'meaning', w_data, x1, curr_y, x2, is_edit)
+        curr_y = self._draw_prop_row("Bangla", 'bangla_meaning', w_data, x1, curr_y, x2, is_edit, custom_font="Kalpurush", val_font_size=12)
+        curr_y = self._draw_prop_row("Example", 'example_sentence', w_data, x1, curr_y, x2, is_edit)
         
-        curr_y = self._draw_inline_properties(w_data, x1, x2, curr_y, is_edit)
-        curr_y = self._draw_property_row("BANGLA", 'bangla_meaning', w_data, x1, x2, curr_y, is_edit, custom_font="Kalpurush")
-        curr_y = self._draw_property_row("EXAMPLE", 'example_sentence', w_data, x1, x2, curr_y, is_edit)
-        curr_y += self._z(15)
+        curr_y += self._z(4)
+        curr_y = self._draw_prop_row("Synonyms", 'synonyms', w_data, x1, curr_y, x2, is_edit, is_tag_list=True)
+        curr_y = self._draw_prop_row("Antonyms", 'antonyms', w_data, x1, curr_y, x2, is_edit, is_tag_list=True)
         
-        available_w = x2 - x1 - self._z(75)
-        panel_w = max(self._z(100), available_w // 2)
-        x_syn = x1 + self._z(30)
-        x_ant = x1 + self._z(45) + panel_w
+        curr_y += self._z(4) 
+        curr_y = self._draw_prop_row("Notes", 'notes', w_data, x1, curr_y, x2, is_edit)
+
+        # Use the specific IDs assigned above
+        self._update_round_rect(bg_id, x1+1, y_start+1, x2-1, curr_y + self._z(15)-1, radius=corner_rad)
+        self._update_round_rect(rim_id, x1, y_start, x2, curr_y + self._z(15), radius=corner_rad)
         
-        y_syn = self._draw_panel("SYNONYMS", 'synonyms', w_data, x_syn, curr_y, panel_w, "#1C1C20", is_edit)
-        y_ant = self._draw_panel("ANTONYMS", 'antonyms', w_data, x_ant, curr_y, panel_w, "#191A21", is_edit)
-        curr_y = max(y_syn, y_ant) + self._z(20) 
-        
-        if word in self.open_notes or is_edit:
-            notes_rect = self._create_round_rect(x1 + self._z(20), curr_y, x2 - self._z(20), curr_y + self._z(10), radius=self._z(8), fill=BG_SIDEBAR, outline="")
-            self.canvas.create_text(x1 + self._z(45), curr_y + self._z(20), text="PERSONAL NOTES", font=("Segoe UI", self._z(11), "bold"), fill=TEXT_MUTED, anchor="nw")
-            
-            val_x = x1 + self._z(45)
-            val_y = curr_y + self._z(50)
-            val_w = x2 - x1 - self._z(90)
-            value = w_data.get('notes', "") or ""
-            
-            if is_edit:
-                widget = ctk.CTkTextbox(self.canvas, width=val_w, height=self._z(75), fg_color=BG_CARD, text_color=TEXT_PRIMARY, font=("Segoe UI", self._z(15)), border_width=0, corner_radius=6)
-                widget.insert("1.0", value)
-                self.canvas.create_window(val_x, val_y, anchor="nw", window=widget)
-                self.edit_widgets[f"{word}_notes"] = widget
-                bottom_y = val_y + self._z(85)
-            else:
-                display_text = value if value else "No personal notes yet."
-                color = TEXT_PRIMARY if value else TEXT_MUTED
-                text_id = self.canvas.create_text(val_x, val_y, text=display_text, font=("Segoe UI", self._z(15)), fill=color, anchor="nw", width=val_w)
-                bbox = self.canvas.bbox(text_id)
-                bottom_y = (bbox[3] if bbox else val_y + self._z(25)) + self._z(25)
-                
-            self._update_round_rect(notes_rect, x1 + self._z(20), curr_y, x2 - self._z(20), bottom_y + self._z(10), radius=self._z(8))
-            curr_y = bottom_y + self._z(20)
-            
-        self._update_round_rect(bg_id, x1, y_start, x2, curr_y + self._z(35), radius=self._z(12)) # Clean bottom padding
-        return bg_id, curr_y + self._z(35)
+        return bg_id, curr_y + self._z(15)
 
     # --- Event Actions ---
-
     def action_delete(self, word):
-        if messagebox.askyesno("Delete Word", f"Are you sure you want to permanently delete '{word.capitalize()}'?"):
+        dlg = StyledConfirmDialog(self.app, "Delete Word", f"Permanently delete '{word.capitalize()}'?", danger=True)
+        self.wait_window(dlg)
+        if dlg.result:
             if delete_word(word):
                 self.app.load_words()
 
@@ -594,17 +561,17 @@ class WordListView(ctk.CTkFrame):
         raw_key = self.app.api_key_entry.get().strip()
         api_key = self.app.api_key if raw_key == "••••••••" else raw_key
         if not api_key:
-            messagebox.showwarning("Missing API Key", "Please enter your API Key in Settings first.")
+            dlg = StyledConfirmDialog(self.app, "Missing API Key", "Please enter your API Key in Settings first.", confirm_text="OK")
+            self.wait_window(dlg)
             return
             
-        self.app.status_label.configure(text=f"Refreshing '{word}'...", text_color=HIGHLIGHT_COLOR)
+        self.app.status_label.configure(text=f"Refreshing '{word}'...", text_color=Color.ACCENT)
         
         def fetch_task():
             try:
-                data, api_msg = fetch_word_details(word, api_key)
+                data, api_msg = _fetch_word_details(word, api_key, self.app.get_current_provider_config())
                 self.app.after(0, lambda: self._on_refresh_done(word, data, api_msg))
             except Exception as e:
-                err_dump = traceback.format_exc()
                 self.app.after(0, lambda: self._on_refresh_done(word, None, f"Network Crash: {str(e)}"))
             
         threading.Thread(target=fetch_task, daemon=True).start()
@@ -613,11 +580,12 @@ class WordListView(ctk.CTkFrame):
         if data:
             for field in ['meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech', 'example_sentence', 'synonyms', 'antonyms', 'exam_history']:
                 if field in data: update_single_field(word, field, data[field])
-            self.app.status_label.configure(text=f"Refreshed '{word}'!", text_color="#34D399")
+            self.app.status_label.configure(text=f"Refreshed '{word}'!", text_color=Color.SUCCESS)
             self.app.load_words(scroll_to=word.lower(), flash=False)
         else:
-            messagebox.showerror("Refresh Failed", api_msg)
-            self.app.status_label.configure(text="", text_color=TEXT_MUTED)
+            dlg = StyledConfirmDialog(self.app, "Refresh Failed", api_msg, confirm_text="OK", danger=True)
+            self.wait_window(dlg)
+            self.app.status_label.configure(text="", text_color=Color.TEXT_MUTED)
 
     def action_edit(self, word):
         self.editing_word = word
@@ -625,8 +593,6 @@ class WordListView(ctk.CTkFrame):
 
     def action_save(self, word):
         updates = {
-            'ipa': self.edit_widgets.get(f"{word}_ipa").get().strip() if f"{word}_ipa" in self.edit_widgets else "",
-            'part_of_speech': self.edit_widgets.get(f"{word}_part_of_speech").get().strip() if f"{word}_part_of_speech" in self.edit_widgets else "",
             'meaning': self.edit_widgets.get(f"{word}_meaning").get().strip() if f"{word}_meaning" in self.edit_widgets else "",
             'bangla_meaning': self.edit_widgets.get(f"{word}_bangla_meaning").get().strip() if f"{word}_bangla_meaning" in self.edit_widgets else "",
             'example_sentence': self.edit_widgets.get(f"{word}_example_sentence").get().strip() if f"{word}_example_sentence" in self.edit_widgets else "",
@@ -636,19 +602,11 @@ class WordListView(ctk.CTkFrame):
         if f"{word}_notes" in self.edit_widgets:
             updates['notes'] = self.edit_widgets.get(f"{word}_notes").get("1.0", "end-1c").strip()
             
-        for field, new_value in updates.items():
-            update_single_field(word, field, new_value)
+        for field, new_value in updates.items(): update_single_field(word, field, new_value)
             
         self.editing_word = None
         self.app.load_words(scroll_to=word.lower(), flash=False)
 
-    def action_notes(self, word):
-        if word in self.open_notes:
-            self.open_notes.remove(word)
-        else:
-            self.open_notes.add(word)
-        self.render()
-        
     def action_fav(self, word):
         w_data = next((w for w in self.words if w['word'] == word), None)
         if not w_data: return
@@ -662,230 +620,324 @@ class WordListView(ctk.CTkFrame):
             w_data['is_favorite'] = 1 if is_fav else 0
             self.render()
 
-# =========================================================================================
-
+# =======================================================================
+# MAIN APPLICATION
+# =======================================================================
 class VocabNoteApp(ctk.CTk):
+    
+    API_PRESETS = {
+        "Google AI Studio": {"url": "https://generativelanguage.googleapis.com/v1beta/models", "model": "gemini-3.1-flash-lite", "type": "google"},
+        "Agent Router": {"url": "https://agentrouter.org/v1", "model": "claude-opus-4-8", "type": "openai_compatible"},
+        "Groq": {"url": "https://api.groq.com/openai/v1", "model": "llama3-8b-8192", "type": "openai_compatible"},
+        "Mistral AI": {"url": "https://api.mistral.ai/v1", "model": "mistral-small-latest", "type": "openai_compatible"},
+        "GitHub Models": {"url": "https://models.inference.ai.azure.com", "model": "gpt-4o", "type": "openai_compatible"},
+        "OpenRouter": {"url": "https://openrouter.ai/api/v1", "model": "google/gemini-2.5-flash:free", "type": "openai_compatible"},
+        "Hugging Face": {"url": "https://api-inference.huggingface.co/v1", "model": "meta-llama/Meta-Llama-3-8B-Instruct", "type": "openai_compatible"},
+        "Cohere": {"url": "https://api.cohere.com/v1", "model": "command-r", "type": "openai_compatible"},
+        "Cloudflare Workers": {"url": "https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1", "model": "@cf/meta/llama-3-8b-instruct", "type": "openai_compatible"},
+        "Custom API Server": {"url": "https://api.example.com/v1", "model": "gpt-4", "type": "openai_compatible"}
+    }
+    
     def __init__(self):
         super().__init__()
         init_db()
         
         self.api_key = get_setting("gemini_api_key")
         
-        saved_zoom = get_setting("zoom_factor")
+        # Zoom Logic – default 1.0 replaces previous 0.6
         try:
-            self.zoom_factor = float(saved_zoom) if saved_zoom else 1.0
-        except ValueError:
+            saved_zoom = float(get_setting("zoom_factor") or 1.0)
+            if saved_zoom <= 0.7:
+                self.zoom_factor = 1.0
+            else:
+                self.zoom_factor = saved_zoom
+        except ValueError: 
             self.zoom_factor = 1.0
             
         self.current_volume_id = None
-        self.vol_display_to_id = {}
         self.show_favorites_only = False
+        self.volume_buttons = []
 
         self.title("VocabNote")
-        
-        icon_path = resource_path("vocab_icon.ico")
-        if os.path.exists(icon_path):
-            self.iconbitmap(icon_path)
+        if os.path.exists(resource_path("vocab_icon.ico")): self.iconbitmap(resource_path("vocab_icon.ico"))
             
         self.geometry("1200x800")
-        self.configure(fg_color=BG_MAIN)
+        self.configure(fg_color=Color.SURFACE_0)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
         self.setup_sidebar()
         self.setup_notebook_page()
         self.setup_settings_page()
+        self.setup_shortcuts() 
 
         self.view_all_words()
         self.refresh_volumes_dashboard()
         self.load_words()
 
+    def setup_shortcuts(self):
+        self.bind("<Control-f>", lambda e: self.search_entry.focus_set())
+        self.bind("<Control-n>", lambda e: self.add_word_entry.focus_set())
+        self.bind("<Escape>", lambda e: self.cancel_edit())
+
+    def cancel_edit(self):
+        if self.word_list_frame.editing_word:
+            self.word_list_frame.editing_word = None
+            self.word_list_frame.render()
+
     def setup_sidebar(self):
-        self.sidebar = ctk.CTkFrame(self, width=250, fg_color=BG_SIDEBAR, corner_radius=0)
+        self.sidebar = ctk.CTkFrame(self, width=260, fg_color=Color.SURFACE_1, corner_radius=0)
         self.sidebar.grid(row=0, column=0, sticky="nsew")
-        self.sidebar.grid_rowconfigure(6, weight=1)
+        self.sidebar.grid_rowconfigure(4, weight=1)
 
-        ctk.CTkLabel(self.sidebar, text="VocabNote", font=("Segoe UI", 24, "bold"), text_color=TEXT_PRIMARY).grid(row=0, column=0, padx=25, pady=(35, 30), sticky="w")
+        ctk.CTkLabel(self.sidebar, text="VocabNote", font=Font.base(20, "bold"), text_color=Color.TEXT_PRIMARY).grid(row=0, column=0, padx=25, pady=(35, 20), sticky="w")
 
-        self.btn_notebook = ctk.CTkButton(self.sidebar, text="📚 All Words", fg_color=BG_CARD, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 15), anchor="w", command=self.view_all_words)
-        self.btn_notebook.grid(row=1, column=0, padx=15, pady=(5, 2), sticky="ew")
+        self.btn_notebook = ctk.CTkButton(self.sidebar, text="All Words", fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, font=Font.base(13, "bold"), anchor="w", command=self.view_all_words)
+        self.btn_notebook.grid(row=1, column=0, padx=15, pady=2, sticky="ew")
 
-        self.btn_favorites = ctk.CTkButton(self.sidebar, text="⭐ Favorites", fg_color=BG_SIDEBAR, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 15), anchor="w", command=self.view_favorites)
-        self.btn_favorites.grid(row=2, column=0, padx=15, pady=(2, 15), sticky="ew")
+        self.btn_favorites = ctk.CTkButton(self.sidebar, text="Favorites", fg_color="transparent", hover_color=Color.SURFACE_3, text_color=Color.TEXT_SECONDARY, font=Font.base(13, "bold"), anchor="w", command=self.view_favorites)
+        self.btn_favorites.grid(row=2, column=0, padx=15, pady=2, sticky="ew")
 
-        self.btn_settings = ctk.CTkButton(self.sidebar, text="⚙ Settings", fg_color=BG_SIDEBAR, hover_color=BG_CARD, text_color=TEXT_PRIMARY, font=("Segoe UI", 15), anchor="w", command=lambda: self.select_frame("settings"))
-        self.btn_settings.grid(row=3, column=0, padx=15, pady=5, sticky="ew")
+        nav_header = ctk.CTkFrame(self.sidebar, fg_color="transparent")
+        nav_header.grid(row=3, column=0, padx=25, pady=(30, 10), sticky="ew")
+        ctk.CTkLabel(nav_header, text="VOLUMES", font=Font.base(11, "bold"), text_color=Color.TEXT_MUTED).pack(side="left")
+        ctk.CTkButton(nav_header, text="+", width=24, height=24, fg_color="transparent", hover_color=Color.SURFACE_3, text_color=Color.ACCENT, command=self.add_volume_ui).pack(side="right")
 
-        ctk.CTkLabel(self.sidebar, text="DATA MANAGEMENT", font=("Segoe UI", 11, "bold"), text_color=TEXT_MUTED).grid(row=7, column=0, padx=25, pady=(20, 10), sticky="w")
-        ctk.CTkButton(self.sidebar, text="Export as DOCX", fg_color=ACCENT, hover_color=ACCENT_HOVER, font=("Segoe UI", 14), anchor="w", command=self.export_docx).grid(row=8, column=0, padx=15, pady=(0, 10), sticky="ew")
-        ctk.CTkButton(self.sidebar, text="Import from DOCX", fg_color=BG_CARD, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 14), anchor="w", command=self.import_docx).grid(row=9, column=0, padx=15, pady=(0, 30), sticky="ew")
+        self.volumes_scroll = ctk.CTkScrollableFrame(self.sidebar, fg_color="transparent", width=230)
+        self.volumes_scroll.grid(row=4, column=0, padx=5, sticky="nsew")
+
+        ctk.CTkButton(self.sidebar, text="Settings", fg_color="transparent", hover_color=Color.SURFACE_3, text_color=Color.TEXT_SECONDARY, font=Font.base(13), anchor="w", command=lambda: self.select_frame("settings")).grid(row=6, column=0, padx=15, pady=(20, 5), sticky="ew")
+        ctk.CTkButton(self.sidebar, text="Export as DOCX", fg_color="transparent", hover_color=Color.SURFACE_3, text_color=Color.TEXT_SECONDARY, font=Font.base(13), anchor="w", command=self.export_docx).grid(row=7, column=0, padx=15, pady=5, sticky="ew")
+        ctk.CTkButton(self.sidebar, text="Import from DOCX", fg_color="transparent", hover_color=Color.SURFACE_3, text_color=Color.TEXT_SECONDARY, font=Font.base(13), anchor="w", command=self.import_docx).grid(row=8, column=0, padx=15, pady=(5, 30), sticky="ew")
 
     def setup_notebook_page(self):
-        self.notebook_frame = ctk.CTkFrame(self, fg_color=BG_MAIN, corner_radius=0)
+        self.notebook_frame = ctk.CTkFrame(self, fg_color=Color.SURFACE_0, corner_radius=0)
         
-        self.header_container = tk.Frame(self.notebook_frame, bg=BG_MAIN)
-        self.header_container.pack(fill="x", padx=40, pady=(25, 10))
+        self.header_container = tk.Frame(self.notebook_frame, bg=Color.SURFACE_0)
+        self.header_container.pack(fill="x", padx=40, pady=(35, 10))
 
-        row1 = tk.Frame(self.header_container, bg=BG_MAIN)
-        row1.pack(fill="x", pady=(0, 10))
+        row1 = tk.Frame(self.header_container, bg=Color.SURFACE_0)
+        row1.pack(fill="x", pady=(0, 25))
         
-        self.header = ctk.CTkLabel(row1, text="My Notebook", font=("Segoe UI", 28, "bold"), text_color=TEXT_PRIMARY)
-        self.header.pack(side="left", padx=(0, 20))
+        self.header_title = ctk.CTkLabel(row1, text="My Notebook", font=Font.base(24, "bold"), text_color=Color.TEXT_PRIMARY)
+        self.header_title.pack(side="left")
 
-        self.volume_dropdown = ctk.CTkOptionMenu(row1, width=170, height=32, fg_color=BG_CARD, button_color=BG_CARD, button_hover_color="#3F3F46", font=("Segoe UI", 13), command=self.on_volume_selection_changed)
-        self.volume_dropdown.pack(side="left", padx=(0, 8))
-        
-        ctk.CTkButton(row1, text="+ New", width=60, height=32, fg_color=BG_CARD, hover_color="#3F3F46", font=("Segoe UI", 12, "bold"), text_color=TEXT_PRIMARY, command=self.add_volume_ui).pack(side="left", padx=3)
-        ctk.CTkButton(row1, text="Rename", width=65, height=32, fg_color=BG_CARD, hover_color="#3F3F46", font=("Segoe UI", 12, "bold"), text_color=TEXT_PRIMARY, command=self.rename_volume_ui).pack(side="left", padx=3)
-        ctk.CTkButton(row1, text="Delete", width=65, height=32, fg_color="#7F1D1D", hover_color="#991B1B", font=("Segoe UI", 12, "bold"), text_color=TEXT_PRIMARY, command=self.delete_volume_ui).pack(side="left", padx=3)
-
-        self.sort_dropdown = ctk.CTkOptionMenu(row1, values=["Sort A-Z", "Sort Z-A"], width=120, height=32, fg_color=BG_CARD, button_color=BG_CARD, button_hover_color="#3F3F46", font=("Segoe UI", 13), command=lambda choice: self.load_words())
-        self.sort_dropdown.pack(side="right")
-        
-        self.zoom_slider = ctk.CTkSlider(row1, from_=0.6, to=1.4, width=120, command=self.on_zoom_changed)
+        self.zoom_slider = ctk.CTkSlider(row1, from_=0.7, to=1.5, width=120, command=self.on_zoom_changed, button_color=Color.ACCENT, button_hover_color=Color.ACCENT_HOVER)
         self.zoom_slider.set(self.zoom_factor)
-        self.zoom_slider.pack(side="right", padx=(10, 15))
+        self.zoom_slider.pack(side="right", padx=(10, 0))
         self.zoom_slider.bind("<ButtonRelease-1>", lambda e: save_setting("zoom_factor", str(self.zoom_factor)))
+        ctk.CTkLabel(row1, text="Zoom", font=Font.base(11, "bold"), text_color=Color.TEXT_MUTED).pack(side="right")
         
-        ctk.CTkLabel(row1, text="Zoom", font=("Segoe UI", 12, "bold"), text_color=TEXT_MUTED).pack(side="right")
+        self.sort_dropdown = ctk.CTkOptionMenu(row1, values=["Sort A-Z", "Sort Z-A"], width=120, height=32, fg_color=Color.SURFACE_1, button_color=Color.SURFACE_1, button_hover_color=Color.SURFACE_3, font=Font.base(12), command=lambda _: self.load_words())
+        self.sort_dropdown.pack(side="right", padx=15)
 
-        row2 = tk.Frame(self.header_container, bg=BG_MAIN)
+        row2 = tk.Frame(self.header_container, bg=Color.SURFACE_0)
         row2.pack(fill="x")
 
-        self.add_word_entry = ctk.CTkEntry(row2, placeholder_text="Enter a hard English word...", width=260, height=38, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
+        self.add_word_entry = ctk.CTkEntry(row2, placeholder_text="Enter word to add/enrich...", width=260, height=34, font=Font.base(13), fg_color=Color.SURFACE_1, border_width=1, border_color=Color.GLASS_BORDER)
         self.add_word_entry.pack(side="left", padx=(0, 10))
+        self.add_word_entry.bind("<Return>", lambda e: self.add_new_word())
         
-        self.add_word_entry.bind("<Return>", self._on_enter_pressed)
-        
-        ctk.CTkButton(row2, text="Enrich Word", width=110, height=38, fg_color=ACCENT, hover_color=ACCENT_HOVER, font=("Segoe UI", 14, "bold"), command=self.add_new_word).pack(side="left")
+        ctk.CTkButton(row2, text="Enrich Word", width=110, height=34, fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, text_color="#000000", font=Font.base(13, "bold"), command=self.add_new_word).pack(side="left")
 
         self.search_all_var = tk.BooleanVar(value=True)
-        self.cb_search_all = ctk.CTkCheckBox(row2, text="Search All Volumes", variable=self.search_all_var, font=("Segoe UI", 12), text_color=TEXT_MUTED, fg_color=ACCENT, hover_color=ACCENT_HOVER, command=lambda: self.load_words())
+        self.cb_search_all = ctk.CTkCheckBox(row2, text="Search All Volumes", variable=self.search_all_var, font=Font.base(11), text_color=Color.TEXT_MUTED, fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, border_color=Color.GLASS_BORDER, command=lambda: self.load_words())
         self.cb_search_all.pack(side="right", padx=(15, 0))
 
-        self.search_entry = ctk.CTkEntry(row2, placeholder_text="Search...", width=220, height=38, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
+        self.search_entry = ctk.CTkEntry(row2, placeholder_text="Search notebook...", width=220, height=34, font=Font.base(13), fg_color=Color.SURFACE_1, border_width=1, border_color=Color.GLASS_BORDER)
         self.search_entry.pack(side="right")
         self.search_entry.bind("<KeyRelease>", lambda e: self.load_words())
 
-        self.status_label = ctk.CTkLabel(self.notebook_frame, text="", font=("Segoe UI", 13), text_color=TEXT_MUTED, height=20)
+        self.status_label = ctk.CTkLabel(self.notebook_frame, text="", font=Font.base(12), text_color=Color.TEXT_MUTED, height=20)
         self.status_label.pack(anchor="w", padx=40, pady=(0, 6))
 
         self.word_list_frame = WordListView(self.notebook_frame, self)
         self.word_list_frame.pack(side="top", fill="both", expand=True, padx=40, pady=(0, 10))
-
-    def _on_enter_pressed(self, event):
-        self.focus()
-        self.add_new_word()
 
     def on_zoom_changed(self, value):
         self.zoom_factor = value
         self.word_list_frame.render()
 
     def setup_settings_page(self):
-        self.settings_frame = ctk.CTkFrame(self, fg_color=BG_MAIN, corner_radius=0)
-        ctk.CTkLabel(self.settings_frame, text="Settings", font=("Segoe UI", 34, "bold"), text_color=TEXT_PRIMARY).pack(anchor="w", padx=50, pady=(45, 30))
-        ctk.CTkLabel(self.settings_frame, text="AI API Key (Gemini)", font=("Segoe UI", 15, "bold"), text_color=TEXT_PRIMARY).pack(anchor="w", padx=50, pady=(0, 8))
+        self.settings_frame = ctk.CTkFrame(self, fg_color=Color.SURFACE_0, corner_radius=0)
         
-        self.api_key_entry = ctk.CTkEntry(self.settings_frame, placeholder_text="Paste API Key here...", width=450, height=42, font=("Segoe UI", 14), fg_color=BG_CARD, border_width=1, border_color="#3F3F46")
-        if self.api_key: self.api_key_entry.insert(0, "••••••••")
-        self.api_key_entry.bind("<FocusOut>", self.on_api_key_changed)
-        self.api_key_entry.pack(anchor="w", padx=50, pady=(0, 20))
+        card = ctk.CTkFrame(self.settings_frame, fg_color=Color.SURFACE_1, corner_radius=16, border_width=1, border_color=Color.GLASS_BORDER)
+        card.pack(fill="x", padx=50, pady=50)
         
-        ctk.CTkButton(self.settings_frame, text="Test Connection", width=160, height=42, fg_color=BG_CARD, hover_color="#3F3F46", text_color=TEXT_PRIMARY, font=("Segoe UI", 14), command=self.run_api_test).pack(anchor="w", padx=50)
-        self.settings_status = ctk.CTkLabel(self.settings_frame, text="", font=("Segoe UI", 14), text_color=TEXT_MUTED)
-        self.settings_status.pack(anchor="w", padx=50, pady=15)
+        ctk.CTkLabel(card, text="API Settings", font=Font.base(24, "bold"), text_color=Color.TEXT_PRIMARY).pack(anchor="w", padx=40, pady=(40, 30))
+        
+        ctk.CTkLabel(card, text="Select AI Platform", font=Font.base(12, "bold"), text_color=Color.TEXT_MUTED).pack(anchor="w", padx=40)
+        self.provider_var = tk.StringVar(value=get_setting("api_provider_name") or "Google AI Studio")
+        self.provider_dropdown = ctk.CTkOptionMenu(card, variable=self.provider_var, values=list(self.API_PRESETS.keys()), width=300, fg_color=Color.SURFACE_2, button_color=Color.SURFACE_2, button_hover_color=Color.SURFACE_3, font=Font.base(13), command=self.on_provider_change)
+        self.provider_dropdown.pack(anchor="w", padx=40, pady=(0, 20))
 
-    def on_api_key_changed(self, event):
-        new_key = self.api_key_entry.get().strip()
-        if new_key == "":
-            save_setting("gemini_api_key", "")
-            self.api_key = None
-        elif new_key != "••••••••":
-            save_setting("gemini_api_key", new_key)
-            self.api_key = new_key
-            self.api_key_entry.delete(0, 'end')
-            self.api_key_entry.insert(0, "••••••••")
+        ctk.CTkLabel(card, text="Base URL", font=Font.base(12, "bold"), text_color=Color.TEXT_MUTED).pack(anchor="w", padx=40)
+        self.url_entry = ctk.CTkEntry(card, width=500, font=Font.base(13), fg_color=Color.SURFACE_2, border_color=Color.GLASS_BORDER)
+        self.url_entry.insert(0, get_setting("api_base_url") or self.API_PRESETS["Google AI Studio"]["url"])
+        self.url_entry.pack(anchor="w", padx=40, pady=(0, 20))
+
+        ctk.CTkLabel(card, text="Model Name", font=Font.base(12, "bold"), text_color=Color.TEXT_MUTED).pack(anchor="w", padx=40)
+        self.model_entry = ctk.CTkEntry(card, width=500, font=Font.base(13), fg_color=Color.SURFACE_2, border_color=Color.GLASS_BORDER)
+        self.model_entry.insert(0, get_setting("api_model") or self.API_PRESETS["Google AI Studio"]["model"])
+        self.model_entry.pack(anchor="w", padx=40, pady=(0, 20))
+        
+        ctk.CTkLabel(card, text="API Key", font=Font.base(12, "bold"), text_color=Color.TEXT_MUTED).pack(anchor="w", padx=40)
+        self.api_key_entry = ctk.CTkEntry(card, width=500, font=Font.base(13), fg_color=Color.SURFACE_2, border_color=Color.GLASS_BORDER)
+        saved_key = get_setting("gemini_api_key")
+        if saved_key: 
+            self.api_key_entry.insert(0, saved_key)
+            self.api_key_entry.configure(show="•")
+        self.api_key_entry.bind("<FocusIn>", lambda e: self.api_key_entry.configure(show=""))
+        self.api_key_entry.bind("<FocusOut>", lambda e: self.api_key_entry.configure(show="•"))
+        self.api_key_entry.pack(anchor="w", padx=40, pady=(0, 30))
+
+        btn_frame = ctk.CTkFrame(card, fg_color="transparent")
+        btn_frame.pack(anchor="w", padx=40, pady=(0, 40))
+        
+        ctk.CTkButton(btn_frame, text="Save Configurations", width=170, height=34, fg_color=Color.ACCENT, hover_color=Color.ACCENT_HOVER, text_color="#000000", font=Font.base(13, "bold"), command=self.save_api_settings).pack(side="left", padx=(0, 15))
+        self.test_btn = ctk.CTkButton(btn_frame, text="Test Connection", width=150, height=34, fg_color=Color.SURFACE_3, hover_color=Color.GLASS_BORDER, text_color=Color.TEXT_PRIMARY, font=Font.base(13), command=self.run_api_test)
+        self.test_btn.pack(side="left")
+        
+        self.settings_status = ctk.CTkLabel(btn_frame, text="", font=Font.base(13), text_color=Color.TEXT_MUTED)
+        self.settings_status.pack(side="left", padx=20)
+
+    def on_provider_change(self, choice):
+        preset = self.API_PRESETS.get(choice)
+        if preset:
+            self.url_entry.delete(0, 'end')
+            self.url_entry.insert(0, preset["url"])
+            self.model_entry.delete(0, 'end')
+            self.model_entry.insert(0, preset["model"])
+
+    def get_current_provider_config(self):
+        return {
+            "type": self.API_PRESETS.get(self.provider_var.get(), {}).get("type", "openai_compatible"),
+            "base_url": self.url_entry.get().strip(),
+            "model": self.model_entry.get().strip()
+        }
+
+    def save_api_settings(self):
+        save_setting("api_provider_name", self.provider_var.get())
+        save_setting("api_model", self.model_entry.get().strip())
+        save_setting("api_base_url", self.url_entry.get().strip())
+        save_setting("gemini_api_key", self.api_key_entry.get().strip())
+        self.api_key = self.api_key_entry.get().strip()
+        self.settings_status.configure(text="Saved securely!", text_color=Color.SUCCESS)
+
+    def run_api_test(self):
+        self.settings_status.configure(text="Testing...", text_color=Color.ACCENT)
+        self.test_btn.configure(state="disabled")
+        self.update()
+        test_config = self.get_current_provider_config()
+        api_key_to_test = self.api_key_entry.get().strip()
+        
+        def background_task():
+            is_success, msg = _test_gemini_connection(api_key_to_test, test_config)
+            self.after(0, lambda: self.settings_status.configure(text=msg, text_color=Color.SUCCESS if is_success else Color.DANGER))
+            self.after(0, lambda: self.test_btn.configure(state="normal"))
+            
+        threading.Thread(target=background_task, daemon=True).start()
 
     def refresh_volumes_dashboard(self):
         vols = get_all_volumes()
-        dropdown_strings = []
-        self.vol_display_to_id.clear()
         
-        for v in vols:
-            display_str = f"{v['name']} ({v['word_count']} words)"
-            dropdown_strings.append(display_str)
-            self.vol_display_to_id[display_str] = v['id']
-            
-        self.volume_dropdown.configure(values=dropdown_strings)
+        for btn in self.volume_buttons: btn.destroy()
+        self.volume_buttons.clear()
         
         if self.current_volume_id is None or not any(v['id'] == self.current_volume_id for v in vols):
-            self.current_volume_id = vols[0]['id']
-            
-        for display_str, v_id in self.vol_display_to_id.items():
-            if v_id == self.current_volume_id:
-                self.volume_dropdown.set(display_str)
-                break
+            self.current_volume_id = vols[0]['id'] if vols else None
 
-    def on_volume_selection_changed(self, choice):
-        self.current_volume_id = self.vol_display_to_id.get(choice)
-        self.load_words()
+        for v in vols:
+            is_active = (v['id'] == self.current_volume_id and not self.show_favorites_only and self.notebook_frame.winfo_ismapped())
+            bg_color = Color.SURFACE_3 if is_active else "transparent"
+            text_color = Color.ACCENT if is_active else Color.TEXT_SECONDARY
+            font_w = "bold" if is_active else "normal"
+            
+            btn = ctk.CTkButton(self.volumes_scroll, text=f"{v['name']} ({v['word_count']})", fg_color=bg_color, hover_color=Color.SURFACE_3, text_color=text_color, font=Font.base(13, font_w), anchor="w", command=lambda vid=v['id']: self.on_volume_selected(vid))
+            btn.pack(fill="x", padx=10, pady=2)
+            
+            btn.bind("<Button-3>", lambda e, v_id=v['id']: self.on_volume_rclick(e, v_id)) 
+            
+            self.volume_buttons.append(btn)
+
+    def on_volume_rclick(self, event, vid):
+        menu = tk.Menu(self, tearoff=0, bg=Color.SURFACE_1, fg=Color.TEXT_PRIMARY, activebackground=Color.SURFACE_3, activeforeground=Color.TEXT_PRIMARY, borderwidth=1, relief="solid", font=Font.base(11))
+        menu.add_command(label="Rename Volume", command=lambda: self.rename_volume_ui(vid))
+        menu.add_command(label="Delete Volume", command=lambda: self.delete_volume_ui(vid))
+        try:
+            menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu.grab_release()
+
+    def on_volume_selected(self, vid):
+        self.current_volume_id = vid
+        self.show_favorites_only = False
+        self.select_frame("notebook")
 
     def view_all_words(self):
         self.show_favorites_only = False
-        self.btn_notebook.configure(fg_color=BG_CARD)
-        self.btn_favorites.configure(fg_color=BG_SIDEBAR)
+        self.current_volume_id = None 
         self.select_frame("notebook")
 
     def view_favorites(self):
         self.show_favorites_only = True
-        self.btn_notebook.configure(fg_color=BG_SIDEBAR)
-        self.btn_favorites.configure(fg_color=BG_CARD)
         self.select_frame("notebook")
 
     def add_volume_ui(self):
-        dialog = ctk.CTkInputDialog(text="Enter new volume name:", title="Create Volume")
-        name = dialog.get_input()
-        if name and name.strip():
-            create_volume(name.strip())
+        dlg = StyledInputDialog(self, "Create Volume", placeholder="Enter new volume name")
+        self.wait_window(dlg)
+        if dlg.result and dlg.result.strip():
+            create_volume(dlg.result.strip())
             self.refresh_volumes_dashboard()
 
-    def rename_volume_ui(self):
-        dialog = ctk.CTkInputDialog(text="Enter new name for active volume:", title="Rename Volume")
-        name = dialog.get_input()
-        if name and name.strip():
-            rename_volume(self.current_volume_id, name.strip())
+    def rename_volume_ui(self, vid=None):
+        target_vid = vid or self.current_volume_id
+        if not target_vid: return
+        dlg = StyledInputDialog(self, "Rename Volume", placeholder="Enter new name")
+        self.wait_window(dlg)
+        if dlg.result and dlg.result.strip():
+            rename_volume(target_vid, dlg.result.strip())
             self.refresh_volumes_dashboard()
+            self.load_words()
 
-    def delete_volume_ui(self):
-        if messagebox.askyesno("Delete Volume", "Are you sure you want to delete the active volume permanently?"):
-            success, msg = delete_volume(self.current_volume_id)
+    def delete_volume_ui(self, vid=None):
+        target_vid = vid or self.current_volume_id
+        if not target_vid: return
+        dlg = StyledConfirmDialog(self, "Delete Volume", "Are you sure you want to delete this volume and all its words permanently?", danger=True)
+        self.wait_window(dlg)
+        if dlg.result:
+            success, msg = delete_volume(target_vid)
             if success:
-                self.current_volume_id = None
+                if self.current_volume_id == target_vid: self.current_volume_id = None
                 self.refresh_volumes_dashboard()
                 self.load_words()
             else:
-                messagebox.showerror("Error", msg)
+                StyledConfirmDialog(self, "Error", msg, confirm_text="OK").wait_window()
 
     def load_words(self, scroll_to=None, flash=False):
-        self.header.configure(text="Favorites" if self.show_favorites_only else "My Notebook")
+        if self.show_favorites_only:
+            self.header_title.configure(text="Favorites")
+        elif self.current_volume_id:
+            vols = get_all_volumes()
+            v_name = next((v['name'] for v in vols if v['id'] == self.current_volume_id), "Volume")
+            self.header_title.configure(text=v_name)
+        else:
+            self.header_title.configure(text="All Words")
 
         all_words = get_all_words_dictionaries(
             search_query=self.search_entry.get().strip(), 
             sort_order="DESC" if "Z-A" in self.sort_dropdown.get() else "ASC", 
-            volume_id=self.current_volume_id, 
+            volume_id=self.current_volume_id if not self.show_favorites_only else None, 
             search_all=self.search_all_var.get(),
             favorites_only=self.show_favorites_only
         )
 
         self.word_list_frame.set_words(all_words)
         
-        if scroll_to:
-            self.after(50, lambda: self.word_list_frame.scroll_to_word(scroll_to, flash=flash))
+        if scroll_to: self.after(50, lambda: self.word_list_frame.scroll_to_word(scroll_to, flash=flash))
         else:
-            try:
-                self.word_list_frame.canvas.yview_moveto(0)
-            except Exception:
-                pass
+            try: self.word_list_frame.canvas.yview_moveto(0)
+            except Exception: pass
 
     def add_new_word(self):
         word = self.add_word_entry.get().strip()
@@ -897,7 +949,6 @@ class VocabNoteApp(ctk.CTk):
             if dialog.result == "cancel": return
             elif dialog.result == "open":
                 self.search_entry.delete(0, 'end')
-                self.search_entry.insert(0, word)
                 self.search_all_var.set(True) 
                 self.load_words(scroll_to=word.lower(), flash=True)
                 self.add_word_entry.delete(0, 'end')
@@ -906,18 +957,17 @@ class VocabNoteApp(ctk.CTk):
         raw_key = self.api_key_entry.get().strip()
         api_key_to_use = self.api_key if raw_key == "••••••••" else raw_key
         if not api_key_to_use:
-            messagebox.showwarning("Missing API Key", "Please add your API Key in Settings first.")
+            StyledConfirmDialog(self, "Missing API Key", "Please add your API Key in Settings first.", confirm_text="OK").wait_window()
             return
 
-        self.status_label.configure(text=f"Asking AI about '{word}'...", text_color=HIGHLIGHT_COLOR)
-        self.update()
+        self.status_label.configure(text=f"Enriching '{word}' via AI...", text_color=Color.ACCENT)
+        self.update_idletasks()
 
         def fetch_task():
             try:
-                data, api_msg = fetch_word_details(word, api_key_to_use)
+                data, api_msg = _fetch_word_details(word, api_key_to_use, self.get_current_provider_config())
                 self.after(0, lambda: self._on_add_fetched(word, data, api_msg))
             except Exception as e:
-                err_dump = traceback.format_exc()
                 self.after(0, lambda: self._on_add_fetched(word, None, f"Network failed: {str(e)}"))
             
         threading.Thread(target=fetch_task, daemon=True).start()
@@ -927,53 +977,51 @@ class VocabNoteApp(ctk.CTk):
             if check_word_exists(word): 
                 for field in ['meaning', 'bangla_meaning', 'english_definition', 'ipa', 'part_of_speech', 'example_sentence', 'synonyms', 'antonyms', 'exam_history']:
                     if field in data: update_single_field(word, field, data[field])
-                self.status_label.configure(text=f"'{word}' updated with fresh AI data!", text_color="#34D399")
+                self.status_label.configure(text=f"'{word}' updated with fresh AI data!", text_color=Color.SUCCESS)
             else:
                 save_word_to_db(word, data, current_vol_id=self.current_volume_id)
-                self.status_label.configure(text=f"'{word}' added successfully!", text_color="#34D399")
+                self.status_label.configure(text=f"'{word}' added successfully!", text_color=Color.SUCCESS)
             
             self.add_word_entry.delete(0, 'end')
             self.search_entry.delete(0, 'end')
             self.refresh_volumes_dashboard() 
             self.load_words(scroll_to=word.lower(), flash=True)
+            self.after(4000, lambda: self.status_label.configure(text=""))
         else:
-            self.status_label.configure(text=api_msg, text_color="#F87171")
+            self.status_label.configure(text=api_msg, text_color=Color.DANGER)
 
     def select_frame(self, name):
         self.notebook_frame.grid_forget()
         self.settings_frame.grid_forget()
-        self.btn_notebook.configure(fg_color=BG_SIDEBAR)
-        self.btn_favorites.configure(fg_color=BG_SIDEBAR)
-        self.btn_settings.configure(fg_color=BG_CARD if name == "settings" else BG_SIDEBAR)
+        
+        self.btn_notebook.configure(
+            fg_color=Color.SURFACE_3 if name == "notebook" and not self.show_favorites_only and not self.current_volume_id else "transparent",
+            text_color=Color.ACCENT if name == "notebook" and not self.show_favorites_only and not self.current_volume_id else Color.TEXT_SECONDARY
+        )
+        self.btn_favorites.configure(
+            fg_color=Color.SURFACE_3 if name == "notebook" and self.show_favorites_only else "transparent",
+            text_color=Color.ACCENT if name == "notebook" and self.show_favorites_only else Color.TEXT_SECONDARY
+        )
         
         if name == "notebook":
             self.notebook_frame.grid(row=0, column=1, sticky="nsew")
-            if self.show_favorites_only: self.btn_favorites.configure(fg_color=BG_CARD)
-            else: self.btn_notebook.configure(fg_color=BG_CARD)
             self.refresh_volumes_dashboard()
             self.load_words()
         else:
             self.settings_frame.grid(row=0, column=1, sticky="nsew")
-
-    def run_api_test(self):
-        self.settings_status.configure(text="Testing connection...", text_color=HIGHLIGHT_COLOR)
-        self.update()
-        raw_key = self.api_key_entry.get().strip()
-        key_input = self.api_key if raw_key == "••••••••" else raw_key
-        is_success, msg = test_gemini_connection(key_input)
-        self.settings_status.configure(text=msg, text_color="#34D399" if is_success else "#F87171")
+            self.refresh_volumes_dashboard()
 
     def import_docx(self):
         file_path = filedialog.askopenfilename(filetypes=[("Word Document", "*.docx")])
         if not file_path: return
         success, result = import_from_docx(file_path)
         if not success:
-            messagebox.showerror("Import Error", result)
+            StyledConfirmDialog(self, "Import Error", result, confirm_text="OK", danger=True).wait_window()
             return
             
         words_to_import = result
         if not words_to_import:
-            messagebox.showinfo("Import", "No recognizable vocabulary items found in the document.")
+            StyledConfirmDialog(self, "Import", "No recognizable vocabulary items found.", confirm_text="OK").wait_window()
             return
             
         replace_duplicates, skip_duplicates, imported_count, skipped_count, failed_count = False, False, 0, 0, 0
@@ -1005,7 +1053,7 @@ class VocabNoteApp(ctk.CTk):
                     imported_count += 1
                 else: failed_count += 1
                     
-        messagebox.showinfo("Import Summary", f"Imported: {imported_count} words\nSkipped: {skipped_count} duplicates\nFailed: {failed_count}")
+        StyledConfirmDialog(self, "Import Summary", f"Imported: {imported_count} words\nSkipped: {skipped_count} duplicates\nFailed: {failed_count}", confirm_text="OK").wait_window()
         self.refresh_volumes_dashboard()
         self.load_words()
 
@@ -1022,17 +1070,16 @@ class VocabNoteApp(ctk.CTk):
         words = []
         if dialog.result['type'] == 'all': words = get_all_words_dictionaries(search_all=True, sort_order="ASC")
         elif dialog.result['type'] == 'current': words = get_all_words_dictionaries(volume_id=self.current_volume_id, sort_order="ASC")
-        elif dialog.result['type'] == 'custom': words = get_all_words_dictionaries(volume_id=dialog.result['volumes'], sort_order="ASC")
             
         if not words:
-            messagebox.showwarning("Export Failed", "No words found to export.")
+            StyledConfirmDialog(self, "Export Failed", "No words found to export.", confirm_text="OK", danger=True).wait_window()
             return
             
         file_path = filedialog.asksaveasfilename(defaultextension=".docx", filetypes=[("Word Document", "*.docx")])
         if file_path:
             success, msg = export_to_docx(words, file_path)
-            if success: messagebox.showinfo("Success", msg)
-            else: messagebox.showerror("Error", msg)
+            dlg = StyledConfirmDialog(self, "Success" if success else "Error", msg, confirm_text="OK", danger=not success)
+            dlg.wait_window()
 
 if __name__ == "__main__":
     app = VocabNoteApp()
