@@ -2,110 +2,290 @@
 
 <div align="center">
 
-A hyper-fast, offline-first vocabulary notebook powered by Google Gemini AI.
+**A modern, offline-first vocabulary notebook powered by Universal AI APIs.**
+
+Store, enrich, organize, and export your vocabulary with a beautiful desktop experience built for speed.
 
 [![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![CustomTkinter](https://img.shields.io/badge/CustomTkinter-Modern_UI-1F6FEB?style=for-the-badge)](https://github.com/TomSchimansky/CustomTkinter)
 [![SQLite](https://img.shields.io/badge/SQLite-Offline_Storage-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
-[![Gemini AI](https://img.shields.io/badge/Gemini_AI-Powered-8E75FF?style=for-the-badge)](https://ai.google.dev/)
+[![Universal LLM](https://img.shields.io/badge/Universal_LLM-OpenAI_Compatible-8E75FF?style=for-the-badge)](https://platform.openai.com/docs/api-reference)
 [![Windows](https://img.shields.io/badge/Windows-Desktop_App-0078D6?style=for-the-badge&logo=windows&logoColor=white)]()
 
-<img src="screenshot.png" alt="VocabNote Dashboard UI" width="800"/>
+<img src="screenshot.png" alt="VocabNote Screenshot" width="900"/>
 
 </div>
 
-## 📥 Download
+---
 
-**[👉 Download the latest Windows executable (v1.0.0)](https://github.com/sayedalve/VocabNote/releases/latest)**
+# ✨ Overview
 
-*No installation required. Just unzip and run `VocabNote.exe`. The application is fully portable and will automatically generate its local database on the first launch.*
+**VocabNote** is a modern desktop vocabulary notebook that combines the speed of local storage with the power of AI.
+
+Instead of manually searching dictionaries and writing notes, simply enter a word and let your preferred AI automatically generate rich vocabulary information including pronunciation, meanings, Bangla translation, example sentences, synonyms, antonyms, and more.
+
+Everything is stored locally in SQLite, making the application fast, responsive, and fully usable offline after your words have been saved.
 
 ---
 
-## ✨ What is VocabNote?
+# 🚀 Features
 
-VocabNote removes the friction from language learning by automating vocabulary enrichment. Enter a hard English word, and the built-in AI engine autonomously fetches the pronunciation, part of speech, meanings, Bangla translations, example sentences, synonyms, antonyms, and competitive exam history. 
+### 🤖 Universal AI Support
 
-All enriched data is stored locally via SQLite, ensuring the application remains blazing fast and fully functional offline.
+Works with virtually every OpenAI-compatible API.
 
-## 🚀 Key Features
+Supported providers include:
 
-*   **🤖 1-Click AI Enrichment:** Type a word and press `Enter` to instantly generate comprehensive linguistic data via the `gemini-3.1-flash-lite` API.
-*   **⚡ Pure Canvas Rendering Engine:** Bypasses standard Tkinter scrolling bottlenecks. The UI draws primitives directly to a single canvas, achieving buttery-smooth 60fps scrolling regardless of notebook size.
-*   **🔎 Dynamic Interactive Tokens:** Synonyms and antonyms are rendered as interactive tags. Hover and click to apply a "Golden Highlight" to important words, instantly syncing to the database.
-*   **📱 Real-Time UI Scaling:** A mathematical layout engine allows you to zoom in/out of the interface fluidly without pixelation on High-DPI displays.
-*   **🗂 Volume Management:** Organize your vocabulary into infinite custom volumes with full CRUD capabilities.
-*   **📄 Smart Export/Import:** Compile your active volume or entire notebook into clean, formatted `.docx` files for offline study or sharing.
+- Google AI Studio (Gemini)
+- OpenRouter
+- Groq
+- GitHub Models
+- Together AI
+- DeepInfra
+- Local LLMs (Ollama, LM Studio)
+- Any OpenAI-compatible endpoint
 
-## 🧠 Under the Hood (Architecture)
+Simply choose your provider, enter your API key, and start learning.
 
-VocabNote is engineered for performance and resilience:
-*   **Asynchronous Network Layer:** API calls are dispatched to background threads (`threading.Thread`) with robust `try/except` wrappers. Network drops or API timeouts will gracefully return error messages without freezing the GUI mainloop.
-*   **Defensive JSON Parsing:** Custom regex-based sanitization strips rogue Markdown formatting (like ` ```json ` fences) from AI responses before parsing, preventing application crashes.
-*   **"Read-Only vs. Edit" Paradigm:** Cards default to lightweight canvas text. Heavy native `CTkEntry` widgets are only spawned dynamically when a user clicks "Edit", keeping memory consumption incredibly low.
+---
 
-## ⚙️ Installation & Setup
+### 📖 AI-Powered Vocabulary Generation
 
-### 1. Clone the repository
+Generate rich information automatically:
+
+- IPA Pronunciation
+- Parts of Speech
+- English Meaning
+- Bangla Meaning
+- Example Sentence
+- Synonyms
+- Antonyms
+
+No manual searching required.
+
+---
+
+### ⚡ High Performance
+
+Designed specifically for large vocabulary collections.
+
+Features include:
+
+- Custom Canvas rendering engine
+- Smooth scrolling
+- Efficient rendering
+- Lightweight memory usage
+- Optimized for thousands of words
+
+---
+
+### 🎨 Modern Desktop UI
+
+Built using CustomTkinter with a clean Midnight Blue interface featuring:
+
+- Glass-inspired cards
+- Rounded layouts
+- High-DPI support
+- Adjustable UI zoom
+- Responsive rendering
+- Custom scrollbar
+
+---
+
+### 🗂 Vocabulary Management
+
+Organize words using unlimited custom volumes.
+
+Features:
+
+- Create
+- Rename
+- Delete
+- Search
+- Sort
+- Edit
+- Favorite words
+- Personal notes
+
+---
+
+### 📄 Import & Export
+
+Export your vocabulary into clean documents.
+
+Current support:
+
+- DOCX
+
+Future support:
+
+- PDF
+- Markdown
+- CSV
+
+---
+
+### 💾 Offline First
+
+All vocabulary is stored locally using SQLite.
+
+Benefits:
+
+- Instant loading
+- No internet required after saving
+- Private local database
+- Portable application
+
+---
+
+# 🧠 Architecture
+
+VocabNote is designed around responsiveness and reliability.
+
+### Background AI Requests
+
+AI requests run in background threads, keeping the interface responsive even during slow network connections.
+
+### Local SQLite Storage
+
+Vocabulary is stored in SQLite for fast lookup and long-term persistence.
+
+### Canvas-Based Rendering
+
+Instead of relying on large numbers of native widgets, VocabNote renders most interface elements directly onto a canvas for improved performance.
+
+### Defensive AI Response Parsing
+
+AI responses are cleaned and validated before parsing to reduce failures caused by malformed JSON or Markdown formatting.
+
+---
+
+# ⚙️ Installation
+
+## 1. Clone the repository
+
 ```bash
 git clone https://github.com/sayedalve/VocabNote.git
 cd VocabNote
-2. Install dependencies
-It is recommended to use a virtual environment. Install the required packages via pip:
+```
 
-Bash
+## 2. Install dependencies
+
+```bash
 pip install -r requirements.txt
-3. Run the application
-Bash
+```
+
+## 3. Run
+
+```bash
 python src/main.py
-4. Connect the AI
-Launch the app and navigate to the Settings tab.
+```
 
-Paste your free Google AI Studio Gemini API key.
+---
 
-Click Test Connection. You are ready to start enriching words!
+# 🔑 Configure AI
 
-🧩 Project Structure
-Plaintext
+1. Open **Settings**
+2. Select your AI provider
+3. Enter your API Key
+4. Click **Test Connection**
+5. Start adding vocabulary
+
+---
+
+# 📁 Project Structure
+
+```text
 VocabNote/
+│
 ├── src/
-│   ├── main.py                # Application entry point & Canvas UI Engine
+│   ├── main.py
 │   ├── api/
-│   │   └── gemini.py          # LLM integration & threaded network logic
+│   │   └── gemini.py
 │   ├── database/
-│   │   └── db_manager.py      # SQLite schema & CRUD operations
+│   │   └── db_manager.py
 │   └── utils/
-│       └── export_manager.py  # DOCX/PDF parser and generator
-├── data/                      # Auto-generated SQLite database storage
-├── vocab_icon.ico             # Application branding
-├── requirements.txt           # Dependency manifest
+│       └── export_manager.py
+│
+├── data/
+├── docs/
+├── requirements.txt
+├── vocab_icon.ico
+├── screenshot.png
 └── README.md
-📦 Building from Source
-To compile VocabNote into a portable, branded .exe file without requiring Python on the host machine:
+```
 
-Bash
+---
+
+# 🛠 Build From Source
+
+Install PyInstaller:
+
+```bash
 pip install pyinstaller
-pyinstaller --noconsole --onefile --windowed --add-data "vocab_icon.ico;." --icon=vocab_icon.ico --name="VocabNote" src/main.py
-🎯 Roadmap
-[ ] Audio pronunciation integration
+```
 
-[ ] Spaced repetition flashcards
+Build:
 
-[ ] Automated daily backup mechanism
+```bash
+pyinstaller ^
+--noconsole ^
+--onefile ^
+--windowed ^
+--icon=vocab_icon.ico ^
+--add-data "vocab_icon.ico;." ^
+--name "VocabNote" ^
+src/main.py
+```
 
-[ ] Light mode theme support
+---
 
-🤝 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+# 🎯 Roadmap
 
-📄 License
-This project is licensed under the MIT License - see below for details.
+- [ ] Audio pronunciation
+- [ ] Flashcards
+- [ ] Spaced repetition
+- [ ] Word statistics
+- [ ] Daily learning goals
+- [ ] Multiple export formats
+- [ ] Automatic backup
+- [ ] Light theme
+- [ ] Cross-platform support (Linux/macOS)
 
-Plaintext
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+If you have ideas for improvements, bug fixes, or new features, feel free to open an issue or submit a pull request.
+
+---
+
+# 📄 License
+
+Licensed under the **MIT License**.
+
+```text
 MIT License
 
 Copyright (c) 2026 Md Sayed (Alve)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
