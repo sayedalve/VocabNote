@@ -1,6 +1,6 @@
 <div align="center">
 # 📚 VocabNote
-
+<br/>
 <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
 <img src="https://img.shields.io/badge/CustomTkinter-0A84FF?style=for-the-badge" alt="CustomTkinter"/>
 <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
