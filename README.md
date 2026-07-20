@@ -1,181 +1,151 @@
-# 📚 VocabNote
-
+````md
 <div align="center">
 
-**A modern, offline-first vocabulary notebook powered by Universal AI APIs.**
+<img src="./screenshot.png" alt="VocabNote" width="100%"/>
 
-Store, enrich, organize, and export your vocabulary with a beautiful desktop experience built for speed.
+<br/><br/>
 
-[![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![CustomTkinter](https://img.shields.io/badge/CustomTkinter-Modern_UI-1F6FEB?style=for-the-badge)](https://github.com/TomSchimansky/CustomTkinter)
-[![SQLite](https://img.shields.io/badge/SQLite-Offline_Storage-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
-[![Universal LLM](https://img.shields.io/badge/Universal_LLM-OpenAI_Compatible-8E75FF?style=for-the-badge)](https://platform.openai.com/docs/api-reference)
-[![Windows](https://img.shields.io/badge/Windows-Desktop_App-0078D6?style=for-the-badge&logo=windows&logoColor=white)]()
+# 📚 VocabNote
 
-<img src="screenshot.png" alt="VocabNote Screenshot" width="900"/>
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+<img src="https://img.shields.io/badge/CustomTkinter-0A84FF?style=for-the-badge" alt="CustomTkinter"/>
+<img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
+<img src="https://img.shields.io/badge/AI%20Powered-8B5CF6?style=for-the-badge" alt="AI Powered"/>
+<img src="https://img.shields.io/badge/Offline%20First-10B981?style=for-the-badge" alt="Offline First"/>
+<img src="https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Windows"/>
+
+<br/>
+
+### Modern desktop vocabulary notebook with universal AI support
+
+Store, enrich, organize, and export your vocabulary with a fast and polished desktop experience.
+
+<br/>
+
+[Features](#-features) • [AI Providers](#-ai-providers) • [Installation](#-installation) • [Quick Start](#-quick-start) • [Build](#-build-a-windows-executable) • [Roadmap](#-roadmap)
 
 </div>
 
 ---
 
-# ✨ Overview
+## What is VocabNote?
 
-**VocabNote** is a modern desktop vocabulary notebook that combines the speed of local storage with the power of AI.
+VocabNote is a desktop vocabulary notebook designed to make word learning simple, fast, and organized.
 
-Instead of manually searching dictionaries and writing notes, simply enter a word and let your preferred AI automatically generate rich vocabulary information including pronunciation, meanings, Bangla translation, example sentences, synonyms, antonyms, and more.
+Instead of switching between browser tabs to search for meanings, pronunciations, examples, and synonyms, you can enter a word directly into VocabNote. The app uses your chosen AI provider to generate a structured vocabulary card, then stores it locally for instant offline access.
 
-Everything is stored locally in SQLite, making the application fast, responsive, and fully usable offline after your words have been saved.
-
----
-
-# 🚀 Features
-
-### 🤖 Universal AI Support
-
-Works with virtually every OpenAI-compatible API.
-
-Supported providers include:
-
-- Google AI Studio (Gemini)
-- OpenRouter
-- Groq
-- GitHub Models
-- Together AI
-- DeepInfra
-- Local LLMs (Ollama, LM Studio)
-- Any OpenAI-compatible endpoint
-
-Simply choose your provider, enter your API key, and start learning.
+It is built for students, language learners, and anyone who wants a clean place to keep vocabulary notes.
 
 ---
 
-### 📖 AI-Powered Vocabulary Generation
+## ✨ Features
 
-Generate rich information automatically:
+### 🤖 Universal AI support
 
-- IPA Pronunciation
-- Parts of Speech
-- English Meaning
-- Bangla Meaning
-- Example Sentence
-- Synonyms
-- Antonyms
+VocabNote works with OpenAI compatible APIs and supports multiple providers through a simple settings dashboard.
 
-No manual searching required.
+Supported providers include Google AI Studio, OpenRouter, Groq, Mistral AI, GitHub Models, Hugging Face, and local model setups such as Ollama and LM Studio.
 
----
+### 📖 Rich vocabulary cards
 
-### ⚡ High Performance
+Each word can include:
 
-Designed specifically for large vocabulary collections.
+<table>
+<tr>
+<td><b>Meaning</b></td>
+<td><b>Bangla meaning</b></td>
+<td><b>English definition</b></td>
+</tr>
+<tr>
+<td><b>IPA</b></td>
+<td><b>Part of speech</b></td>
+<td><b>Example sentence</b></td>
+</tr>
+<tr>
+<td><b>Synonyms</b></td>
+<td><b>Antonyms</b></td>
+<td><b>Notes</b></td>
+</tr>
+</table>
 
-Features include:
+### ⚡ Fast desktop performance
 
-- Custom Canvas rendering engine
-- Smooth scrolling
-- Efficient rendering
-- Lightweight memory usage
-- Optimized for thousands of words
+VocabNote uses a custom Canvas based rendering engine designed for responsive browsing and editing.
 
----
+This keeps the notebook light and smooth even when the word list grows large.
 
-### 🎨 Modern Desktop UI
+### 🎨 Deep customization
 
-Built using CustomTkinter with a clean Midnight Blue interface featuring:
+The Settings dashboard gives you fine control over the notebook layout.
 
-- Glass-inspired cards
-- Rounded layouts
-- High-DPI support
-- Adjustable UI zoom
-- Responsive rendering
-- Custom scrollbar
+You can adjust spacing, typography, padding, and preview behavior, then see the changes live before saving.
 
----
+### 🗂️ Smart organization
 
-### 🗂 Vocabulary Management
+Keep your notebook clean with unlimited volumes, favorites, search, and interactive synonym and antonym tags.
 
-Organize words using unlimited custom volumes.
+### 📄 DOCX import and export
 
-Features:
+Move vocabulary in and out of the app with ease.
 
-- Create
-- Rename
-- Delete
-- Search
-- Sort
-- Edit
-- Favorite words
-- Personal notes
+You can export a single volume or the entire notebook, and you can import DOCX files with duplicate handling options such as replace, skip, replace all, and skip all.
 
----
+### 🧠 Offline first
 
-### 📄 Import & Export
+All vocabulary, settings, layout preferences, favorites, and volumes are stored locally in SQLite.
 
-Export your vocabulary into clean documents.
+The internet is only needed when fetching a new word from an AI provider.
 
-Current support:
+### 🧩 Responsive by design
 
-- DOCX
+The app keeps the interface usable while work happens in the background.
 
-Future support:
-
-- PDF
-- Markdown
-- CSV
+It uses background threads for API calls, non blocking UI updates, and defensive parsing for AI output.
 
 ---
 
-### 💾 Offline First
+## 🤖 AI providers
 
-All vocabulary is stored locally using SQLite.
+<div align="center">
 
-Benefits:
+<img src="https://img.shields.io/badge/Google%20AI%20Studio-Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google AI Studio"/>
+<img src="https://img.shields.io/badge/OpenRouter-7C3AED?style=for-the-badge" alt="OpenRouter"/>
+<img src="https://img.shields.io/badge/Groq-000000?style=for-the-badge&logo=groq&logoColor=white" alt="Groq"/>
+<img src="https://img.shields.io/badge/Mistral%20AI-F97316?style=for-the-badge" alt="Mistral AI"/>
+<img src="https://img.shields.io/badge/GitHub%20Models-111827?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Models"/>
+<img src="https://img.shields.io/badge/Hugging%20Face-FCD34D?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face"/>
+<img src="https://img.shields.io/badge/Local%20LLMs-Ollama%20%7C%20LM%20Studio-22C55E?style=for-the-badge" alt="Local LLMs"/>
 
-- Instant loading
-- No internet required after saving
-- Private local database
-- Portable application
-
----
-
-# 🧠 Architecture
-
-VocabNote is designed around responsiveness and reliability.
-
-### Background AI Requests
-
-AI requests run in background threads, keeping the interface responsive even during slow network connections.
-
-### Local SQLite Storage
-
-Vocabulary is stored in SQLite for fast lookup and long-term persistence.
-
-### Canvas-Based Rendering
-
-Instead of relying on large numbers of native widgets, VocabNote renders most interface elements directly onto a canvas for improved performance.
-
-### Defensive AI Response Parsing
-
-AI responses are cleaned and validated before parsing to reduce failures caused by malformed JSON or Markdown formatting.
+</div>
 
 ---
 
-# ⚙️ Installation
+## 📸 Screenshot
 
-## 1. Clone the repository
+<div align="center">
+
+<img src="./screenshot.png" alt="VocabNote screenshot" width="100%"/>
+
+</div>
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/sayedalve/VocabNote.git
 cd VocabNote
-```
+````
 
-## 2. Install dependencies
+### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 3. Run
+### 3. Run the app
 
 ```bash
 python src/main.py
@@ -183,41 +153,22 @@ python src/main.py
 
 ---
 
-# 🔑 Configure AI
+## 🚀 Quick Start
 
-1. Open **Settings**
-2. Select your AI provider
-3. Enter your API Key
-4. Click **Test Connection**
-5. Start adding vocabulary
+1. Open VocabNote.
+2. Click **Settings** in the sidebar.
+3. Open the **API Settings** tab.
+4. Select your preferred AI provider.
+5. Paste your API key.
+6. Click **Test Connection**.
+7. Go back to **All Words**.
+8. Type a word and press **Enter**.
 
----
-
-# 📁 Project Structure
-
-```text
-VocabNote/
-│
-├── src/
-│   ├── main.py
-│   ├── api/
-│   │   └── gemini.py
-│   ├── database/
-│   │   └── db_manager.py
-│   └── utils/
-│       └── export_manager.py
-│
-├── data/
-├── docs/
-├── requirements.txt
-├── vocab_icon.ico
-├── screenshot.png
-└── README.md
-```
+The generated vocabulary card will be saved locally and will remain available offline.
 
 ---
 
-# 🛠 Build From Source
+## 🛠️ Build a Windows executable
 
 Install PyInstaller:
 
@@ -225,46 +176,98 @@ Install PyInstaller:
 pip install pyinstaller
 ```
 
-Build:
+Build the application:
 
-```bash
+```cmd
 pyinstaller ^
 --noconsole ^
 --onefile ^
 --windowed ^
 --icon=vocab_icon.ico ^
 --add-data "vocab_icon.ico;." ^
+--add-data "assets;assets" ^
 --name "VocabNote" ^
 src/main.py
 ```
 
 ---
 
-# 🎯 Roadmap
+## 🧱 Technology stack
 
-- [ ] Audio pronunciation
-- [ ] Flashcards
-- [ ] Spaced repetition
-- [ ] Word statistics
-- [ ] Daily learning goals
-- [ ] Multiple export formats
-- [ ] Automatic backup
-- [ ] Light theme
-- [ ] Cross-platform support (Linux/macOS)
+<table>
+<tr>
+<td><b>Language</b></td>
+<td>Python</td>
+</tr>
+<tr>
+<td><b>UI</b></td>
+<td>CustomTkinter, Tkinter</td>
+</tr>
+<tr>
+<td><b>Rendering</b></td>
+<td>Canvas based custom layout engine</td>
+</tr>
+<tr>
+<td><b>Storage</b></td>
+<td>SQLite</td>
+</tr>
+<tr>
+<td><b>Imaging</b></td>
+<td>Pillow</td>
+</tr>
+<tr>
+<td><b>AI</b></td>
+<td>Universal AI APIs</td>
+</tr>
+</table>
 
 ---
 
-# 🤝 Contributing
+## 🎯 Roadmap
 
-Contributions are welcome.
+<div align="center">
 
-If you have ideas for improvements, bug fixes, or new features, feel free to open an issue or submit a pull request.
+<img src="https://img.shields.io/badge/Audio%20Pronunciation-Planned-8B5CF6?style=for-the-badge" alt="Audio Pronunciation"/>
+<img src="https://img.shields.io/badge/Flashcard%20Mode-Planned-F59E0B?style=for-the-badge" alt="Flashcard Mode"/>
+<img src="https://img.shields.io/badge/Quiz%20Mode-Planned-EC4899?style=for-the-badge" alt="Quiz Mode"/>
+<img src="https://img.shields.io/badge/Spaced%20Repetition-Planned-14B8A6?style=for-the-badge" alt="Spaced Repetition"/>
+<img src="https://img.shields.io/badge/Markdown%20Export-Planned-06B6D4?style=for-the-badge" alt="Markdown Export"/>
+<img src="https://img.shields.io/badge/CSV%20Export-Planned-22C55E?style=for-the-badge" alt="CSV Export"/>
+<img src="https://img.shields.io/badge/Light%20Theme-Planned-FDE047?style=for-the-badge" alt="Light Theme"/>
+
+</div>
+
+1. Audio pronunciation playback
+2. Flashcard mode
+3. Quiz mode
+4. Spaced repetition system
+5. Daily learning statistics
+6. Markdown export
+7. CSV export
+8. Light theme support
+9. Linux support
+10. macOS support
 
 ---
 
-# 📄 License
+## 🤝 Contributing
 
-Licensed under the **MIT License**.
+Contributions, issues, and feature requests are welcome.
+
+If you want to contribute:
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Open a pull request
+
+Bug reports and suggestions are also appreciated.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
 
 ```text
 MIT License
@@ -275,8 +278,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -288,4 +290,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
+
+```
 ```
