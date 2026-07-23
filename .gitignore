@@ -1,16 +1,17 @@
-# Python caches
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-# PyInstaller build files
+# Build
 build/
 dist/
 *.spec
 
-# Database (PREVENTS API KEY LEAK)
-data/vocab_notebook.db
+# Database files
+*.db
 
-# Virtual environments (if you use them later)
+
+# Virtual environments
 venv/
 env/
