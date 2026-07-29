@@ -1,0 +1,25 @@
+name: vocabnote_workspace
+publish_to: none
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+workspace:
+  - app
+  - core/ai
+  - core/db
+  - core/design_system
+  - core/srs
+  - core/storage
+  - core/tts
+  - features/enrich
+  - features/notebook
+  - features/quiz
+  - features/settings
+  - features/transfer
+
+dev_dependencies:
+  melos: ^8.2.2
+
+dependency_overrides:
+  cli_util: ^0.5.0

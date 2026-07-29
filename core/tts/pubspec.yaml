@@ -1,0 +1,24 @@
+name: core_tts
+description: VocabNote text-to-speech core (on-device TTS engine wrapper).
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Windows: keep this plugin current (`flutter pub upgrade flutter_tts`).
+  # Older builds send channel messages from an SAPI worker thread instead
+  # of the platform thread; see lib/src/tts_service.dart.
+  flutter_tts: ^4.2.5
+  riverpod: ^3.3.2
+  riverpod_annotation: ^4.0.3
+
+dev_dependencies:
+  build_runner: ^2.13.0
+  flutter_test:
+    sdk: flutter
+  riverpod_generator: ^4.0.4

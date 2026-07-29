@@ -1,0 +1,23 @@
+name: core_ai
+description: VocabNote AI core (provider-agnostic transport, sanitization, settings).
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  core_storage:
+    path: ../storage
+  freezed_annotation: ^3.1.0
+  http: ^1.6.0
+  meta: ^1.18.0
+  riverpod: ^3.3.2
+  riverpod_annotation: ^4.0.3
+
+dev_dependencies:
+  build_runner: ^2.13.0
+  freezed: ^3.2.5
+  riverpod_generator: ^4.0.4
+  test: ^1.24.0

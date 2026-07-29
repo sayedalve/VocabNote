@@ -1,0 +1,25 @@
+name: core_db
+description: VocabNote persistence core (Drift/SQLite, FTS5, DAOs).
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  drift: ^2.34.2
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  riverpod: ^3.3.2
+  riverpod_annotation: ^4.0.3
+  sqlite3: ^3.5.0
+
+dev_dependencies:
+  build_runner: ^2.13.0
+  drift_dev: ^2.34.0
+  flutter_test:
+    sdk: flutter
+  riverpod_generator: ^4.0.4

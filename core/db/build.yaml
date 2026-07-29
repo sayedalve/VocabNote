@@ -1,0 +1,14 @@
+# Drift build configuration for the core_db package.
+#
+# store_date_time_values_as_text keeps codegen in sync with the runtime
+# `DriftDatabaseOptions(storeDateTimeAsText: true)` override in database.dart:
+# every DateTime column is stored as ISO-8601 text, never as a unix-timestamp
+# integer. This is what fixes the "Invalid radix-10 number" crash: SQLite
+# `CURRENT_TIMESTAMP` defaults write text, so reading them back as integers
+# blew up. Keep both settings together if you ever change one.
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          store_date_time_values_as_text: true
