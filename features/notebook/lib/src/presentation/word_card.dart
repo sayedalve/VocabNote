@@ -38,10 +38,12 @@ class WordCard extends StatefulWidget {
     this.onPronounce,
     this.onTermTap,
     this.highlightedTerm,
+    this.isNewlyAdded = false,
     super.key,
   });
 
   final Word word;
+  final bool isNewlyAdded;
 
   /// Opens the word's detail view; fired when the card is double-clicked.
   final VoidCallback onOpen;
@@ -165,6 +167,7 @@ class _WordCardState extends State<WordCard> {
             importantAntonyms: word.importantAntonymList,
             notes: word.notes,
             isEnriched: word.isEnriched,
+            isNewlyAdded: widget.isNewlyAdded,
             onOpen: widget.onOpen,
             onTermTap: widget.onTermTap,
             onContextMenu: _openContextMenu,

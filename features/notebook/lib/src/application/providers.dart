@@ -28,6 +28,20 @@ class SelectedWordId extends _$SelectedWordId {
   void select(int? id) => state = id;
 }
 
+/// Tracks the ID of a recently added word for a 3-second highlight animation.
+@riverpod
+class NewlyAddedWordId extends _$NewlyAddedWordId {
+  @override
+  int? build() => null;
+
+  void highlight(int id) {
+    state = id;
+    Future.delayed(const Duration(seconds: 3), () {
+      if (state == id) state = null;
+    });
+  }
+}
+
 @riverpod
 Stream<Word?> wordDetail(Ref ref, int wordId) =>
     ref.watch(notebookRepositoryProvider).watchWord(wordId);

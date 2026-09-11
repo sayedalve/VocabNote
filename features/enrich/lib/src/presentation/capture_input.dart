@@ -27,9 +27,8 @@ class CaptureInput extends ConsumerStatefulWidget {
 
   final int? notebookId;
 
-  /// Called with the new word id after a successful capture (e.g. to select
-  /// it in the list).
-  final ValueChanged<int>? onCaptured;
+  /// Called with the new word id and its term after a successful capture.
+  final void Function(int wordId, String term)? onCaptured;
 
   /// Optional external focus node so the host can focus this field from
   /// shortcuts or onboarding actions. When null, an internal node is used.
@@ -71,10 +70,10 @@ class _CaptureInputState extends ConsumerState<CaptureInput> {
         .capture(text, notebookId: widget.notebookId);
 
     if (!mounted) return;
-    if (wordId != null &&
-        ref.read(captureControllerProvider(widget.scope)) is CaptureSaved) {
+    final captureState = ref.read(captureControllerProvider(widget.scope));
+    if (wordId != null && captureState is CaptureSaved) {
       _controller.clear();
-      widget.onCaptured?.call(wordId);
+      widget.onCaptured?.call(wordId, captureState.headword);
     }
     _focusNode.requestFocus();
   }

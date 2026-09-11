@@ -139,6 +139,58 @@ abstract class _$SelectedWordId extends $Notifier<int?> {
   }
 }
 
+/// Tracks the ID of a recently added word for a 3-second highlight animation.
+
+@ProviderFor(NewlyAddedWordId)
+final newlyAddedWordIdProvider = NewlyAddedWordIdProvider._();
+
+/// Tracks the ID of a recently added word for a 3-second highlight animation.
+final class NewlyAddedWordIdProvider
+    extends $NotifierProvider<NewlyAddedWordId, int?> {
+  /// Tracks the ID of a recently added word for a 3-second highlight animation.
+  NewlyAddedWordIdProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'newlyAddedWordIdProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$newlyAddedWordIdHash();
+
+  @$internal
+  @override
+  NewlyAddedWordId create() => NewlyAddedWordId();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(int? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<int?>(value),
+    );
+  }
+}
+
+String _$newlyAddedWordIdHash() => r'9ee7fd911d853e579ce2097a5450c020d5618242';
+
+/// Tracks the ID of a recently added word for a 3-second highlight animation.
+
+abstract class _$NewlyAddedWordId extends $Notifier<int?> {
+  int? build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<int?, int?>;
+    final element = ref.element as $ClassProviderElement<
+        AnyNotifier<int?, int?>, int?, Object?, Object?>;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(wordDetail)
 final wordDetailProvider = WordDetailFamily._();
 

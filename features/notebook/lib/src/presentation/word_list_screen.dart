@@ -346,6 +346,7 @@ class _WordListScreenState extends ConsumerState<WordListScreen> {
     }
 
     final itemCount = state.words.length + (state.hasMore ? 1 : 0);
+    final newlyAddedId = ref.watch(newlyAddedWordIdProvider);
 
     return Scrollbar(
       controller: _scrollController,
@@ -371,6 +372,7 @@ class _WordListScreenState extends ConsumerState<WordListScreen> {
           return WordCard(
             key: ValueKey(word.id),
             word: word,
+            isNewlyAdded: word.id == newlyAddedId,
             onOpen: () => _openWord(context, word),
             onEdit: () => _openWord(context, word),
             onDelete: () => _confirmDeleteWord(word),

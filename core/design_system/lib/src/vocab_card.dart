@@ -68,6 +68,7 @@ class VnVocabCard extends StatefulWidget {
     this.notes = '',
     this.isEnriched = true,
     this.clampLines = true,
+    this.isNewlyAdded = false,
     this.onOpen,
     this.onTermTap,
     this.onContextMenu,
@@ -77,6 +78,7 @@ class VnVocabCard extends StatefulWidget {
   });
 
   final String headword;
+  final bool isNewlyAdded;
 
   /// Explicit style override; defaults to [VnCardStyleScope.of].
   final VnCardStyle? style;
@@ -298,33 +300,43 @@ class _VnVocabCardState extends State<VnVocabCard> {
     );
 
     final radius = BorderRadius.circular(s.cardRadius);
-    Widget card = Material(
-      color: tokens.surface,
-      borderRadius: radius,
-      child: VnDoubleClickRegion(
-        onDoubleClick: widget.onOpen,
-        child: AnimatedContainer(
-          duration: vnMotionDuration(context, VnMotion.fast),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            border: Border.all(
-              color: _focused ? tokens.accent : tokens.border,
+    Widget card = TweenAnimationBuilder<Color?>(
+      duration: const Duration(seconds: 3),
+      tween: ColorTween(
+        begin: widget.isNewlyAdded ? tokens.accent.withValues(alpha: 0.2) : tokens.surface,
+        end: tokens.surface,
+      ),
+      builder: (context, bgColor, child) => Material(
+        color: bgColor,
+        borderRadius: radius,
+        child: VnDoubleClickRegion(
+          onDoubleClick: widget.onOpen,
+          child: AnimatedContainer(
+            duration: vnMotionDuration(context, VnMotion.fast),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: radius,
+              border: Border.all(
+                color: widget.isNewlyAdded
+                    ? tokens.accent
+                    : (_focused ? tokens.accent : tokens.border),
+                width: widget.isNewlyAdded ? 2 : 1,
+              ),
             ),
+            padding: EdgeInsets.symmetric(
+              horizontal: s.zoomed(s.horizontalCardPadding),
+              vertical: s.zoomed(s.horizontalCardPadding / 2),
+            ),
+            // With a card context menu the caller owns right-click, so the
+            // selection toolbar is suppressed (only one menu may appear).
+            child: widget.onContextMenu == null
+                ? SelectionArea(child: content)
+                : SelectionArea(
+                    contextMenuBuilder: (context, selectableRegionState) =>
+                        const SizedBox.shrink(),
+                    child: content,
+                  ),
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: s.zoomed(s.horizontalCardPadding),
-            vertical: s.zoomed(s.horizontalCardPadding / 2),
-          ),
-          // With a card context menu the caller owns right-click, so the
-          // selection toolbar is suppressed (only one menu may appear).
-          child: widget.onContextMenu == null
-              ? SelectionArea(child: content)
-              : SelectionArea(
-                  contextMenuBuilder: (context, selectableRegionState) =>
-                      const SizedBox.shrink(),
-                  child: content,
-                ),
         ),
       ),
     );

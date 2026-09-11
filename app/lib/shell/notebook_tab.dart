@@ -60,13 +60,17 @@ class _NotebookTabState extends ConsumerState<NotebookTab> {
 
   NotebookRepository get _repo => ref.read(notebookRepositoryProvider);
 
-  void _selectWord(int id, {bool newlyAdded = false}) {
-    ref.read(selectedWordIdProvider.notifier).select(id);
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => WordDetailScreen(wordId: id, newlyAdded: newlyAdded),
-      ),
-    );
+  void _selectWord(int id) =>
+      ref.read(selectedWordIdProvider.notifier).select(id);
+
+  void _handleWordCaptured(int id, String term) {
+    ref.read(searchFocusCoordinatorProvider).requestSearchFocus();
+    ref.read(wordListControllerProvider(WordListFilter(
+      notebookId: _notebookId,
+      favoritesOnly: widget.favoritesOnly,
+    )).notifier).setQuery(term);
+    ref.read(newlyAddedWordIdProvider.notifier).highlight(id);
+    _selectWord(id);
   }
 
   /// "Add \u201cterm\u201d to your notebook" from the no-matches empty state.
@@ -76,7 +80,7 @@ class _NotebookTabState extends ConsumerState<NotebookTab> {
         .capture(term, notebookId: _notebookId);
     if (!mounted) return;
     if (id != null) {
-      _selectWord(id, newlyAdded: true);
+      _handleWordCaptured(id, term);
     }
   }
 
@@ -278,7 +282,7 @@ class _NotebookTabState extends ConsumerState<NotebookTab> {
             notebookId: _notebookId,
             focusNode: _captureFocus,
             autofocus: true,
-            onCaptured: (id) => _selectWord(id, newlyAdded: true),
+            onCaptured: _handleWordCaptured,
           ),
         ),
       ],
