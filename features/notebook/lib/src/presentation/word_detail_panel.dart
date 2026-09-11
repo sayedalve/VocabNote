@@ -23,12 +23,18 @@ import '../domain/pronunciation.dart';
 import '../domain/word.dart';
 
 class WordDetailScreen extends StatelessWidget {
-  const WordDetailScreen({required this.wordId, super.key});
+  const WordDetailScreen({
+    required this.wordId,
+    this.newlyAdded = false,
+    super.key,
+  });
 
   final int wordId;
+  final bool newlyAdded;
 
   @override
   Widget build(BuildContext context) {
+    final tokens = VnTheme.of(context).tokens;
     // Esc closes the card, mirroring the search field's Esc behavior on
     // the list screen.
     return CallbackShortcuts(
@@ -41,7 +47,22 @@ class WordDetailScreen extends StatelessWidget {
         skipTraversal: true,
         child: Scaffold(
           appBar: AppBar(title: const Text('Word')),
-          body: SafeArea(child: WordDetailPanel(wordId: wordId)),
+          body: SafeArea(
+            child: TweenAnimationBuilder<Color?>(
+              duration: const Duration(seconds: 3),
+              tween: ColorTween(
+                begin: newlyAdded ? tokens.accent.withValues(alpha: 0.15) : Colors.transparent,
+                end: Colors.transparent,
+              ),
+              builder: (context, color, child) {
+                return Container(
+                  color: color,
+                  child: child,
+                );
+              },
+              child: WordDetailPanel(wordId: wordId),
+            ),
+          ),
         ),
       ),
     );

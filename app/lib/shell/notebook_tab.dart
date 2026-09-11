@@ -60,8 +60,14 @@ class _NotebookTabState extends ConsumerState<NotebookTab> {
 
   NotebookRepository get _repo => ref.read(notebookRepositoryProvider);
 
-  void _selectWord(int id) =>
-      ref.read(selectedWordIdProvider.notifier).select(id);
+  void _selectWord(int id, {bool newlyAdded = false}) {
+    ref.read(selectedWordIdProvider.notifier).select(id);
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => WordDetailScreen(wordId: id, newlyAdded: newlyAdded),
+      ),
+    );
+  }
 
   /// "Add \u201cterm\u201d to your notebook" from the no-matches empty state.
   Future<void> _quickCapture(String term) async {
@@ -69,7 +75,9 @@ class _NotebookTabState extends ConsumerState<NotebookTab> {
         .read(captureControllerProvider(CaptureScope.toolbar).notifier)
         .capture(term, notebookId: _notebookId);
     if (!mounted) return;
-    if (id != null) _selectWord(id);
+    if (id != null) {
+      _selectWord(id, newlyAdded: true);
+    }
   }
 
   void _addWord() {
@@ -270,7 +278,7 @@ class _NotebookTabState extends ConsumerState<NotebookTab> {
             notebookId: _notebookId,
             focusNode: _captureFocus,
             autofocus: true,
-            onCaptured: _selectWord,
+            onCaptured: (id) => _selectWord(id, newlyAdded: true),
           ),
         ),
       ],
