@@ -90,13 +90,36 @@ class AppDatabase extends _$AppDatabase {
             // Product schema v8: full quiz parity with the legacy desktop
             // app — word source, question type, provider, duration, and
             // per-question text/explanations for the history review UI.
-            await m.addColumn(quizAttempts, quizAttempts.questionType);
-            await m.addColumn(quizAttempts, quizAttempts.sourceLabel);
-            await m.addColumn(quizAttempts, quizAttempts.provider);
-            await m.addColumn(quizAttempts, quizAttempts.timeTakenSecs);
-            await m.addColumn(quizQuestions, quizQuestions.questionText);
-            await m.addColumn(quizQuestions, quizQuestions.questionType);
-            await m.addColumn(quizQuestions, quizQuestions.explanation);
+            if (from >= 2) {
+              final attemptsRows = await customSelect('PRAGMA table_info("quiz_attempts")').get();
+              final attemptsCols = attemptsRows.map((r) => r.read<String>('name')).toSet();
+              
+              if (!attemptsCols.contains('question_type')) {
+                await m.addColumn(quizAttempts, quizAttempts.questionType);
+              }
+              if (!attemptsCols.contains('source_label')) {
+                await m.addColumn(quizAttempts, quizAttempts.sourceLabel);
+              }
+              if (!attemptsCols.contains('provider')) {
+                await m.addColumn(quizAttempts, quizAttempts.provider);
+              }
+              if (!attemptsCols.contains('time_taken_secs')) {
+                await m.addColumn(quizAttempts, quizAttempts.timeTakenSecs);
+              }
+
+              final questionsRows = await customSelect('PRAGMA table_info("quiz_questions")').get();
+              final questionsCols = questionsRows.map((r) => r.read<String>('name')).toSet();
+              
+              if (!questionsCols.contains('question_text')) {
+                await m.addColumn(quizQuestions, quizQuestions.questionText);
+              }
+              if (!questionsCols.contains('question_type')) {
+                await m.addColumn(quizQuestions, quizQuestions.questionType);
+              }
+              if (!questionsCols.contains('explanation')) {
+                await m.addColumn(quizQuestions, quizQuestions.explanation);
+              }
+            }
           }
         },
         beforeOpen: (details) async {
